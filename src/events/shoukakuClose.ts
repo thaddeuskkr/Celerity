@@ -5,7 +5,7 @@ export const event: Event = {
     once: false,
     emitter: 'shoukaku',
 
-    async run(client, code: number, reason: string) {
+    async run(client, _, code: number, reason: string) {
         client.logger.warn(`Lavalink connection closed with code ${ code } and reason ${ reason }`);
     }
 };
