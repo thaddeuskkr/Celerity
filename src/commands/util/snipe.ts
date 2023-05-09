@@ -28,12 +28,13 @@ export const command: Command = {
                 })
                 .setTimestamp(snipe.timestamp);
             const attachments: string[] = [];
+            const embeds: EmbedBuilder[] = snipe.embeds.map(e => new EmbedBuilder(e.data));
             for (let i = 0; i < snipe.attachments.length; i++) {
                 const attachment = snipe.attachments[i]!;
                 attachments.push(`[${ attachment.name }](${ attachment.url })`);
             }
-            embed.setDescription(`${ attachments.length ? attachments.join(' | ') + '\n' : '' }${ snipe.content.length ? `**__Message content:__**\n${ snipe.content }` : '' }`);
-            paginatedMessage.addPageEmbed(embed);
+            embed.setDescription(`${ attachments.length ? attachments.join(' | ') + '\n' : '' }${ snipe.content.length ? `**__Message content:__**\n${ snipe.content }` : '' }${ snipe.embeds.length > 0 ? '\n\n*Embeds attached below.*' : '' }`);
+            paginatedMessage.addPageEmbeds([embed, ...embeds]);
         }
         return paginatedMessage.run(context);
     }
