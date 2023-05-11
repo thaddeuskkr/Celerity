@@ -36,7 +36,7 @@ export class Config {
             url: 'https://twitch.tv/thaddeuskkr'
         },
         {
-            name: 'v{version} • c!help',
+            name: 'build {version} • c!help',
             type: ActivityType.Playing
         },
         {
@@ -115,7 +115,11 @@ export class Config {
             'soundcloud': '<:soundcloud:1104308078071001159>',
             'applemusic': '<:applemusic:1104308042515877928>',
             'yandexmusic': '<:yandexmusic:1104308117421948928>'
-        }
+        },
+
+        // Pagination
+        nextPage: '<a:right_arrow:1106061122823524473>',
+        prevPage: '<a:left_arrow:1106061156889677976>'
     };
 }
 
