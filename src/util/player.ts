@@ -18,8 +18,8 @@ export class CelerityPlayer {
         this.player = player;
 
         this.queue = new Queue();
+        this.autoplayQueue = new Queue();
         this.previous = [];
-        this.autoplayTracks = [];
 
         this.current = null;
         this.nowPlayingMessage = null;
@@ -42,7 +42,7 @@ export class CelerityPlayer {
     handleTrack(track: CelerityTrack, next: boolean, playskip = false) {
         if (playskip) {
             if (this.loop === 'track') this.loop = 'off';
-            this.queue.length = 0;
+            this.queue.clear();
             this.queue.push(track);
             this.player.stopTrack().then();
             return;
@@ -50,14 +50,14 @@ export class CelerityPlayer {
         if (next) this.queue.unshift(track);
         else this.queue.push(track);
         if (!this.current) this.play();
-        if (this.autoplayTracks.length) this.autoplayTracks.length = 0;
+        if (this.autoplayQueue.length) this.autoplayQueue.clear();
         return;
     }
 
     handlePlaylist(tracks: CelerityTrack[], next: boolean, playskip = false) {
         if (playskip) {
             if (this.loop === 'track') this.loop = 'off';
-            this.queue.length = 0;
+            this.queue.clear();
             this.queue.push(...tracks);
             this.player.stopTrack().then();
             return;
@@ -65,7 +65,7 @@ export class CelerityPlayer {
         if (next) this.queue.unshift(...tracks);
         else this.queue.push(...tracks);
         if (!this.current) this.play();
-        if (this.autoplayTracks.length) this.autoplayTracks.length = 0;
+        if (this.autoplayQueue.length) this.autoplayQueue.clear();
         return;
     }
 
@@ -78,10 +78,10 @@ export class CelerityPlayer {
     }
 
     autoplay() {
-        if (!this.autoplayTracks.length && this.queue.length) return this.play();
-        else if (!this.autoplayTracks.length && !this.queue.length) return;
+        if (!this.autoplayQueue.length && this.queue.length) return this.play();
+        else if (!this.autoplayQueue.length && !this.queue.length) return;
         if (this.stopped) this.stopped = false;
-        this.current = this.autoplayTracks.shift()!;
+        this.current = this.autoplayQueue.shift()!;
         if (this.previous.map(t => t.info.identifier).includes(this.current!.info.identifier)) {
             this.autoplay();
             return;
@@ -100,10 +100,15 @@ export class CelerityPlayer {
         }
         this.player.connection.disconnect().then();
         if (this.nowPlayingMessage && settings.cleanup) this.nowPlayingMessage.delete().catch(() => null);
-        this.queue.length = 0;
+        this.queue.clear();
         this.player.stopTrack().then();
         this.player.connection.destroy().then();
         this.client.players.delete(this.guild.id);
+    }
+
+    setLoop(type: 'off' | 'track' | 'queue') {
+        this.loop = type;
+        return this.loop;
     }
 
     ms(ms: number | undefined) {
@@ -120,9 +125,9 @@ export interface CelerityPlayer {
     guild: Guild;
     channel: TextBasedChannel;
     queue: Queue;
+    autoplayQueue: Queue;
     current: CelerityTrack | null;
     previous: CelerityTrack[];
-    autoplayTracks: CelerityTrack[];
     loop: 'off' | 'track' | 'queue';
     nowPlayingMessage: Message | null;
     stopped: boolean;

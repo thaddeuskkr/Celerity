@@ -115,7 +115,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
     }
     if (!player.queue.length) {
         if (settings.disconnectTimeout === 0) return player.destroy();
-        else if (settings.autoplay && !player.autoplayTracks.length && !player.stopped) {
+        else if (settings.autoplay && !player.autoplayQueue.length && !player.stopped) {
             let identifier: string;
             if (player.current!.info.sourceName === 'youtube') identifier = player.current!.info.identifier;
             else {
@@ -159,9 +159,9 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                 return client.respond(player.channel, `${ client.config.emojis.error } | **Failed to autoplay.**\nNo similar tracks found, automatically disabled autoplay.`, 'error');
             }
             similarTracks.tracks.shift();
-            player.autoplayTracks = similarTracks.tracks.map(t => new CelerityTrack(t, player.guild.members.me!));
+            player.autoplayQueue.push(...similarTracks.tracks.map(t => new CelerityTrack(t, player.guild.members.me!)));
             player.autoplay();
-        } else if (settings.autoplay && player.autoplayTracks.length) return player.autoplay();
+        } else if (settings.autoplay && player.autoplayQueue.length) return player.autoplay();
         else {
             if (player.guild.members.me!.voice.channel?.type === ChannelType.GuildStageVoice) {
                 player.guild!.members.me!.voice.setSuppressed(true).catch(() => null);
@@ -186,6 +186,6 @@ export const exception = async (player: CelerityPlayer, client: Celerity, err: T
     client.logger.error(`Player in ${ player.guild.name } (${ player.guild.id }) encountered a playback error:`);
     client.logger.error(err);
     client.respond(player.channel, `${ client.config.emojis.error } | **An error occurred while playing [${ player.current!.info.title } by ${ player.current!.info.author }](${ player.current!.info.uri }), skipping.**`, 'error');
-    if (player.loop === 'track') player.loop = 'off';
+    if (player.loop === 'track') player.setLoop('off');
     player.player.stopTrack().then();
 };

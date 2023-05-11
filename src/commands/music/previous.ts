@@ -9,7 +9,7 @@ export const command: Command = {
 
     async execute({ client, context, player, settings }) {
         if (!player.previous.length) return client.respond(context.channel, `${ client.config.emojis.error } | **No previous tracks.**`, 'error');
-        if (player.loop === 'track') player.loop = 'off';
+        if (player.loop === 'track') player.setLoop('off');
         const prev = player.previous.shift();
         player.previousUsed = true;
         player.queue.unshift(player.current!);

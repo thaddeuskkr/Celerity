@@ -9,9 +9,9 @@ export const command: Command = {
     options: [],
 
     async execute({ client, context, player }) {
-        if (player.queue.length) player.queue.length = 0;
-        if (player.autoplayTracks.length) player.autoplayTracks.length = 0;
-        player.loop = 'off';
+        if (player.queue.length) player.queue.clear();
+        if (player.autoplayQueue.length) player.autoplayQueue.clear();
+        player.setLoop('off');
         player.stopped = true;
         await player.player.stopTrack();
         const row = new ActionRowBuilder<ButtonBuilder>()

@@ -55,7 +55,7 @@ export const event: Event = {
             switch (id) {
                 case 'previous': {
                     if (!player.previous.length) return errorResponse('No previous tracks.');
-                    if (player.loop === 'track') player.loop = 'off';
+                    if (player.loop === 'track') player.setLoop('off');
                     const prev = player.previous.shift();
                     player.previousUsed = true;
                     player.queue.unshift(player.current!);
@@ -77,15 +77,15 @@ export const event: Event = {
                     break;
                 }
                 case 'skip': {
-                    if (player.loop === 'track') player.loop = 'off';
+                    if (player.loop === 'track') player.setLoop('off');
                     successResponse(`${ client.config.emojis.skip } | **Skipped [${ player.current!.info.title } by ${ player.current!.info.author }](${ player.current!.info.uri }).**`);
                     await player.player.stopTrack();
                     break;
                 }
                 case 'stop': {
-                    if (player.queue.length) player.queue.length = 0;
-                    if (player.autoplayTracks.length) player.autoplayTracks.length = 0;
-                    player.loop = 'off';
+                    if (player.queue.length) player.queue.clear();
+                    if (player.autoplayQueue.length) player.autoplayQueue.clear();
+                    player.setLoop('off');
                     player.stopped = true;
                     await player.player.stopTrack();
                     const row = new ActionRowBuilder<ButtonBuilder>()
@@ -121,9 +121,9 @@ export const event: Event = {
                     break;
                 }
                 case 'loop': {
-                    if (player.loop === 'off') player.loop = 'track';
-                    else if (player.loop === 'track') player.loop = 'queue';
-                    else if (player.loop === 'queue') player.loop = 'off';
+                    if (player.loop === 'off') player.setLoop('track');
+                    else if (player.loop === 'track') player.setLoop('queue');
+                    else if (player.loop === 'queue') player.setLoop('off');
                     successResponse(`${ player.loop === 'off' ? client.config.emojis.loopOff : (player.loop === 'queue' ? client.config.emojis.loopQueue : client.config.emojis.loopTrack) } | **${ player.loop === 'off' ? 'Loop disabled' : (player.loop === 'queue' ? 'Queue loop enabled' : 'Track loop enabled') }.**`);
                     break;
                 }
