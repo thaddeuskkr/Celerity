@@ -30,13 +30,21 @@ export class CelerityPlayer {
         this.timeout = null;
         this.noUserTimeout = null;
 
+        this.lastPlayerUpdate = Date.now();
+        this.connected = true;
+
         this._notifiedOnce = false;
 
         player
             .on('start', () => start(this, client))
             .on('end', () => end(this, client))
             .on('stuck', (err) => stuck(this, client, err))
-            .on('exception', (err) => exception(this, client, err));
+            .on('exception', (err) => exception(this, client, err))
+            .on('update', ({ guildId, state }) => {
+                if (guildId !== this.guild.id) return;
+                this.connected = state.connected;
+                this.lastPlayerUpdate = Date.now();
+            });
     }
 
     handleTrack(track: CelerityTrack, next: boolean, playskip = false) {
@@ -115,6 +123,12 @@ export class CelerityPlayer {
         if (!ms) return '0:00';
         return pms(ms, { colonNotation: true, secondsDecimalDigits: 0 });
     }
+
+    get position() {
+        if (!this.current) return 0;
+        if (this.player.paused || !this.connected) return this.player.position;
+        return Math.min((this.player.position + (Date.now() - this.lastPlayerUpdate)), this.current.info.length);
+    }
 }
 
 export interface CelerityPlayer {
@@ -134,5 +148,7 @@ export interface CelerityPlayer {
     previousUsed: boolean;
     timeout: NodeJS.Timeout | null;
     noUserTimeout: NodeJS.Timeout | null;
+    lastPlayerUpdate: number;
+    connected: boolean;
     _notifiedOnce: boolean;
 }

@@ -16,7 +16,7 @@ export const command: Command = {
         const embed = new EmbedBuilder()
             .setColor(settings.color)
             .setDescription(
-                `\`${ player.ms(player.player.position) }\` ${ createNowPlayingBar(player.player.position, current.info.length, 30) } \`${ player.ms(current.info.length) }\`\n` +
+                `\`${ player.ms(player.player.position) }\` ${ createNowPlayingBar(player.position, current.info.length, 30) } \`${ player.ms(current.info.length) }\`\n` +
                 '**__NOW PLAYING__**\n' +
                 `${ sourceEmoji } | [${ current.info.title } by ${ current.info.author }](${ current.info.uri })\n` +
                 `**Requested by:** ${ current.info.requester.user.toString() }`
