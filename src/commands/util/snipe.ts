@@ -1,6 +1,7 @@
 import type { Command, Snipe } from '../../types';
-import { PaginatedMessage } from '@sapphire/discord.js-utilities';
+import { CelerityPaginatedMessage } from '../../util/pagination.js';
 import { EmbedBuilder } from 'discord.js';
+import tags from 'common-tags';
 
 export const command: Command = {
     name: 'snipe',
@@ -14,7 +15,7 @@ export const command: Command = {
         if (!snipes) snipes = [];
         const channelSnipes = snipes.filter(s => s.channel === context.channel.id);
         if (!channelSnipes.length) return client.respond(context.channel, `${ client.config.emojis.error } | **No deleted messages recorded in this channel.**`, 'error');
-        const paginatedMessage = new PaginatedMessage({
+        const paginatedMessage = new CelerityPaginatedMessage(client, {
             template: new EmbedBuilder()
                 .setColor(settings.color)
         });
@@ -33,7 +34,10 @@ export const command: Command = {
                 const attachment = snipe.attachments[i]!;
                 attachments.push(`[${ attachment.name }](${ attachment.url })`);
             }
-            embed.setDescription(`${ attachments.length ? attachments.join(' | ') + '\n' : '' }${ snipe.content.length ? `**__Message content:__**\n${ snipe.content }` : '' }${ snipe.embeds.length > 0 ? '\n\n*Embeds attached below.*' : '' }`);
+            embed.setDescription(
+                tags.stripIndents`${ attachments.length ? attachments.join(' | ') : '' }
+                ${ `**__Message content:__**\n${ snipe.content || 'None' }` }
+                ${ snipe.embeds.length > 0 ? '\n*Embeds attached below.*' : '' }`);
             paginatedMessage.addPageEmbeds([embed, ...embeds]);
         }
         return paginatedMessage.run(context);

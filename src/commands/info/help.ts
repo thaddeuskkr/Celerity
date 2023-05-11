@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
-import { PaginatedMessage } from '@sapphire/discord.js-utilities';
+import { CelerityPaginatedMessage } from '../../util/pagination.js';
 import type { Command } from '../../types';
 import _ from 'lodash';
 
@@ -60,7 +60,7 @@ export const command: Command = {
                 .setDescription('**Note:** `<>` denotes a required argument, while `[]` denotes an optional argument.');
             return client.respond(context.channel, embed, 'none');
         }
-        const paginatedMessage = new PaginatedMessage({
+        const paginatedMessage = new CelerityPaginatedMessage(client, {
             template: new EmbedBuilder()
                 .setAuthor({ name: 'Celerity', iconURL: client.user!.displayAvatarURL({ size: 4096 }) })
                 .setURL('https://celerity.tkkr.one')

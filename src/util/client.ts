@@ -14,7 +14,6 @@ import fs from 'fs';
 import path from 'path';
 import EventEmitter from 'events';
 import type { Command, Event } from '../types';
-import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 
 export class Celerity extends Client {
     constructor() {
@@ -132,13 +131,6 @@ export class Celerity extends Client {
     async initialise(dirname: string) {
         await this.initialiseEvents(dirname);
         await this.initialiseCommands(dirname);
-        PaginatedMessage.wrongUserInteractionReply = () => ({
-            embeds: [ new EmbedBuilder()
-                .setColor('#F38BA8')
-                .setDescription(`${ this.config.emojis.error } | **You are not allowed to interact with the buttons on this message.**`) ],
-            ephemeral: true,
-            allowedMentions: { users: [], roles: [] }
-        });
         await this.login(this.config.token);
     }
 }

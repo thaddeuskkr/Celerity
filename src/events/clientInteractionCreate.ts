@@ -2,7 +2,7 @@ import type { Event } from '../types';
 import type { Interaction } from 'discord.js';
 import _ from 'lodash';
 import { ActionRowBuilder, ButtonStyle, EmbedBuilder, ButtonBuilder } from 'discord.js';
-import { PaginatedMessage } from '@sapphire/discord.js-utilities';
+import { CelerityPaginatedMessage } from '../util/pagination.js';
 import type { CelerityTrack } from '../util/track';
 
 export const event: Event = {
@@ -134,7 +134,7 @@ export const event: Event = {
                     let loopText = '';
                     if (player.loop === 'queue') loopText = '\n🔁 Looping the queue';
                     else if (player.loop === 'track') loopText = '\n🔂 Looping the current track';
-                    const paginatedMessage = new PaginatedMessage({
+                    const paginatedMessage = new CelerityPaginatedMessage(client, {
                         template: new EmbedBuilder()
                             .setColor(settings.color)
                             .setFooter({ text: `${ queue.length } track(s) in queue • ${ player.ms(queue.totalDuration) } • Requested by ${ interaction.user.username }${ loopText }` })

@@ -1,5 +1,5 @@
 import { EmbedBuilder } from 'discord.js';
-import { PaginatedMessage } from '@sapphire/discord.js-utilities';
+import { CelerityPaginatedMessage } from '../../util/pagination.js';
 import _ from 'lodash';
 import type { CelerityTrack } from '../../util/track';
 import type { Command } from '../../types';
@@ -11,16 +11,16 @@ export const command: Command = {
     checks: [ 'playing', 'queue' ],
     options: [],
 
-    async execute({ context, player, settings }) {
+    async execute({ client, context, player, settings }) {
         const queue = player.queue;
         const chunkedQueue = _.chunk(queue, 15);
         let loopText = '';
         if (player.loop === 'queue') loopText = '\n🔁 Looping the queue';
         else if (player.loop === 'track') loopText = '\n🔂 Looping the current track';
-        const paginatedMessage = new PaginatedMessage({
+        const paginatedMessage = new CelerityPaginatedMessage(client, {
             template: new EmbedBuilder()
                 .setColor(settings.color)
-                .setFooter({ text: `${ queue.length } track(s) in queue • ${ player.ms(queue.totalDuration) }${ loopText }` })
+                .setFooter({ text: `${ queue.length } track(s) in queue • Total duration: ${ player.ms(queue.totalDuration) }${ loopText }` })
         });
         for (let x = 0; x < chunkedQueue.length; x++) {
             const descriptionLines = [];

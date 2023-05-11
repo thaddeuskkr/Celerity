@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
 import type { Command } from '../../types';
 import axios from 'axios';
-import { PaginatedMessage } from '@sapphire/discord.js-utilities';
+import { CelerityPaginatedMessage } from '../../util/pagination.js';
 
 const lyrics_url = 'https://spclient.wg.spotify.com/color-lyrics/v2/track';
 
@@ -64,7 +64,7 @@ export const command: Command = {
             const lyricsLines: string[] = [];
             lyrics.lines.forEach((line: { words: string }) => lyricsLines.push(line.words));
             const lyr = splitLyrics(lyricsLines.join('\n'));
-            const paginatedMessage = new PaginatedMessage({
+            const paginatedMessage = new CelerityPaginatedMessage(client, {
                 template: new EmbedBuilder()
                     .setColor(settings.color)
                     .setFooter({ text: `Lyrics provided by ${ lyrics.providerDisplayName }` })
