@@ -178,14 +178,14 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
 export const stuck = async (player: CelerityPlayer, client: Celerity, err: TrackStuckEvent) => {
     client.logger.error(`Player in ${ player.guild.name } (${ player.guild.id }) encountered a playback error:`);
     client.logger.error(err);
-    client.respond(player.channel, `${ client.config.emojis.error } | **Stuck while playing ${ player.current!.info.title } by ${ player.current!.info.author }, skipping.**`, 'warn');
+    client.respond(player.channel, `${ client.config.emojis.error } | **Stuck while playing [${ player.current!.info.title } by ${ player.current!.info.author }](${ player.current!.info.uri }), skipping.**`, 'warn');
     player.play();
 };
 
 export const exception = async (player: CelerityPlayer, client: Celerity, err: TrackExceptionEvent) => {
     client.logger.error(`Player in ${ player.guild.name } (${ player.guild.id }) encountered a playback error:`);
     client.logger.error(err);
-    client.respond(player.channel, `${ client.config.emojis.error } | **An error occurred while playing ${ player.current!.info.title } by ${ player.current!.info.author }, skipping.**`, 'error');
+    client.respond(player.channel, `${ client.config.emojis.error } | **An error occurred while playing [${ player.current!.info.title } by ${ player.current!.info.author }](${ player.current!.info.uri }), skipping.**`, 'error');
     if (player.loop === 'track') player.loop = 'off';
-    player.play();
+    player.player.stopTrack().then();
 };
