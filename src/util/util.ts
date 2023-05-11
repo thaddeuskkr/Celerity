@@ -62,9 +62,7 @@ export class Util {
             matrix[i] = [ i ];
             for (let j = 1; j <= len2; j++) {
                 matrix[i]![j] = i === 0 ? j :
-                    Math.min(matrix[i - 1]![j - 1]! +
-                        (str1.charAt(i - 1) === str2.charAt(j - 1) ? 0 : 1),
-                    Math.min(matrix[i]![j - 1]! + 1, matrix[i - 1]![j]! + 1));
+                    Math.min(matrix[i - 1]![j - 1]! + (str1.charAt(i - 1) === str2.charAt(j - 1) ? 0 : 1), Math.min(matrix[i]![j - 1]! + 1, matrix[i - 1]![j]! + 1));
             }
         }
 

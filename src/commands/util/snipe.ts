@@ -38,7 +38,7 @@ export const command: Command = {
                 tags.stripIndents`${ attachments.length ? attachments.join(' | ') : '' }
                 ${ `**__Message content:__**\n${ snipe.content || 'None' }` }
                 ${ snipe.embeds.length > 0 ? '\n*Embeds attached below.*' : '' }`);
-            paginatedMessage.addPageEmbeds([embed, ...embeds]);
+            paginatedMessage.addPageEmbeds([ embed, ...embeds ]);
         }
         return paginatedMessage.run(context);
     }
