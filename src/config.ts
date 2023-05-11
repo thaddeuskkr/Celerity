@@ -36,7 +36,7 @@ export class Config {
             url: 'https://twitch.tv/thaddeuskkr'
         },
         {
-            name: 'build {version} • c!help',
+            name: '{version} • c!help',
             type: ActivityType.Playing
         },
         {
