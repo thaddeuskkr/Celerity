@@ -55,8 +55,8 @@ export class Celerity extends Client {
             secure: this.config.lavalinkSecure.toLowerCase() === 'true'
         } ], {
             userAgent: 'Celerity',
-            reconnectTries: 10,
-            reconnectInterval: 10000
+            reconnectTries: 100,
+            reconnectInterval: 10 // Tries to reconnect every 10 seconds, 100 times.
         });
         this.messageContent = '';
         this.presenceUpdater = {
