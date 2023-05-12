@@ -9,7 +9,7 @@ const nlPattern = new RegExp(nl, 'g');
 export const command: Command = {
     name: 'eval',
     description: 'Evaluates JavaScript code.',
-    aliases: [],
+    aliases: ['ev'],
     checks: [ 'owner' ],
     userPermissions: [],
     options: [
