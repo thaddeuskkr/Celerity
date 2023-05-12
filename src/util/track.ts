@@ -18,6 +18,8 @@ export interface CelerityTrack extends Track {
         position: number;
         title: string;
         uri?: string;
+        artworkUrl?: string;
+        isrc?: string;
         sourceName: string;
         requester: GuildMember;
     };

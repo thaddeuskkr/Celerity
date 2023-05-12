@@ -32,8 +32,8 @@ export const command: Command = {
             let finalResult;
             if (spotifyURL) result = await client.node.rest.resolve(`${ query }`);
             else result = await client.node.rest.resolve(`spsearch:${ query }`);
-            if (!result!.tracks.length) return client.respond(context.channel, `${ client.config.emojis.error } | **No results for \`${ query }\`.**${ args.length ? '' : '\nTry using a custom search query instead.' }`, 'error');
-            const tracks = result!.tracks;
+            if (!result || result.loadType !== 'search' || !result.data.length) return client.respond(context.channel, `${ client.config.emojis.error } | **No results for \`${ query }\`.**${ args.length ? '' : '\nTry using a custom search query instead.' }`, 'error');
+            const tracks = result.data;
             for (let i = 0; i < tracks.length; i++) {
                 const track = tracks[i]!;
                 customQuery = `${ track.info.title } - ${ track.info.author }`;

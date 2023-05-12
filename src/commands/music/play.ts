@@ -2,6 +2,7 @@ import type { Command } from '../../types';
 import { ApplicationCommandOptionType, ChannelType } from 'discord.js';
 import { CelerityPlayer } from '../../util/player.js';
 import { CelerityTrack } from '../../util/track.js';
+import type { Track } from 'shoukaku';
 
 export const command: Command = {
     name: 'play',
@@ -79,24 +80,24 @@ export const command: Command = {
         if (urls.length > 0) {
             for (let i = 0; i < urls.length; i++) {
                 const result = await client.node.rest.resolve(urls[i]!);
-                if (!result || !result.tracks.length) return client.respond(context.channel, `${ client.config.emojis.error } | **No results found for \`${ urls[i] }\`.**`, 'error');
-                if (result.tracks[0]?.info.isStream) return client.respond(context.channel, `${ client.config.emojis.error } | **Streams are currently unsupported, but will be in the future.**`, 'error');
-                const playlist = result.loadType === 'PLAYLIST_LOADED';
+                if (!result || result.loadType === 'empty' || result.loadType === 'error') return client.respond(context.channel, `${ client.config.emojis.error } | **No results found for \`${ urls[i] }\`.**`, 'error');
+                if (result.loadType === 'track' && result.data.info.isStream) return client.respond(context.channel, `${ client.config.emojis.error } | **Streams are currently unsupported, but will be in the future.**`, 'error');
+                const playlist = result.loadType === 'playlist';
                 if (playlist) {
-                    const tracks = result.tracks.map(t => new CelerityTrack(t, context.member!));
-                    client.respond(context.channel, `${ client.config.emojis.queued } | **Queued ${ tracks.length } tracks from __${ result.playlistInfo.name }__.**${ next ? '\nInserted at the top of the queue.' : '' }`, 'success');
+                    const tracks = result.data.tracks.filter(t => !t.info.isStream).map(t => new CelerityTrack(t, context.member!));
+                    client.respond(context.channel, `${ client.config.emojis.queued } | **Queued ${ tracks.length } tracks from __${ result.data.info.name }__.**${ next ? '\nInserted at the top of the queue.' : '' }`, 'success');
                     player.handlePlaylist(tracks, next);
                     continue;
                 }
-                const track = result.tracks.shift()!;
+                const track = result.data as Track;
                 if (player.queue.length !== 0 || player.current || !settings.announceNowPlaying) client.respond(context.channel, `${ client.config.emojis.queued } | **Queued [${ track.info.title } by ${ track.info.author }](${ track.info.uri }).**${ next ? '\nInserted at the top of the queue.' : '' }`, 'success');
                 player.handleTrack(new CelerityTrack(track, context.member!), next);
             }
             return;
         }
         const result = await client.node.rest.resolve(`${ source || settings.searchProvider }:${ query }`);
-        if (!result || !result.tracks.length) return client.respond(context.channel, `${ client.config.emojis.error } | **No results found for \`${ query }\`.**`, 'error');
-        const track = result.tracks.shift()!;
+        if (!result || result.loadType !== 'search' || !result.data.length) return client.respond(context.channel, `${ client.config.emojis.error } | **No results found for \`${ query }\`.**`, 'error');
+        const track = result.data.shift()!;
         if (player.queue.length || player.current || !settings.announceNowPlaying) client.respond(context.channel, `${ client.config.emojis.queued } | **Queued [${ track.info.title } by ${ track.info.author }](${ track.info.uri }).**${ next ? '\nInserted at the top of the queue.' : '' }`, 'success');
         player.handleTrack(new CelerityTrack(track, context.member!), next);
         return;

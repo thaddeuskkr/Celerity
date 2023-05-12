@@ -120,14 +120,14 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
             if (player.current!.info.sourceName === 'youtube') identifier = player.current!.info.identifier;
             else {
                 const res = await client.node.rest.resolve(`ytmsearch:${ player.current!.info.title } - ${ player.current!.info.author }`);
-                if (!res || !res.tracks.length) {
+                if (!res || res.loadType !== 'search' || !res.data.length) {
                     settings.autoplay = false;
                     if (settings.disconnectTimeout === 0) return player.destroy();
                     client.util.timeout(player);
                     player.current = null;
                     return client.respond(player.channel, `${ client.config.emojis.error } | **Failed to autoplay.**\nFailed to resolve last track, automatically disabled autoplay.`, 'error');
                 }
-                const tracks = res.tracks;
+                const tracks = res.data;
                 let finalTrack;
                 for (let i = 0; i < tracks.length; i++) {
                     const playing = tracks[i]!;
@@ -151,15 +151,15 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                 identifier = finalTrack.info.identifier;
             }
             const similarTracks = await client.node.rest.resolve(`https://music.youtube.com/watch?v=${ identifier }&list=RD${ identifier }`);
-            if (!similarTracks || !similarTracks.tracks.length) {
+            if (!similarTracks || similarTracks.loadType !== 'playlist' || !similarTracks.data.tracks.length) {
                 settings.autoplay = false;
                 if (settings.disconnectTimeout === 0) return player.destroy();
                 client.util.timeout(player);
                 player.current = null;
                 return client.respond(player.channel, `${ client.config.emojis.error } | **Failed to autoplay.**\nNo similar tracks found, automatically disabled autoplay.`, 'error');
             }
-            similarTracks.tracks.shift();
-            player.autoplayQueue.push(...similarTracks.tracks.map(t => new CelerityTrack(t, player.guild.members.me!)));
+            similarTracks.data.tracks.shift();
+            player.autoplayQueue.push(...similarTracks.data.tracks.map(t => new CelerityTrack(t, player.guild.members.me!)));
             player.autoplay();
         } else if (settings.autoplay && player.autoplayQueue.length) return player.autoplay();
         else {
