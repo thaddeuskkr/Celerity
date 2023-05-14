@@ -395,7 +395,7 @@ export const command: Command = {
                     });
                     messageCollector.on('collect', async (msg: Message) => {
                         const color = msg.content.toUpperCase().replace('#', '');
-                        await msg.delete();
+                        await msg.delete().catch(() => null);
                         if (/^#?[\da-f]{6}$/i.test(color)) {
                             settings.color = `#${ color }` as ColorResolvable;
                             message.edit({
@@ -482,15 +482,15 @@ export const command: Command = {
                     });
                     messageCollector.on('collect', async (msg: Message) => {
                         if (isNaN(Number(msg.content))) {
-                            await msg.delete();
+                            await msg.delete().catch(() => null);
                             message.edit({ embeds: [ successEmbed.setColor('#F38BA8').setDescription(`${ client.config.emojis.error } | **Invalid number.**`) ] });
                             return;
                         } else if (Number(msg.content) < 0 || Number(msg.content) > 3600) {
-                            await msg.delete();
+                            await msg.delete().catch(() => null);
                             message.edit({ embeds: [ successEmbed.setColor('#F38BA8').setDescription(`${ client.config.emojis.error } | **Invalid number.**\nAccepts: \`0 - 3600\``) ] });
                             return;
                         }
-                        await msg.delete();
+                        await msg.delete().catch(() => null);
                         settings.disconnectTimeout = Number(msg.content);
                         message.edit({
                             embeds: [ successEmbed.setDescription(`${ client.config.emojis.success } | Set **${ foundSetting.name }** to \`${ settings.disconnectTimeout }\`.`) ],
@@ -604,7 +604,7 @@ export const command: Command = {
                             .setColor('#F5C2E7') ], components: []
                     });
                     messageCollector.on('collect', async (msg: Message) => {
-                        await msg.delete();
+                        await msg.delete().catch(() => null);
                         const prefixes = splitBySpacesWithQuotes(msg.content);
                         settings.prefixes = prefixes;
                         message.edit({
