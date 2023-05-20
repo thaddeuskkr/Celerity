@@ -19,13 +19,13 @@ export class Queue extends Array<CelerityTrack> {
         return this.splice(0);
     }
 
-    shuffle(): Queue {
-        if (this.length <= 1) return this;
-        for (let i = this.length - 1; i > 0; i--) {
+    shuffle(tracks: Queue | CelerityTrack[] = this): Queue | CelerityTrack[] {
+        if (tracks.length <= 1) return tracks;
+        for (let i = tracks.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [ this[i], this[j] ] = [ this[j]!, this[i]! ];
+            [ tracks[i], tracks[j] ] = [ tracks[j]!, tracks[i]! ];
         }
-        return this;
+        return tracks;
     }
 
     get totalDuration(): number {
