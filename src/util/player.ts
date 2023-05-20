@@ -62,7 +62,8 @@ export class CelerityPlayer {
         return;
     }
 
-    handlePlaylist(tracks: CelerityTrack[], next: boolean, playskip = false) {
+    handlePlaylist(tracks: CelerityTrack[], next: boolean, playskip = false, shuffle = false) {
+        if (shuffle) tracks = this.queue.shuffle(tracks);
         if (playskip) {
             if (this.loop === 'track') this.loop = 'off';
             this.queue.clear();

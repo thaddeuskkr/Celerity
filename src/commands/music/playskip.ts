@@ -29,6 +29,12 @@ export const command: Command = {
                 { name: 'Apple Music', value: 'am' },
                 { name: 'Yandex Music', value: 'ym' }
             ]
+        },
+        {
+            name: 'shuffle',
+            description: 'If the playlist should be shuffled before being added to the queue. | `--shuffle` / `-sh`',
+            type: ApplicationCommandOptionType.Boolean,
+            required: false
         }
     ],
 
@@ -38,7 +44,13 @@ export const command: Command = {
             playCommand.execute({ client, context, args, settings, player, prefix });
             return;
         }
+        let shuffle = false;
         let source;
+        if (args.includes('--shuffle') || args.includes('-sh')) {
+            if (args.indexOf('--shuffle') !== -1) args.splice(args.indexOf('--shuffle'), 1);
+            if (args.indexOf('-sh') !== -1) args.splice(args.indexOf('-sh'), 1);
+            shuffle = true;
+        }
         if (args.includes('--source') || args.includes('-s')) {
             let index = -1;
             if (args.indexOf('--source') !== -1) index = args.indexOf('--source');
@@ -60,7 +72,7 @@ export const command: Command = {
                 if (playlist) {
                     const tracks = result.data.tracks.filter(t => !t.info.isStream).map(t => new CelerityTrack(t, context.member!));
                     client.respond(context.channel, `${ client.config.emojis.queued } | **Playing ${ tracks.length } tracks from __${ result.data.info.name }__.**`, 'success');
-                    player.handlePlaylist(tracks, false, true);
+                    player.handlePlaylist(tracks, false, true, shuffle);
                     continue;
                 }
                 const track = result.data as Track;

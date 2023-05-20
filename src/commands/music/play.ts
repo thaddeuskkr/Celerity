@@ -36,6 +36,12 @@ export const command: Command = {
             description: 'If the track should be added to the top of the queue. | `--next` / `-n`',
             type: ApplicationCommandOptionType.Boolean,
             required: false
+        },
+        {
+            name: 'shuffle',
+            description: 'If the playlist should be shuffled before being added to the queue. | `--shuffle` / `-sh`',
+            type: ApplicationCommandOptionType.Boolean,
+            required: false
         }
     ],
 
@@ -59,11 +65,17 @@ export const command: Command = {
             if (context.guild!.members.me!.voice.channel?.type === ChannelType.GuildStageVoice) client.util.removeSuppress(context.channel);
         }
         let next = false;
+        let shuffle = false;
         let source;
         if (args.includes('--next') || args.includes('-n')) {
             if (args.indexOf('--next') !== -1) args.splice(args.indexOf('--next'), 1);
             if (args.indexOf('-n') !== -1) args.splice(args.indexOf('-n'), 1);
             next = true;
+        }
+        if (args.includes('--shuffle') || args.includes('-sh')) {
+            if (args.indexOf('--shuffle') !== -1) args.splice(args.indexOf('--shuffle'), 1);
+            if (args.indexOf('-sh') !== -1) args.splice(args.indexOf('-sh'), 1);
+            shuffle = true;
         }
         if (args.includes('--source') || args.includes('-s')) {
             let index = -1;
@@ -86,7 +98,7 @@ export const command: Command = {
                 if (playlist) {
                     const tracks = result.data.tracks.filter(t => !t.info.isStream).map(t => new CelerityTrack(t, context.member!));
                     client.respond(context.channel, `${ client.config.emojis.queued } | **Queued ${ tracks.length } tracks from __${ result.data.info.name }__.**${ next ? '\nInserted at the top of the queue.' : '' }`, 'success');
-                    player.handlePlaylist(tracks, next);
+                    player.handlePlaylist(tracks, next, false, shuffle);
                     continue;
                 }
                 const track = result.data as Track;
