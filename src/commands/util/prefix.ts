@@ -4,7 +4,7 @@ import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 export const command: Command = {
     name: 'prefix',
     description: 'Sets the server prefix(es) that Celerity responds to.',
-    aliases: [ 'pre' ],
+    aliases: [ 'pre', 'prefixes' ],
     checks: [],
     userPermissions: [ PermissionFlagsBits.ManageMessages ],
     options: [],
