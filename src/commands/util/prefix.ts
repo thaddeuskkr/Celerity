@@ -10,6 +10,12 @@ export const command: Command = {
     options: [],
 
     async execute({ client, context, settings, args }) {
+        if (!args.length) {
+            return client.respond(context.channel,
+                new EmbedBuilder()
+                    .setColor(settings.color)
+                    .setDescription(`**Here is a list of prefixes I respond to:**\n${ settings.prefixes.map(prefix => `- \`${ prefix }\``).join('\n') }\n- \`@${ client.user?.username }\``), 'none');
+        }
         const prefixes = splitBySpacesWithQuotes(args.join(' '));
         settings.prefixes = prefixes;
         const embed = new EmbedBuilder()
