@@ -44,6 +44,8 @@ export const event: Event = {
             };
             if (!player) return errorResponse('There isn\'t a player for this server.');
             if (id === 'disconnect') {
+                if (member.voice.channelId === null) return errorResponse('You\'re not in a voice channel.');
+                if (member.voice.channelId !== me.voice.channelId) return errorResponse(`You're not in <#${ me.voice.channel?.id }>.`);
                 successResponse(`${ client.config.emojis.disconnect } | **Disconnected from <#${ player.player.connection.channelId }>.**`);
                 player.player.connection.disconnect().then();
                 player.destroy();
