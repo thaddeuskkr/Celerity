@@ -50,7 +50,7 @@ export const command: Command = {
             { name: 'dj only', altName: 'dj', default: client.config.defaultSettings.dj.enabled },
             { name: 'dj role', altName: 'djr', default: client.config.defaultSettings.dj.role },
             { name: 'prefixes', altName: 'prefix', default: client.config.defaultSettings.prefixes },
-            { name: 'search provider', altName: 'provider', default: client.config.defaultSettings.searchProvider },
+            { name: 'search provider', altName: 'source', default: client.config.defaultSettings.searchProvider },
             { name: 'set stage topic', altName: 'topic', default: client.config.defaultSettings.setStageTopic }
             // { name: 'statistics', default: client.config.defaultSettings.statistics },
             // { name: 'voteSkip', default: client.config.defaultSettings.voteSkip },
