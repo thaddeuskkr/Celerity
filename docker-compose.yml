@@ -7,12 +7,12 @@ services:
     env_file:
       - .env
     environment:
-      LAVALINK_URL: lavalink:6969
       TZ: Asia/Singapore
+      LAVALINK_URL: lavalink:6969
 
   lavalink:
     container_name: lavalink
-    image: ghcr.io/drschlaubi/lavalink:7c03b48
+    image: ghcr.io/lavalink-devs/lavalink:v4
     restart: on-failure
     ports:
       - 6969:6969
