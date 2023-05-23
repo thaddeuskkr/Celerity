@@ -76,7 +76,7 @@ export const command: Command = {
                     continue;
                 }
                 const track = result.data as Track;
-                if (!settings.announceNowPlaying) client.respond(context.channel, `${ client.config.emojis.queued } | **Playing [${ track.info.title } by ${ track.info.author }](${ track.info.uri }).**`, 'success');
+                if (!settings.announceNowPlaying) client.respond(context.channel, `${ client.config.emojis.queued } | **Playing [${ track.info.title } by ${ track.info.author.replace(' - Topic', '') }](${ track.info.uri }).**`, 'success');
                 player.handleTrack(new CelerityTrack(track, context.member!, isYouTubeMusicUrl(urls[i]!) ? 'ytmsearch' : undefined), false, true);
             }
             return;
@@ -84,7 +84,7 @@ export const command: Command = {
         const result = await client.node.rest.resolve(`${ source || settings.searchProvider }:${ query }`);
         if (!result || result.loadType !== 'search' || !result.data.length) return client.respond(context.channel, `${ client.config.emojis.error } | **No results found for \`${ query }\`.**`, 'error');
         const track = result.data.shift()!;
-        if (!settings.announceNowPlaying) client.respond(context.channel, `${ client.config.emojis.queued } | **Playing [${ track.info.title } by ${ track.info.author }](${ track.info.uri }).**`, 'success');
+        if (!settings.announceNowPlaying) client.respond(context.channel, `${ client.config.emojis.queued } | **Playing [${ track.info.title } by ${ track.info.author.replace(' - Topic', '') }](${ track.info.uri }).**`, 'success');
         player.handleTrack(new CelerityTrack(track, context.member!, source || settings.searchProvider), false, true);
         return;
 

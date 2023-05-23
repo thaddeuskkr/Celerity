@@ -102,7 +102,7 @@ export const command: Command = {
                     continue;
                 }
                 const track = result.data as Track;
-                if (player.queue.length !== 0 || player.current || !settings.announceNowPlaying) client.respond(context.channel, `${ client.config.emojis.queued } | **Queued [${ track.info.title } by ${ track.info.author }](${ track.info.uri }).**${ next ? '\nInserted at the top of the queue.' : '' }`, 'success');
+                if (player.queue.length !== 0 || player.current || !settings.announceNowPlaying) client.respond(context.channel, `${ client.config.emojis.queued } | **Queued [${ track.info.title } by ${ track.info.author.replace(' - Topic', '') }](${ track.info.uri }).**${ next ? '\nInserted at the top of the queue.' : '' }`, 'success');
                 player.handleTrack(new CelerityTrack(track, context.member!, isYouTubeMusicUrl(urls[i]!) ? 'ytmsearch' : undefined), next);
             }
             return;
@@ -110,7 +110,7 @@ export const command: Command = {
         const result = await client.node.rest.resolve(`${ source || settings.searchProvider }:${ query }`);
         if (!result || result.loadType !== 'search' || !result.data.length) return client.respond(context.channel, `${ client.config.emojis.error } | **No results found for \`${ query }\`.**`, 'error');
         const track = result.data.shift()!;
-        if (player.queue.length || player.current || !settings.announceNowPlaying) client.respond(context.channel, `${ client.config.emojis.queued } | **Queued [${ track.info.title } by ${ track.info.author }](${ track.info.uri }).**${ next ? '\nInserted at the top of the queue.' : '' }`, 'success');
+        if (player.queue.length || player.current || !settings.announceNowPlaying) client.respond(context.channel, `${ client.config.emojis.queued } | **Queued [${ track.info.title } by ${ track.info.author.replace(' - Topic', '') }](${ track.info.uri }).**${ next ? '\nInserted at the top of the queue.' : '' }`, 'success');
         player.handleTrack(new CelerityTrack(track, context.member!, source || settings.searchProvider), next);
         return;
 
