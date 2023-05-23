@@ -96,14 +96,14 @@ export const command: Command = {
                 if (result.loadType === 'track' && result.data.info.isStream) return client.respond(context.channel, `${ client.config.emojis.error } | **Streams are currently unsupported, but will be in the future.**`, 'error');
                 const playlist = result.loadType === 'playlist';
                 if (playlist) {
-                    const tracks = result.data.tracks.filter(t => !t.info.isStream).map(t => new CelerityTrack(t, context.member!));
+                    const tracks = result.data.tracks.filter(t => !t.info.isStream).map(t => new CelerityTrack(t, context.member!, isYouTubeMusicUrl(urls[i]!) ? 'ytmsearch' : undefined));
                     client.respond(context.channel, `${ client.config.emojis.queued } | **Queued ${ tracks.length } tracks from __${ result.data.info.name }__.**${ next ? '\nInserted at the top of the queue.' : '' }`, 'success');
                     player.handlePlaylist(tracks, next, false, shuffle);
                     continue;
                 }
                 const track = result.data as Track;
                 if (player.queue.length !== 0 || player.current || !settings.announceNowPlaying) client.respond(context.channel, `${ client.config.emojis.queued } | **Queued [${ track.info.title } by ${ track.info.author }](${ track.info.uri }).**${ next ? '\nInserted at the top of the queue.' : '' }`, 'success');
-                player.handleTrack(new CelerityTrack(track, context.member!), next);
+                player.handleTrack(new CelerityTrack(track, context.member!, isYouTubeMusicUrl(urls[i]!) ? 'ytmsearch' : undefined), next);
             }
             return;
         }
@@ -111,7 +111,7 @@ export const command: Command = {
         if (!result || result.loadType !== 'search' || !result.data.length) return client.respond(context.channel, `${ client.config.emojis.error } | **No results found for \`${ query }\`.**`, 'error');
         const track = result.data.shift()!;
         if (player.queue.length || player.current || !settings.announceNowPlaying) client.respond(context.channel, `${ client.config.emojis.queued } | **Queued [${ track.info.title } by ${ track.info.author }](${ track.info.uri }).**${ next ? '\nInserted at the top of the queue.' : '' }`, 'success');
-        player.handleTrack(new CelerityTrack(track, context.member!), next);
+        player.handleTrack(new CelerityTrack(track, context.member!, source || settings.searchProvider), next);
         return;
 
         function extractURL(str: string, lower = false) {
@@ -126,6 +126,11 @@ export const command: Command = {
             } else {
                 return [];
             }
+        }
+
+        function isYouTubeMusicUrl(url: string) {
+            const youtubeMusicRegex = /^(https?:\/\/)?(www\.)?(music\.youtube\.com\/watch\?v=|music\.youtube\.com\/playlist\?list=)([a-zA-Z0-9_-]+)/;
+            return youtubeMusicRegex.test(url);
         }
     }
 };

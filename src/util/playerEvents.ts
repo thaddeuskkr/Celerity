@@ -159,7 +159,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                 return client.respond(player.channel, `${ client.config.emojis.error } | **Failed to autoplay.**\nNo similar tracks found, automatically disabled autoplay.`, 'error');
             }
             similarTracks.data.tracks.shift();
-            player.autoplayQueue.push(...similarTracks.data.tracks.map(t => new CelerityTrack(t, player.guild.members.me!)));
+            player.autoplayQueue.push(...similarTracks.data.tracks.map(t => new CelerityTrack(t, player.guild.members.me!, 'ytmsearch')));
             player.autoplay();
         } else if (settings.autoplay && player.autoplayQueue.length) return player.autoplay();
         else {
