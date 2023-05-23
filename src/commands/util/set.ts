@@ -36,22 +36,22 @@ export const command: Command = {
     ],
 
     async execute({ client, context, settings, args, prefix }) {
-        const modifiableSettings: { name: string, altName?: string, default: unknown }[] = [
+        const modifiableSettings: { name: string, aliases?: string[], default: unknown }[] = [
             { name: 'announce connect', default: client.config.defaultSettings.announceConnect },
             { name: 'announce disconnect', default: client.config.defaultSettings.announceDisconnect },
-            { name: 'announce now playing', default: client.config.defaultSettings.announceNowPlaying },
-            { name: 'autoplay', altName: 'ap', default: client.config.defaultSettings.autoplay },
-            { name: 'banned', default: client.config.defaultSettings.banned },
+            { name: 'announce now playing', aliases: ['announce np'], default: client.config.defaultSettings.announceNowPlaying },
+            { name: 'autoplay', aliases: ['ap'], default: client.config.defaultSettings.autoplay },
+            { name: 'banned users', aliases: ['banned'], default: client.config.defaultSettings.banned },
             { name: 'buttons', default: client.config.defaultSettings.buttons },
-            { name: 'cleanup', default: client.config.defaultSettings.cleanup },
+            { name: 'cleanup', aliases: ['auto delete', 'delete'], default: client.config.defaultSettings.cleanup },
             { name: 'color', default: client.config.defaultSettings.color },
             { name: 'disabled channels', default: client.config.defaultSettings.disabledChannels },
             { name: 'disconnect timeout', default: client.config.defaultSettings.disconnectTimeout },
-            { name: 'dj only', altName: 'dj', default: client.config.defaultSettings.dj.enabled },
-            { name: 'dj role', altName: 'djr', default: client.config.defaultSettings.dj.role },
-            { name: 'prefixes', altName: 'prefix', default: client.config.defaultSettings.prefixes },
-            { name: 'search provider', altName: 'source', default: client.config.defaultSettings.searchProvider },
-            { name: 'set stage topic', altName: 'topic', default: client.config.defaultSettings.setStageTopic }
+            { name: 'dj only', aliases: ['dj'], default: client.config.defaultSettings.dj.enabled },
+            { name: 'dj role', aliases: ['djr'], default: client.config.defaultSettings.dj.role },
+            { name: 'prefixes', aliases: ['prefix'], default: client.config.defaultSettings.prefixes },
+            { name: 'search provider', aliases: ['source', 'provider'], default: client.config.defaultSettings.searchProvider },
+            { name: 'set stage topic', aliases: ['topic'], default: client.config.defaultSettings.setStageTopic }
             // { name: 'statistics', default: client.config.defaultSettings.statistics },
             // { name: 'voteSkip', default: client.config.defaultSettings.voteSkip },
             // { name: 'voteSkipPercentage', default: client.config.defaultSettings.voteSkipPercentage }
@@ -61,7 +61,7 @@ export const command: Command = {
             const foundSetting = modifiableSettings.find(s =>
                 s.name.toLowerCase() === setting ||
                 s.name.split(' ').join('') === setting ||
-                (s.altName ? s.altName.toLowerCase() === setting || s.altName.split(' ').join('') === setting : false));
+                (s.aliases?.length ? s.aliases.map(a => a.toLowerCase()).includes(setting) || s.aliases.map(a => a.toLowerCase().split(' ').join('')).includes(setting) : false));
             if (!foundSetting) return client.respond(context.channel, `**Invalid usage.** Use \`${ client.util.escapeBackticks(prefix.replace(/<@!?\d+>/g, `@${ client.user!.tag } `)) }set\` to see all available settings.`, 'error');
             const stringRow = new ActionRowBuilder<StringSelectMenuBuilder>();
             const buttonRow = new ActionRowBuilder<ButtonBuilder>();
@@ -231,7 +231,7 @@ export const command: Command = {
                 collector.on('end', async collected => {
                     if (!collected.size) message.edit({ embeds: [ timeoutEmbed ], components: [] });
                 });
-            } else if (foundSetting.name === 'banned') {
+            } else if (foundSetting.name === 'banned users') {
                 const currentValue: string[] = [];
                 const currentlyBanned = settings.banned;
                 for (let x = 0; x < currentlyBanned.length; x++) {
@@ -754,7 +754,7 @@ export const command: Command = {
                         value: 'Automatically queue related tracks when a track ends.'
                     },
                     {
-                        name: 'banned',
+                        name: 'banned users',
                         value: 'Ban certain users/roles from using Celerity\'s commands.'
                     },
                     {
