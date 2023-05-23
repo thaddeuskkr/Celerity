@@ -110,6 +110,7 @@ export class Config {
         // Sources
         sources: {
             'youtube': '<:youtube:1104308197440888834>',
+            'youtubemusic': '<:youtubemusic:1110375196973604954>',
             'spotify': '<:spotify:1104308093942251590>',
             'deezer': '<:deezer:1104308063780995082>',
             'soundcloud': '<:soundcloud:1104308078071001159>',
