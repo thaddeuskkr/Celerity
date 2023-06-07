@@ -49,9 +49,9 @@ lavalink:
       #proxyUser: "" # Optional user for basic authentication fields, leave blank if you don't use basic auth
       #proxyPassword: "" # Password for basic authentication
   plugins:
-    - dependency: "com.github.TopiSenpai.LavaSrc:lavasrc-plugin:3.2.0"
+    - dependency: "com.github.TopiSenpai.LavaSrc:lavasrc-plugin:3.2.4"
       repository: "https://jitpack.io"
-    - dependency: "com.dunctebot:skybot-lavalink-plugin:1.4.1"
+    - dependency: "com.dunctebot:skybot-lavalink-plugin:1.4.2"
       repository: "https://m2.duncte123.dev/releases"
 
 plugins:
