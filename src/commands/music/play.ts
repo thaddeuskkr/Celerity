@@ -48,7 +48,7 @@ export const command: Command = {
     async execute({ client, context, player, args, settings }) {
         if (!player) {
             try {
-                const newPlayer = await client.node.joinChannel({
+                const newPlayer = await client.shoukaku.joinVoiceChannel({
                     guildId: context.guild!.id,
                     channelId: context.member!.voice.channel!.id,
                     shardId: context.guild!.shardId

@@ -107,11 +107,11 @@ export class CelerityPlayer {
         ) {
             this.guild.members.me!.voice.channel.stageInstance.edit({ topic: 'Nothing playing' }).catch(() => null);
         }
-        this.player.connection.disconnect().then();
+        this.player.connection.disconnect();
         if (this.nowPlayingMessage && settings.cleanup) this.nowPlayingMessage.delete().catch(() => null);
         this.queue.clear();
         this.player.stopTrack().then();
-        this.player.connection.destroy().then();
+        this.player.destroyPlayer().then();
         this.client.players.delete(this.guild.id);
     }
 

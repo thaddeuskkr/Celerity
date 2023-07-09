@@ -18,7 +18,7 @@ export const command: Command = {
         if (members.size > 0 && player.current && context.member!.voice.channelId !== context.guild!.members.me!.voice.channelId)
             return client.respond(context.channel, `${ client.config.emojis.error } | **You're not in <#${ context.guild!.members.me!.voice.channel!.id }>.**`, 'error');
         client.respond(context.channel, `${ client.config.emojis.disconnect } | **Disconnected from <#${ player.player.connection.channelId }>.**`, 'success');
-        player.player.connection.disconnect().then();
+        player.player.connection.disconnect();
         player.destroy();
         return;
     }

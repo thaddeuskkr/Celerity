@@ -12,7 +12,7 @@ export const command: Command = {
     async execute({ client, context, player, settings }) {
         if (!player) {
             try {
-                const newPlayer = await client.node.joinChannel({
+                const newPlayer = await client.shoukaku.joinVoiceChannel({
                     guildId: context.guild!.id,
                     channelId: context.member!.voice.channel!.id,
                     shardId: context.guild!.shardId
@@ -42,11 +42,8 @@ export const command: Command = {
                     player.channel = context.channel;
                     return client.respond(context.channel, `${ client.config.emojis.connect } | **Bound to <#${ context.channel.id }>.**`, 'success');
                 } else {
-                    await player.player.connection.connect({
-                        guildId: context.guild!.id,
-                        shardId: context.guild!.shardId,
-                        channelId: context.member!.voice.channelId!
-                    });
+                    player.player.connection.channelId = context.member!.voice.channel!.id;
+                    await player.player.connection.connect();
                     player.channel = context.channel;
                     return client.respond(context.channel, `${ client.config.emojis.connect } | **Moved to <#${ context.member!.voice.channel!.id }> and bound to <#${ context.channel.id }>.**`, 'success');
                 }

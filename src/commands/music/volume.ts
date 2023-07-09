@@ -21,7 +21,7 @@ export const command: Command = {
             const newVolume = Number(args[0]);
             if (isNaN(newVolume)) return client.respond(context.channel, `${ client.config.emojis.error } | **Invalid integer.**`, 'error');
             if (newVolume > 100 || newVolume < 0) return client.respond(context.channel, `${ client.config.emojis.error } | **Invalid integer.**\nAccepts: \`0 - 100\`.`, 'error');
-            else await player.player.setVolume(newVolume);
+            else await player.player.setGlobalVolume(newVolume);
             return client.respond(context.channel, `${ client.config.emojis.volume } | **Player volume set to __${ newVolume }%__.**`, 'success');
         }
     }
