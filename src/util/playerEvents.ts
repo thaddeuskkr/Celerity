@@ -187,5 +187,5 @@ export const exception = async (player: CelerityPlayer, client: Celerity, err: T
     client.logger.error(err);
     client.respond(player.channel, `${ client.config.emojis.error } | **An error occurred while playing [${ player.current!.info.title } by ${ player.current!.info.author }](${ player.current!.info.uri }), skipping.**`, 'error');
     if (player.loop === 'track') player.setLoop('off');
-    player.player.stopTrack().then();
+    player.destroy();
 };
