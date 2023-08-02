@@ -185,7 +185,7 @@ export const stuck = async (player: CelerityPlayer, client: Celerity, err: Track
 export const exception = async (player: CelerityPlayer, client: Celerity, err: TrackExceptionEvent) => {
     client.logger.error(`Player in ${ player.guild.name } (${ player.guild.id }) encountered a playback error:`);
     client.logger.error(err);
-    client.respond(player.channel, `${ client.config.emojis.error } | **An error occurred while playing [${ player.current!.info.title } by ${ player.current!.info.author }](${ player.current!.info.uri }), skipping.**`, 'error');
+    client.respond(player.channel, `${ client.config.emojis.error } | **An error occurred while playing [${ player.current!.info.title } by ${ player.current!.info.author }](${ player.current!.info.uri }), disconnecting to prevent further issues.**`, 'error');
     if (player.loop === 'track') player.setLoop('off');
     player.destroy();
 };
