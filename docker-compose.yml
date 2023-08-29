@@ -9,15 +9,3 @@ services:
       - .env
     environment:
       TZ: Asia/Singapore
-      LAVALINK_URL: lavalink:6969
-
-  lavalink:
-    container_name: lavalink
-    image: ghcr.io/lavalink-devs/lavalink:v4
-    restart: unless-stopped
-    ports:
-      - 6969:6969
-    volumes:
-      - ./application.yml:/opt/Lavalink/application.yml:ro
-      - ./lavalink/plugins:/opt/Lavalink/plugins
-      - ./lavalink/logs:/opt/Lavalink/logs
