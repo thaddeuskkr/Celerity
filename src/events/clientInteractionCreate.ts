@@ -74,7 +74,7 @@ export const event: Event = {
                         successResponse(`${ client.config.emojis.resume } | **Resumed [${ current.info.title } by ${ current.info.author }](${ current.info.uri }).**`);
                     } else {
                         await player.player.setPaused(true);
-                        successResponse(`${ client.config.emojis.resume } | **Paused [${ current.info.title } by ${ current.info.author }](${ current.info.uri }).**`);
+                        successResponse(`${ client.config.emojis.pause } | **Paused [${ current.info.title } by ${ current.info.author }](${ current.info.uri }).**`);
                     }
                     break;
                 }

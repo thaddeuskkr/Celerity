@@ -11,9 +11,9 @@ export const command: Command = {
         const current = player.current!;
         if (!player.player.paused) {
             await player.player.setPaused(true);
-            return client.respond(context.channel, `${ client.config.emojis.resume } | **Paused [${ current.info.title } by ${ current.info.author }](${ current.info.uri }).**`, 'success');
+            return client.respond(context.channel, `${ client.config.emojis.pause } | **Paused [${ current.info.title } by ${ current.info.author }](${ current.info.uri }).**`, 'success');
         }
         await player.player.setPaused(false);
-        return client.respond(context.channel, `${ client.config.emojis.pause } | **Resumed [${ current.info.title } by ${ current.info.author }](${ current.info.uri }).**`, 'success');
+        return client.respond(context.channel, `${ client.config.emojis.resume } | **Resumed [${ current.info.title } by ${ current.info.author }](${ current.info.uri }).**`, 'success');
     }
 };
