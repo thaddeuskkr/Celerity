@@ -30,8 +30,8 @@ export const command: Command = {
             const spotifyURL = query.startsWith('https://open.spotify.com/track/');
             let result;
             let finalResult;
-            if (spotifyURL) result = await client.node.rest.resolve(`${ query }`);
-            else result = await client.node.rest.resolve(`spsearch:${ query }`);
+            if (spotifyURL) result = await player.node.rest.resolve(`${ query }`);
+            else result = await player.node.rest.resolve(`spsearch:${ query }`);
             if (!result || result.loadType !== 'search' || !result.data.length) return client.respond(context.channel, `${ client.config.emojis.error } | **No results for \`${ query }\`.**${ args.length ? '' : '\nTry using a custom search query instead.' }`, 'error');
             const tracks = result.data;
             for (let i = 0; i < tracks.length; i++) {
