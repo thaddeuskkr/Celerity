@@ -1,8 +1,9 @@
-LABEL org.opencontainers.image.description="Docker image for Celerity, a Discord music bot that focuses on performance without sacrificing functionality."
-LABEL org.opencontainers.image.source=https://github.com/thaddeuskkr/Celerity
-LABEL org.opencontainers.image.licenses=GPL-3.0-or-later
-
 FROM node:slim AS base
+
+LABEL org.opencontainers.image.description="Docker image for Celerity, a Discord music bot that focuses on performance without sacrificing functionality." \
+      org.opencontainers.image.source=https://github.com/thaddeuskkr/Celerity \
+      org.opencontainers.image.licenses=GPL-3.0-or-later
+
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
