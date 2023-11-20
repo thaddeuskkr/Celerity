@@ -2,6 +2,9 @@
   "include": [
     "**/*"
   ],
+  "exclude": [
+    "node_modules"
+  ],
   "compileOnSave": true,
   "compilerOptions": {
     // Type Checking
