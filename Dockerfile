@@ -8,7 +8,7 @@ COPY . /celerity
 WORKDIR /celerity
 
 FROM base AS prod-deps
-RUN npm install --prod
+RUN npm install --omit=dev
 
 FROM base AS build
 RUN npm install
