@@ -1,9 +1,6 @@
 {
   "include": [
-    "**/*"
-  ],
-  "exclude": [
-    "node_modules"
+    "src/**/*"
   ],
   "compileOnSave": true,
   "compilerOptions": {
