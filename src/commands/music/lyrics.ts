@@ -28,10 +28,12 @@ export const command: Command = {
         } else {
             const query = args.length ? args.join(' ') : `${ player.current!.info.title.replace('(Lyrics)', '').replace(`(${ player.current!.info.title.replace(/\(.*?\)/g, '').trim() })`, '') } - ${ player.current!.info.author.replace(' - Topic', '') }`;
             const spotifyURL = query.startsWith('https://open.spotify.com/track/');
+            const node = client.shoukaku.nodes.get('main');
+            if (!node) return client.respond(context.channel, `${ client.config.emojis.error } | **No audio node available - cannot resolve lyrics.**`, 'error');
             let result;
             let finalResult;
-            if (spotifyURL) result = await client.node.rest.resolve(`${ query }`);
-            else result = await client.node.rest.resolve(`spsearch:${ query }`);
+            if (spotifyURL) result = await node.rest.resolve(`${ query }`);
+            else result = await node.rest.resolve(`spsearch:${ query }`);
             if (!result || result.loadType !== 'search' || !result.data.length) return client.respond(context.channel, `${ client.config.emojis.error } | **No results for \`${ query }\`.**${ args.length ? '' : '\nTry using a custom search query instead.' }`, 'error');
             const tracks = result.data;
             for (let i = 0; i < tracks.length; i++) {
