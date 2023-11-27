@@ -1,5 +1,4 @@
 FROM node:slim AS base
-FROM node:latest AS build
 
 LABEL org.opencontainers.image.description="Docker image for Celerity, a Discord music bot that focuses on performance without sacrificing functionality." \
       org.opencontainers.image.source=https://github.com/thaddeuskkr/Celerity \
@@ -10,10 +9,10 @@ WORKDIR /celerity
 
 CMD [ "node", "." ]
 
-FROM build AS prod-deps
+FROM base AS prod-deps
 RUN npm install --omit=dev
 
-FROM build AS builder
+FROM base AS builder
 RUN npm install -g typescript
 RUN npm install
 RUN tsc
