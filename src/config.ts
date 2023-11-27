@@ -17,9 +17,13 @@ export class Config {
     };
 
     // Lavalink server
-    lavalinkUrl: string = String(process.env.LAVALINK_URL) || '';
-    lavalinkAuth: string = String(process.env.LAVALINK_AUTH) || '';
-    lavalinkSecure: string = String(process.env.LAVALINK_SECURE) || '';
+    lavalink: { name: string; host: string; port: number; auth: string; secure: boolean; } = {
+        name: 'main',
+        host: String(process.env.LAVALINK_HOST) || '',
+        port: Number(process.env.LAVALINK_PORT) || 2333,
+        auth: String(process.env.LAVALINK_AUTH) || '',
+        secure: Boolean(process.env.LAVALINK_SECURE) || false
+    };
 
     // Owners
     owners: string[] = String(process.env.OWNERS).split(',') || [];

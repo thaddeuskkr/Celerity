@@ -49,10 +49,10 @@ export class Celerity extends Client {
         });
         this.db = new Keyv(this.config.database.url, { namespace: this.config.database.namespace });
         this.shoukaku = new Shoukaku(new Connectors.DiscordJS(this), [ {
-            name: 'main',
-            url: this.config.lavalinkUrl,
-            auth: this.config.lavalinkAuth,
-            secure: this.config.lavalinkSecure.toLowerCase() === 'true'
+            name: this.config.lavalink.name,
+            url: `${this.config.lavalink.host}:${this.config.lavalink.port}`,
+            auth: this.config.lavalink.auth,
+            secure: this.config.lavalink.secure
         } ], {
             userAgent: 'Celerity',
             reconnectTries: 100,
