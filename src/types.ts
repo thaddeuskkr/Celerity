@@ -11,7 +11,7 @@ import type {
 import type { Collection } from '@discordjs/collection';
 import type { CelerityPlayer } from './util/player';
 import type Keyv from 'keyv';
-import type { Connection, Node, Shoukaku } from 'shoukaku';
+import type { Connection, Shoukaku } from 'shoukaku';
 import type { Celerity } from './util/client';
 import { ApplicationCommandOptionType, Attachment, Embed } from 'discord.js';
 
@@ -83,7 +83,6 @@ declare module 'discord.js' {
             accessTokenExpirationTimestampMs: number;
             isAnonymous: boolean;
         };
-        node: Node;
         guildSettings: Collection<string, GuildSettings>;
         presenceUpdater: {
             currentIndex: number;
