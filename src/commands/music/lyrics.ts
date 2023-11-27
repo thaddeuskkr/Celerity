@@ -28,7 +28,7 @@ export const command: Command = {
         } else {
             const query = args.length ? args.join(' ') : `${ player.current!.info.title.replace('(Lyrics)', '').replace(`(${ player.current!.info.title.replace(/\(.*?\)/g, '').trim() })`, '') } - ${ player.current!.info.author.replace(' - Topic', '') }`;
             const spotifyURL = query.startsWith('https://open.spotify.com/track/');
-            const node = client.shoukaku.nodes.get('main');
+            const node = client.shoukaku.nodes.get(client.config.lavalink.name);
             if (!node) return client.respond(context.channel, `${ client.config.emojis.error } | **No audio node available - cannot resolve lyrics.**`, 'error');
             let result;
             let finalResult;
