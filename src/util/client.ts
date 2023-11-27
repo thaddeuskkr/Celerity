@@ -52,7 +52,7 @@ export class Celerity extends Client {
             name: this.config.lavalink.name,
             url: `${this.config.lavalink.host}:${this.config.lavalink.port}`,
             auth: this.config.lavalink.auth,
-            secure: this.config.lavalink.secure
+            secure: this.config.lavalink.secure === 'true'
         } ], {
             userAgent: 'Celerity',
             reconnectTries: 100,

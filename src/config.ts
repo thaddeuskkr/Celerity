@@ -17,12 +17,12 @@ export class Config {
     };
 
     // Lavalink server
-    lavalink: { name: string; host: string; port: number; auth: string; secure: boolean; } = {
+    lavalink: { name: string; host: string; port: number; auth: string; secure: string; } = {
         name: 'main',
         host: String(process.env.LAVALINK_HOST) || '',
         port: Number(process.env.LAVALINK_PORT) || 2333,
         auth: String(process.env.LAVALINK_AUTH) || '',
-        secure: Boolean(process.env.LAVALINK_SECURE) || false
+        secure: String(process.env.LAVALINK_SECURE) || '',
     };
 
     // Owners
