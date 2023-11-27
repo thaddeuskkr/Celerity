@@ -11,7 +11,7 @@ import type {
 import type { Collection } from '@discordjs/collection';
 import type { CelerityPlayer } from './util/player';
 import type Keyv from 'keyv';
-import type { Node, Shoukaku } from 'shoukaku';
+import type { Connection, Node, Shoukaku } from 'shoukaku';
 import type { Celerity } from './util/client';
 import { ApplicationCommandOptionType, Attachment, Embed } from 'discord.js';
 
@@ -44,7 +44,7 @@ export type Command = {
     name: string;
     description: string;
     aliases?: string[];
-    checks?: ('vc' | 'samevc' | 'joinable' | 'speakable' | 'player' | 'playing' | 'queue' | 'dj' | 'owner')[];
+    checks?: ('vc' | 'samevc' | 'joinable' | 'speakable' | 'player' | 'playing' | 'queue' | 'dj' | 'owner' | 'connection')[];
     userPermissions?: bigint[];
     clientPermissions?: bigint[];
     options?: {
@@ -56,13 +56,14 @@ export type Command = {
     }[];
     category?: string;
 
-    execute({ client, context, args, settings, prefix, player }: {
+    execute({ client, context, args, settings, prefix, player, connection }: {
         client: Celerity,
         context: Message,
         args: string[],
         settings: GuildSettings,
         prefix: string,
-        player: CelerityPlayer
+        player: CelerityPlayer,
+        connection?: Connection
     }): void;
 }
 

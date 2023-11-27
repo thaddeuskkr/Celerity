@@ -53,6 +53,7 @@ export const event: Event = {
         const userPermissions = command.userPermissions;
         const clientPermissions = command.clientPermissions;
         const player = client.players.get(message.guild.id)!;
+        const connection = client.shoukaku.connections.get(message.guild.id);
         if (checks && checks.length) {
             for (let i = 0; i < checks.length; i++) {
                 if (checks[i] === 'vc' && !message.member.voice.channel)
@@ -65,6 +66,8 @@ export const event: Event = {
                     return errorResponse(`I don't have permission to speak in <#${ message.member.voice.channel.id }>.`);
                 else if (checks[i] === 'player' && !player)
                     return errorResponse('There isn\'t a player for this server.');
+                else if (checks[i] === 'connection' && !connection)
+                    return errorResponse('There isn\'t a voice connection in this server.');
                 else if (checks[i] === 'playing' && (!player || !player.current))
                     return errorResponse('There is nothing playing.');
                 else if (checks[i] === 'queue' && (!player || !player.queue.length))
@@ -93,7 +96,7 @@ export const event: Event = {
             return client.respond(message.channel, `${ client.config.emojis.error } | **Invalid usage.** Use \`${ prefix }help ${ command.name }\` for more information.`, 'error');
 
         try {
-            await command.execute({ client, context: message, args, settings, prefix, player });
+            await command.execute({ client, context: message, args, settings, prefix, player, connection });
             const endTime = performance.now();
             client.logger.debug(`${ message.author.username } (${ message.author.id }) used command ${ command.name }, executed in ${ endTime - startTime }ms`);
         } catch (err) {
