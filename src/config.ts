@@ -32,8 +32,7 @@ export class Config {
     activities: ActivityOptions[] = [
         {
             name: 'music for you ♡',
-            type: ActivityType.Streaming,
-            url: 'https://twitch.tv/thaddeuskkr'
+            type: ActivityType.Playing,
         },
         {
             name: '{version} • c!help',
@@ -48,7 +47,7 @@ export class Config {
             type: ActivityType.Watching
         }
     ];
-    statuses: PresenceStatusData[] = [ 'online', 'online' ];
+    statuses: PresenceStatusData[] = [ 'idle', 'idle', 'idle', 'idle' ];
     presenceUpdateInterval = 25; // in seconds
 
     // Default per-server settings
