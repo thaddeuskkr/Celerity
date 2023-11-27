@@ -9,7 +9,7 @@ COPY . /celerity
 WORKDIR /celerity
 
 FROM build AS prod-deps
-RUN npm install --production
+RUN npm install --omit=dev
 
 FROM build AS builder
 RUN npm install -g typescript
