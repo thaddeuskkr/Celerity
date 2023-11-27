@@ -119,7 +119,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
             let identifier: string;
             if (player.current!.info.sourceName === 'youtube') identifier = player.current!.info.identifier;
             else {
-                const res = await player.node.rest.resolve(`ytmsearch:${ player.current!.info.title } - ${ player.current!.info.author }`);
+                const res = await client.node.rest.resolve(`ytmsearch:${ player.current!.info.title } - ${ player.current!.info.author }`);
                 if (!res || res.loadType !== 'search' || !res.data.length) {
                     settings.autoplay = false;
                     if (settings.disconnectTimeout === 0) return player.destroy();
@@ -150,7 +150,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                 }
                 identifier = finalTrack.info.identifier;
             }
-            const similarTracks = await player.node.rest.resolve(`https://music.youtube.com/watch?v=${ identifier }&list=RD${ identifier }`);
+            const similarTracks = await client.node.rest.resolve(`https://music.youtube.com/watch?v=${ identifier }&list=RD${ identifier }`);
             if (!similarTracks || similarTracks.loadType !== 'playlist' || !similarTracks.data.tracks.length) {
                 settings.autoplay = false;
                 if (settings.disconnectTimeout === 0) return player.destroy();

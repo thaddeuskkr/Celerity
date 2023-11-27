@@ -21,7 +21,7 @@ export const command: Command = {
         const owner = await client.users.fetch(client.config.owners[0]!);
         const cmd = args.join(' ');
         if (cmd) {
-            const command = client.commands.get(cmd) || client.commands.find((c: Command) => c.aliases && c.aliases.includes(cmd));
+            const command = client.commands.get(cmd) || client.commands.find(c => c.aliases && c.aliases.includes(cmd));
             if (!command) return client.respond(context.channel, `${ client.config.emojis.error } | **Invalid command.**\nUse \`${ client.util.escapeBackticks(prefix.replace(/<@!?\d+>/g, `@${ client.user!.tag } `)) }help\` for a list of commands.`, 'error');
             const embed = new EmbedBuilder()
                 .setColor('#cba6f7')

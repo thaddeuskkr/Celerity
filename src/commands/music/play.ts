@@ -91,7 +91,7 @@ export const command: Command = {
         const urls = extractURL(query);
         if (urls.length > 0) {
             for (let i = 0; i < urls.length; i++) {
-                const result = await player.node.rest.resolve(urls[i]!);
+                const result = await client.node.rest.resolve(urls[i]!);
                 if (!result || result.loadType === 'empty' || result.loadType === 'error') return client.respond(context.channel, `${ client.config.emojis.error } | **No results found for \`${ urls[i] }\`.**`, 'error');
                 if (result.loadType === 'track' && result.data.info.isStream) return client.respond(context.channel, `${ client.config.emojis.error } | **Streams are currently unsupported, but will be in the future.**`, 'error');
                 const playlist = result.loadType === 'playlist';
@@ -107,7 +107,7 @@ export const command: Command = {
             }
             return;
         }
-        const result = await player.node.rest.resolve(`${ source || settings.searchProvider }:${ query }`);
+        const result = await client.node.rest.resolve(`${ source || settings.searchProvider }:${ query }`);
         if (!result || result.loadType !== 'search' || !result.data.length) return client.respond(context.channel, `${ client.config.emojis.error } | **No results found for \`${ query }\`.**`, 'error');
         const track = result.data.shift()!;
         if (player.queue.length || player.current || !settings.announceNowPlaying) client.respond(context.channel, `${ client.config.emojis.queued } | **Queued [${ track.info.title } by ${ track.info.author.replace(' - Topic', '') }](${ track.info.uri }).**${ next ? '\nInserted at the top of the queue.' : '' }`, 'success');

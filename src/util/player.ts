@@ -1,5 +1,5 @@
 import type { Client, TextBasedChannel, GuildMember, Guild, Message } from 'discord.js';
-import type { Player, Node, Connection } from 'shoukaku';
+import type { Player, Node } from 'shoukaku';
 import type { CelerityTrack } from './track';
 import type { Celerity } from './client';
 import { ChannelType } from 'discord.js';
@@ -11,12 +11,11 @@ import _ from 'lodash';
 export class CelerityPlayer {
     constructor(client: Celerity, member: GuildMember, channel: TextBasedChannel, player: Player) {
         this.client = client;
-        this.node = player.node;
+        this.node = client.node;
         this.guild = member.guild;
         this.channel = channel;
 
         this.player = player;
-        this.connection = player.node.manager.connections.get(this.guild.id)!;
 
         this.queue = new Queue();
         this.autoplayQueue = new Queue();
@@ -108,7 +107,7 @@ export class CelerityPlayer {
         ) {
             this.guild.members.me!.voice.channel.stageInstance.edit({ topic: 'Nothing playing' }).catch(() => null);
         }
-        this.connection.disconnect();
+        this.player.connection.disconnect();
         if (this.nowPlayingMessage && settings.cleanup) this.nowPlayingMessage.delete().catch(() => null);
         this.queue.clear();
         this.player.stopTrack().then();
@@ -137,7 +136,6 @@ export interface CelerityPlayer {
     client: Client;
     node: Node;
     player: Player;
-    connection: Connection;
     member: GuildMember;
     guild: Guild;
     channel: TextBasedChannel;

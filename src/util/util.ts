@@ -28,7 +28,7 @@ export class Util {
             if (player.timeout) clearTimeout(player.timeout);
             if (!player.queue.length && !player.current) {
                 if (settings.announceDisconnect) this.client.respond(player.channel, `${ this.client.config.emojis.timeout } | **Disconnected due to inactivity.**`, 'warn');
-                player.connection.disconnect();
+                player.player.connection.disconnect();
                 return player.destroy();
             }
         }, (this.client.guildSettings.get(celerity.guild.id)?.disconnectTimeout || _.cloneDeep(this.client.config.defaultSettings).disconnectTimeout) * 1000);

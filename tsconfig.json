@@ -1,6 +1,6 @@
 {
   "include": [
-    "src/**/*"
+    "**/*"
   ],
   "compileOnSave": true,
   "compilerOptions": {
@@ -32,7 +32,6 @@
     "inlineSources": true,
     "newLine": "lf",
     "noEmitHelpers": true,
-    "rootDir": "src",
     "outDir": "dist",
     "removeComments": true,
     "sourceMap": true,

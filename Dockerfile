@@ -1,21 +1,14 @@
-FROM node:latest AS base
+FROM node:latest
 
-LABEL org.opencontainers.image.description="Docker image for Celerity, a Discord music bot that focuses on performance without sacrificing functionality." \
-      org.opencontainers.image.source=https://github.com/thaddeuskkr/Celerity \
-      org.opencontainers.image.licenses=GPL-3.0-or-later
+LABEL org.opencontainers.image.description="Docker image for Celerity, a Discord music bot that focuses on performance without sacrificing functionality."
+LABEL org.opencontainers.image.source=https://github.com/thaddeuskkr/Celerity
+LABEL org.opencontainers.image.licenses=GPL-3.0-or-later
 
-COPY . /celerity
 WORKDIR /celerity
+COPY . .
 
-FROM base AS prod-deps
-RUN npm install --omit=dev
-
-FROM base AS build
+RUN npm install -g typescript
 RUN npm install
-RUN npm run build
+RUN tsc
 
-FROM base
-COPY --from=prod-deps /celerity/node_modules /celerity/node_modules
-COPY --from=build /celerity/dist /celerity/dist
-
-CMD [ "node", "." ]
+CMD ["node", "."]
