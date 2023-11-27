@@ -7,13 +7,5 @@ export const event: Event = {
 
     async run(client) {
         client.logger.info(`Connected to Lavalink - ${ client.config.lavalinkSecure.toLowerCase() === 'true' ? 'wss://' : 'ws://' }${ client.config.lavalinkUrl }`);
-        const node = client.shoukaku.getIdealNode();
-        if (!node) return client.logger.warn('No audio node available, all music commands will not work.');
-        client.node = node;
-        setInterval(async () => {
-            const node = client.shoukaku.getIdealNode();
-            if (!node) return client.logger.warn('No audio node available, all music commands will not work.');
-            client.node = node;
-        }, 5000);
     }
 };
