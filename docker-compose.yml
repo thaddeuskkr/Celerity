@@ -1,8 +1,8 @@
 services:
   celerity:
     container_name: celerity
-    image: celerity
-    # image: ghcr.io/thaddeuskkr/celerity:latest
+    # image: celerity
+    image: ghcr.io/thaddeuskkr/celerity:latest
     restart: unless-stopped
     build: .
     env_file:
