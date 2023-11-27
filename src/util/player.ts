@@ -11,7 +11,7 @@ import _ from 'lodash';
 export class CelerityPlayer {
     constructor(client: Celerity, member: GuildMember, channel: TextBasedChannel, player: Player) {
         this.client = client;
-        this.node = client.node;
+        this.node = player.node;
         this.guild = member.guild;
         this.channel = channel;
 
@@ -98,7 +98,7 @@ export class CelerityPlayer {
         return this.player.playTrack({ track: this.current!.encoded });
     }
 
-    destroy() {
+    async destroy() {
         const settings = this.client.guildSettings.get(this.guild.id) || _.cloneDeep(this.client.config.defaultSettings);
         if (
             this.guild.members.me!.voice.channel?.type === ChannelType.GuildStageVoice &&
@@ -107,11 +107,13 @@ export class CelerityPlayer {
         ) {
             this.guild.members.me!.voice.channel.stageInstance.edit({ topic: 'Nothing playing' }).catch(() => null);
         }
-        this.player.connection.disconnect();
+        await this.client.shoukaku.leaveVoiceChannel(this.guild.id);
         if (this.nowPlayingMessage && settings.cleanup) this.nowPlayingMessage.delete().catch(() => null);
+        /*
         this.queue.clear();
         this.player.stopTrack().then();
         this.player.destroyPlayer().then();
+        */
         this.client.players.delete(this.guild.id);
     }
 
