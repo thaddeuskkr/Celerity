@@ -8,6 +8,8 @@ LABEL org.opencontainers.image.description="Docker image for Celerity, a Discord
 COPY . /celerity
 WORKDIR /celerity
 
+CMD [ "node", "." ]
+
 FROM build AS prod-deps
 RUN npm install --omit=dev
 
@@ -19,4 +21,3 @@ RUN tsc
 FROM base
 COPY --from=prod-deps /celerity/node_modules /celerity/node_modules
 COPY --from=builder /celerity/dist /celerity/dist
-CMD [ "node", "." ]
