@@ -21,6 +21,7 @@ export const event: Event = {
                 id !== 'disconnect'
             ) return;
             const player = client.players.get(interaction.guild.id);
+            const connection = client.shoukaku.connections.get(interaction.guild.id);
             const settings = client.guildSettings.get(interaction.guild.id) || _.cloneDeep(client.config.defaultSettings);
             const errorResponse = (text: string) => {
                 interaction.reply({
@@ -42,12 +43,12 @@ export const event: Event = {
                     ]
                 });
             };
+            if (!connection) return errorResponse('There isn\'t a voice connection in this server.');
             if (!player) return errorResponse('There isn\'t a player for this server.');
             if (id === 'disconnect') {
                 if (member.voice.channelId === null) return errorResponse('You\'re not in a voice channel.');
                 if (member.voice.channelId !== me.voice.channelId) return errorResponse(`You're not in <#${ me.voice.channel?.id }>.`);
-                successResponse(`${ client.config.emojis.disconnect } | **Disconnected from <#${ player.player.connection.channelId }>.**`);
-                player.player.connection.disconnect();
+                successResponse(`${ client.config.emojis.disconnect } | **Disconnected from <#${ connection.channelId }>.**`);
                 player.destroy();
                 return;
             }
