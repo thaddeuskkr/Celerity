@@ -9,8 +9,8 @@ export const command: Command = {
     checks: [ 'vc', 'joinable', 'speakable', 'dj' ],
     options: [],
 
-    async execute({ client, context, player, settings }) {
-        if (!player) {
+    async execute({ client, context, player, settings, connection }) {
+        if (!player || !connection) {
             try {
                 const newPlayer = await client.shoukaku.joinVoiceChannel({
                     guildId: context.guild!.id,
@@ -28,7 +28,7 @@ export const command: Command = {
             }
             if (context.guild!.members.me!.voice.channel?.type === ChannelType.GuildStageVoice) client.util.removeSuppress(context.channel);
         } else {
-            const voiceChannel = context.guild!.channels.cache.get(player.player.connection.channelId!)!;
+            const voiceChannel = context.guild!.channels.cache.get(connection.channelId!)!;
             if (voiceChannel.type !== ChannelType.GuildVoice && voiceChannel.type !== ChannelType.GuildStageVoice) {
                 client.logger.error(`Disconnected from ${ voiceChannel.name } (${ voiceChannel.id }) in ${ context.guild!.name } (${ context.guild!.id }) due to an unknown channel type: ${ voiceChannel.type }`);
                 return client.respond(context.channel, `${ client.config.emojis.error } | **Disconnected due to an internal error.**`, 'error');
@@ -42,8 +42,8 @@ export const command: Command = {
                     player.channel = context.channel;
                     return client.respond(context.channel, `${ client.config.emojis.connect } | **Bound to <#${ context.channel.id }>.**`, 'success');
                 } else {
-                    player.player.connection.channelId = context.member!.voice.channel!.id;
-                    await player.player.connection.connect();
+                    connection.channelId = context.member!.voice.channel!.id;
+                    await connection.connect();
                     player.channel = context.channel;
                     return client.respond(context.channel, `${ client.config.emojis.connect } | **Moved to <#${ context.member!.voice.channel!.id }> and bound to <#${ context.channel.id }>.**`, 'success');
                 }
