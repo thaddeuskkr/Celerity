@@ -40,7 +40,7 @@
     "pino": "^8.16.1",
     "pino-pretty": "^10.2.3",
     "pretty-ms": "^8.0.0",
-    "shoukaku": "github:Deivu/Shoukaku",
+    "shoukaku": "github:shipgirlproject/Shoukaku",
     "utf-8-validate": "^6.0.3",
     "zlib-sync": "^0.1.9"
   },
