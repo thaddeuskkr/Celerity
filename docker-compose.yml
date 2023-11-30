@@ -1,11 +1,29 @@
 services:
-  celerity:
-    container_name: celerity
-    # image: celerity
-    image: ghcr.io/thaddeuskkr/celerity:latest
-    restart: unless-stopped
-    build: .
-    env_file:
-      - .env
-    environment:
-      TZ: Asia/Singapore
+    celerity:
+        container_name: celerity
+        image: ghcr.io/thaddeuskkr/celerity:latest
+        restart: unless-stopped
+        networks:
+            - default
+        env_file:
+            - .env
+        environment:
+            TZ: Asia/Singapore
+    lavalink:
+        container_name: lavalink
+        image: ghcr.io/lavalink-devs/lavalink:dev
+        restart: unless-stopped
+        networks:
+            - default
+            - lavalink
+        ports:
+            - 6969:6969
+        volumes:
+            - ./application.yml:/opt/Lavalink/application.yml:ro
+
+networks:
+    default:
+        name: celerity
+    lavalink:
+        name: lavalink
+        driver: bridge
