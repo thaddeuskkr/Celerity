@@ -4,7 +4,7 @@ module.exports = {
         node: true,
     },
     ignorePatterns: ['.eslintrc.cjs'],
-    extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+    extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
     overrides: [],
     parser: '@typescript-eslint/parser',
     parserOptions: {
