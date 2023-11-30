@@ -1,9 +1,4 @@
-import {
-    ActivityType,
-    Client,
-    EmbedBuilder,
-    GatewayIntentBits
-} from 'discord.js';
+import { ActivityType, Client, EmbedBuilder, GatewayIntentBits } from 'discord.js';
 import { Collection } from '@discordjs/collection';
 import { Connectors, Shoukaku } from 'shoukaku';
 import { Config } from '../config.js';
@@ -25,16 +20,18 @@ export class Celerity extends Client {
                 /* ============== Privileged intents ============== */
                 // GatewayIntentBits.GuildPresences,
                 GatewayIntentBits.GuildMembers,
-                GatewayIntentBits.MessageContent
+                GatewayIntentBits.MessageContent,
             ],
             shards: 'auto',
             presence: {
-                activities: [ {
-                    name: 'starting...',
-                    type: ActivityType.Playing
-                } ],
-                status: 'online'
-            }
+                activities: [
+                    {
+                        name: 'starting...',
+                        type: ActivityType.Playing,
+                    },
+                ],
+                status: 'online',
+            },
         });
         this.config = new Config(this);
         this.util = new Util(this);
@@ -42,26 +39,35 @@ export class Celerity extends Client {
         this.players = new Collection();
         this.logger = pino({
             level: this.config.logLevel,
-            transport: process.env.NODE_ENV === 'production' ? undefined : {
-                target: 'pino-pretty',
-                options: { colorize: true }
-            }
+            transport:
+                process.env.NODE_ENV === 'production'
+                    ? undefined
+                    : {
+                          target: 'pino-pretty',
+                          options: { colorize: true },
+                      },
         });
         this.db = new Keyv(this.config.database.url, { namespace: this.config.database.namespace });
-        this.shoukaku = new Shoukaku(new Connectors.DiscordJS(this), [ {
-            name: this.config.lavalink.name,
-            url: `${this.config.lavalink.host}:${this.config.lavalink.port}`,
-            auth: this.config.lavalink.auth,
-            secure: this.config.lavalink.secure === 'true'
-        } ], {
-            userAgent: 'Celerity',
-            reconnectTries: 100,
-            reconnectInterval: 10 // Tries to reconnect every 10 seconds, 100 times.
-        });
+        this.shoukaku = new Shoukaku(
+            new Connectors.DiscordJS(this),
+            [
+                {
+                    name: this.config.lavalink.name,
+                    url: `${this.config.lavalink.host}:${this.config.lavalink.port}`,
+                    auth: this.config.lavalink.auth,
+                    secure: this.config.lavalink.secure === 'true',
+                },
+            ],
+            {
+                userAgent: 'Celerity',
+                reconnectTries: 100,
+                reconnectInterval: 10, // Tries to reconnect every 10 seconds, 100 times.
+            },
+        );
         this.messageContent = '';
         this.presenceUpdater = {
             currentIndex: 0,
-            updateRequired: true
+            updateRequired: true,
         };
         this.respond = (context, text, color, options) => {
             if (color === 'success') color = '#A6E3A1';
@@ -71,21 +77,20 @@ export class Celerity extends Client {
             else if (color === 'info') color = '#CBA6F7';
             if (text instanceof EmbedBuilder) {
                 if (color !== 'none') text.setColor(color);
-                context.send({ embeds: [ text ], ...options });
+                context.send({ embeds: [text], ...options });
                 return;
             } else {
                 if (color === 'none') color = '#11111B';
                 context.send({
-                    embeds: [ new EmbedBuilder()
-                        .setDescription(text)
-                        .setColor(color) ], ...options
+                    embeds: [new EmbedBuilder().setDescription(text).setColor(color)],
+                    ...options,
                 });
             }
         };
     }
 
     async initialiseEvents(dirname: string) {
-        const events = fs.readdirSync(path.join(dirname, 'events')).filter(file => file.endsWith('.js'));
+        const events = fs.readdirSync(path.join(dirname, 'events')).filter((file) => file.endsWith('.js'));
 
         for (const file of events) {
             const { event }: { event: Event } = await import('file:///' + path.join(dirname, 'events', file));
@@ -102,7 +107,7 @@ export class Celerity extends Client {
                     eventEmitter = this.db;
                     break;
                 default:
-                    this.logger.warn(`Not loading ${ file } due to an invalid emitter`);
+                    this.logger.warn(`Not loading ${file} due to an invalid emitter`);
                     continue;
             }
             if (once) eventEmitter.once(name, run.bind(null, this));
@@ -111,15 +116,20 @@ export class Celerity extends Client {
     }
 
     async initialiseCommands(dirname: string) {
-        const categories = fs.readdirSync(path.join(dirname, 'commands'), { withFileTypes: true }).filter(dirent => dirent.isDirectory()).map(dirent => dirent.name);
+        const categories = fs
+            .readdirSync(path.join(dirname, 'commands'), { withFileTypes: true })
+            .filter((dirent) => dirent.isDirectory())
+            .map((dirent) => dirent.name);
         for (const category of categories) {
-            const commands = fs.readdirSync(path.join(dirname, 'commands', category)).filter(file => file.endsWith('.js'));
+            const commands = fs.readdirSync(path.join(dirname, 'commands', category)).filter((file) => file.endsWith('.js'));
             for (const file of commands) {
-                const { command }: {
-                    command: Command
+                const {
+                    command,
+                }: {
+                    command: Command;
                 } = await import('file:///' + path.join(dirname, 'commands', category, file));
                 if (!command || !command.name || !command.execute) {
-                    this.logger.warn(`Not loading ${ category }/${ file } due to missing fields`);
+                    this.logger.warn(`Not loading ${category}/${file} due to missing fields`);
                     continue;
                 }
                 command.category = category;

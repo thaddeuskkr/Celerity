@@ -15,10 +15,10 @@
 
 ## Links
 
-* [Invite](https://discord.com/api/oauth2/authorize?client_id=1063698207793762406&permissions=279176399888&scope=bot%20applications.commands)
-* [Source Code](https://github.com/thaddeuskkr/Celerity)
-* [Vote](https://top.gg/bot/1063698207793762406/vote)
-* [View on top.gg](https://top.gg/bot/1063698207793762406)
+-   [Invite](https://discord.com/api/oauth2/authorize?client_id=1063698207793762406&permissions=279176399888&scope=bot%20applications.commands)
+-   [Source Code](https://github.com/thaddeuskkr/Celerity)
+-   [Vote](https://top.gg/bot/1063698207793762406/vote)
+-   [View on top.gg](https://top.gg/bot/1063698207793762406)
 
 <p align="center">
     <i>Thank you for your support for Celerity.</i>

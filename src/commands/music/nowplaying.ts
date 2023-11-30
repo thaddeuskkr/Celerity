@@ -4,15 +4,15 @@ import type { Command } from '../../types';
 export const command: Command = {
     name: 'nowplaying',
     description: 'Returns details regarding the currently playing track.',
-    aliases: [ 'np', 'now', 'playing', 'current' ],
-    checks: [ 'playing' ],
+    aliases: ['np', 'now', 'playing', 'current'],
+    checks: ['playing'],
     options: [
         {
             name: 'dynamic',
             description: 'If the now playing message should update every few seconds. (-d / --dynamic)',
             type: ApplicationCommandOptionType.Boolean,
-            required: false
-        }
+            required: false,
+        },
     ],
 
     async execute({ client, context, player, settings, args }) {
@@ -23,7 +23,7 @@ export const command: Command = {
         else {
             const message = await context.channel.send({ embeds: [getEmbed()] });
             const interval = setInterval(() => {
-                message.edit({ embeds: [ getEmbed() ] });
+                message.edit({ embeds: [getEmbed()] });
             }, 5000);
             player.player.once('end', () => clearInterval(interval));
         }
@@ -37,12 +37,18 @@ export const command: Command = {
                 .setColor(settings.color)
                 .setImage(player.current!.info.artworkUrl || null)
                 .setDescription(
-                    `\`${ player.ms(player.player.position) }\` ${ createNowPlayingBar(player.position, current.info.length, 30) } \`${ player.ms(current.info.length) }\`\n` +
-                    '**__NOW PLAYING__**\n' +
-                    `${ sourceEmoji } | [${ current.info.title } by ${ current.info.author }](${ current.info.uri })\n` +
-                    `**Requested by:** ${ current.info.requester.user.toString() }`
+                    `\`${player.ms(player.player.position)}\` ${createNowPlayingBar(player.position, current.info.length, 30)} \`${player.ms(
+                        current.info.length,
+                    )}\`\n` +
+                        '**__NOW PLAYING__**\n' +
+                        `${sourceEmoji} | [${current.info.title} by ${current.info.author}](${current.info.uri})\n` +
+                        `**Requested by:** ${current.info.requester.user.toString()}`,
                 )
-                .setFooter({ text: `${ player.player.paused ? '⏸️ | ' : '' }🔊 ${ (player.player.filters.volume || 1) * 100 }% | ${ player.queue.length } track(s) in queue` });
+                .setFooter({
+                    text: `${player.player.paused ? '⏸️ | ' : ''}🔊 ${(player.player.filters.volume || 1) * 100}% | ${
+                        player.queue.length
+                    } track(s) in queue`,
+                });
         }
 
         function hasSourceEmoji(value: string): value is keyof typeof client.config.emojis.sources {
@@ -54,11 +60,11 @@ export const command: Command = {
             const currentSeconds = Math.floor(current / 1000);
             const totalSeconds = Math.floor(duration / 1000);
             const percentage = currentSeconds / totalSeconds;
-            const progress = Math.round((size * percentage));
+            const progress = Math.round(size * percentage);
             const emptyProgress = size - progress;
             const progressText = '═'.repeat(progress);
             const emptyProgressText = '═'.repeat(emptyProgress);
-            return `\`╞${ progressText }▰${ emptyProgressText }╡\``;
+            return `\`╞${progressText}▰${emptyProgressText}╡\``;
         }
-    }
+    },
 };

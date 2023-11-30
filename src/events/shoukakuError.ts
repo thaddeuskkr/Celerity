@@ -7,5 +7,5 @@ export const event: Event = {
 
     async run(client, _, error: Error) {
         client.logger.error(error);
-    }
+    },
 };

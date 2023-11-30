@@ -7,6 +7,6 @@ export const event: Event = {
     emitter: 'client',
 
     async run(client, guild: Guild) {
-        client.logger.info(`Removed from server: ${ guild.name } (${ guild.id })`);
-    }
+        client.logger.info(`Removed from server: ${guild.name} (${guild.id})`);
+    },
 };

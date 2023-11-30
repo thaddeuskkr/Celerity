@@ -13,11 +13,11 @@ export class Config {
     token: string = String(process.env.TOKEN) || '';
     database = {
         url: String(process.env.DATABASE_URL) || '',
-        namespace: String(process.env.DATABASE_NAMESPACE) || ''
+        namespace: String(process.env.DATABASE_NAMESPACE) || '',
     };
 
     // Lavalink server
-    lavalink: { name: string; host: string; port: number; auth: string; secure: string; } = {
+    lavalink: { name: string; host: string; port: number; auth: string; secure: string } = {
         name: 'main',
         host: String(process.env.LAVALINK_HOST) || '',
         port: Number(process.env.LAVALINK_PORT) || 2333,
@@ -40,18 +40,18 @@ export class Config {
         },
         {
             name: '{version} • c!help',
-            type: ActivityType.Playing
+            type: ActivityType.Playing,
         },
         {
             name: '{servercount} servers • c!help',
-            type: ActivityType.Watching
+            type: ActivityType.Watching,
         },
         {
             name: '{usercount} users • c!help',
-            type: ActivityType.Watching
-        }
+            type: ActivityType.Watching,
+        },
     ];
-    statuses: PresenceStatusData[] = [ 'idle', 'idle', 'idle', 'idle' ];
+    statuses: PresenceStatusData[] = ['idle', 'idle', 'idle', 'idle'];
     presenceUpdateInterval = 25; // in seconds
 
     // Default per-server settings
@@ -68,14 +68,14 @@ export class Config {
         disconnectTimeout: 300, // In seconds
         dj: {
             enabled: false,
-            role: ''
+            role: '',
         },
-        prefixes: [ 'c!' ],
+        prefixes: ['c!'],
         searchProvider: 'ytmsearch',
         setStageTopic: true,
         statistics: true,
         voteSkip: false,
-        voteSkipPercentage: 50
+        voteSkipPercentage: 50,
     };
 
     // Emojis
@@ -112,18 +112,18 @@ export class Config {
 
         // Sources
         sources: {
-            'youtube': '<:youtube:1104308197440888834>',
-            'youtubemusic': '<:youtubemusic:1110375196973604954>',
-            'spotify': '<:spotify:1104308093942251590>',
-            'deezer': '<:deezer:1104308063780995082>',
-            'soundcloud': '<:soundcloud:1104308078071001159>',
-            'applemusic': '<:applemusic:1104308042515877928>',
-            'yandexmusic': '<:yandexmusic:1104308117421948928>'
+            youtube: '<:youtube:1104308197440888834>',
+            youtubemusic: '<:youtubemusic:1110375196973604954>',
+            spotify: '<:spotify:1104308093942251590>',
+            deezer: '<:deezer:1104308063780995082>',
+            soundcloud: '<:soundcloud:1104308078071001159>',
+            applemusic: '<:applemusic:1104308042515877928>',
+            yandexmusic: '<:yandexmusic:1104308117421948928>',
         },
 
         // Pagination
         nextPage: '<a:right_arrow:1106061122823524473>',
-        prevPage: '<a:left_arrow:1106061156889677976>'
+        prevPage: '<a:left_arrow:1106061156889677976>',
     };
 }
 

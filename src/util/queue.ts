@@ -23,13 +23,13 @@ export class Queue extends Array<CelerityTrack> {
         if (tracks.length <= 1) return tracks;
         for (let i = tracks.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [ tracks[i], tracks[j] ] = [ tracks[j]!, tracks[i]! ];
+            [tracks[i], tracks[j]] = [tracks[j]!, tracks[i]!];
         }
         return tracks;
     }
 
     get totalDuration(): number {
-        if (this.find(track => track.info.isStream)) return Infinity;
+        if (this.find((track) => track.info.isStream)) return Infinity;
         return this.reduce((acc, cur) => acc + cur.info.length, 0);
     }
 }

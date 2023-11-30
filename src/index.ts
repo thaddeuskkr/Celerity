@@ -34,13 +34,21 @@ console.log(chalk.bold('/ /___/  __/ /  __/ /  / / /_/ /_/ / '));
 console.log(chalk.bold('\\____/\\___/_/\\___/_/  /_/\\__/\\__, /  '));
 console.log(chalk.bold('                            /____/   '));
 console.log(chalk.bold('—————————————————————————————————————'));
-console.log(chalk.hex('#cba6f7').bold.italic(`> ${ chalk.hex('#f5c2e7').italic('Celerity • by thaddeuskkr') } | ${ chalk.hex('#a6e3a1').italic(`Node.js ${ process.version }`) } | ${ chalk.hex('#89b4fa').italic(`discord.js v${ require('discord.js').version }`) }`));
+console.log(
+    chalk
+        .hex('#cba6f7')
+        .bold.italic(
+            `> ${chalk.hex('#f5c2e7').italic('Celerity • by thaddeuskkr')} | ${chalk.hex('#a6e3a1').italic(`Node.js ${process.version}`)} | ${chalk
+                .hex('#89b4fa')
+                .italic(`discord.js v${require('discord.js').version}`)}`,
+        ),
+);
 
 const client = new Celerity();
 
-[ 'unhandledRejection', 'uncaughtException' ].forEach(event => {
+['unhandledRejection', 'uncaughtException'].forEach((event) => {
     process.on(event, (err) => {
-        client.logger.error(`${ err }`);
+        client.logger.error(`${err}`);
         console.error(err);
     });
 });

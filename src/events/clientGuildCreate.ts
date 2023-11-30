@@ -7,6 +7,6 @@ export const event: Event = {
     emitter: 'client',
 
     async run(client, guild: Guild) {
-        client.logger.info(`Added to server: ${ guild.name } (${ guild.id })`);
-    }
+        client.logger.info(`Added to server: ${guild.name} (${guild.id})`);
+    },
 };

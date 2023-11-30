@@ -12,11 +12,11 @@ export const event: Event = {
         snipes.unshift({
             content: message.content,
             embeds: message.embeds,
-            attachments: message.attachments.map(a => a),
+            attachments: message.attachments.map((a) => a),
             channel: message.channel.id,
             author: message.author.id,
-            timestamp: message.createdTimestamp
+            timestamp: message.createdTimestamp,
         });
         await client.db.set('snipes', snipes);
-    }
+    },
 };
