@@ -28,14 +28,8 @@ export const command: Command = {
         const avatar = user.avatarURL({ size: 4096, forceStatic: false });
         if (!avatar) return client.respond(context.channel, `${client.config.emojis.error} | **No avatar found.**`, 'error');
         else {
-            const embed = new EmbedBuilder()
-                .setAuthor({
-                    name: `@${context.author.username}`,
-                    iconURL: avatar,
-                })
-                .setImage(avatar)
-                .setColor(settings.color);
-            return client.respond(context.channel, embed, 'success');
+            const embed = new EmbedBuilder().setAuthor({ name: `@${context.author.username}` }).setImage(avatar);
+            return client.respond(context.channel, embed, settings.color);
         }
     },
 };
