@@ -13,11 +13,26 @@ export const command: Command = {
             type: ApplicationCommandOptionType.Boolean,
             required: false,
         },
+        {
+            name: 'timeout',
+            description:
+                'The amount of time, in minutes, for which the embed should be updated. By default, stops at the end of the track. (-t / --timeout)',
+            type: ApplicationCommandOptionType.Integer,
+            required: false,
+        },
     ],
 
     async execute({ client, context, player, settings, args }) {
         let dynamic = false;
+        let timeout = 0;
         if (args.length && (args.includes('-d') || args.includes('--dynamic'))) dynamic = true;
+        if (args.length && (args.includes('-t') || args.includes('--timeout'))) {
+            let index = -1;
+            if (args.indexOf('--timeout') !== -1) index = args.indexOf('--source');
+            if (args.indexOf('-t') !== -1) index = args.indexOf('-s');
+            if (isNaN(Number(args[index + 1]))) return client.respond(context.channel, 'Expected an integer for `timeout`.', 'error');
+            else timeout = Number(args[index + 1]);
+        }
         const embed = getEmbed();
         if (!dynamic) return client.respond(context.channel, embed, 'none');
         else {
@@ -25,7 +40,14 @@ export const command: Command = {
             const interval = setInterval(() => {
                 message.edit({ embeds: [getEmbed()] });
             }, 5000);
-            player.player.once('end', () => clearInterval(interval));
+            if (timeout === 0) player.player.once('end', () => clearInterval(interval));
+            if (timeout === -1) {
+                client.on('voiceStateUpdate', (oldState, newState) => {
+                    if (oldState.guild.id !== context.guild!.id) return;
+                    if (oldState.channelId === client.shoukaku.connections.get(oldState.guild.id)?.channelId && !newState.channelId)
+                        clearInterval(interval);
+                });
+            } else setTimeout(() => clearInterval(interval), timeout * 60 * 1000);
         }
 
         function getEmbed() {
@@ -37,7 +59,7 @@ export const command: Command = {
                 .setColor(settings.color)
                 .setImage(player.current!.info.artworkUrl || null)
                 .setDescription(
-                    `\`${player.ms(player.player.position)}\` ${createNowPlayingBar(player.position, current.info.length, 30)} \`${player.ms(
+                    `\`${player.ms(player.player.position)}\` ${createNowPlayingBar(player.position, current.info.length, 20)} \`${player.ms(
                         current.info.length,
                     )}\`\n` +
                         '**__NOW PLAYING__**\n' +
