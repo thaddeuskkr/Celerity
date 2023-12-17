@@ -28,9 +28,10 @@ export const command: Command = {
         if (args.length && (args.includes('-d') || args.includes('--dynamic'))) dynamic = true;
         if (args.length && (args.includes('-t') || args.includes('--timeout'))) {
             let index = -1;
-            if (args.indexOf('--timeout') !== -1) index = args.indexOf('--source');
-            if (args.indexOf('-t') !== -1) index = args.indexOf('-s');
-            if (isNaN(Number(args[index + 1]))) return client.respond(context.channel, 'Expected an integer for `timeout`.', 'error');
+            if (args.indexOf('--timeout') !== -1) index = args.indexOf('--timeout');
+            if (args.indexOf('-t') !== -1) index = args.indexOf('-t');
+            if (isNaN(Number(args[index + 1])))
+                return client.respond(context.channel, `${client.config.emojis.error} Expected an integer for \`timeout\`.`, 'error');
             else timeout = Number(args[index + 1]);
         }
         const embed = getEmbed();
@@ -65,8 +66,8 @@ export const command: Command = {
                     `\`${player.ms(player.player.position)}\` ${createNowPlayingBar(player.position, current.info.length, 20)} \`${player.ms(
                         current.info.length,
                     )}\`\n` +
-                        `[${current.info.title} by ${current.info.author}](${current.info.uri})\n` +
-                        `on ${sourceEmoji} ${sourceFullName}\n` +
+                        `**[${current.info.title} by ${current.info.author}](${current.info.uri})**\n` +
+                        `on ${sourceEmoji} **${sourceFullName}**\n` +
                         `**Requested by:** ${current.info.requester.user.toString()}`,
                 )
                 .setFooter({
