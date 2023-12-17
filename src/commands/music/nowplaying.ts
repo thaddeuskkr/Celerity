@@ -53,8 +53,11 @@ export const command: Command = {
         function getEmbed() {
             const current = player.current!;
             let sourceEmoji: string;
+            let sourceFullName: string;
             if (!hasSourceEmoji(player.current!.info.sourceName)) sourceEmoji = client.config.emojis.playing;
             else sourceEmoji = client.config.emojis.sources[player.current!.info.sourceName];
+            if (!hasSourceFullName(player.current!.info.sourceName)) sourceFullName = 'Unknown';
+            else sourceFullName = client.util.fullSourceNames[player.current!.info.sourceName];
             return new EmbedBuilder()
                 .setColor(settings.color)
                 .setImage(player.current!.info.artworkUrl || null)
@@ -62,8 +65,8 @@ export const command: Command = {
                     `\`${player.ms(player.player.position)}\` ${createNowPlayingBar(player.position, current.info.length, 20)} \`${player.ms(
                         current.info.length,
                     )}\`\n` +
-                        '**__NOW PLAYING__**\n' +
-                        `${sourceEmoji} | [${current.info.title} by ${current.info.author}](${current.info.uri})\n` +
+                        `[${current.info.title} by ${current.info.author}](${current.info.uri})\n` +
+                        `on ${sourceEmoji} ${sourceFullName}\n` +
                         `**Requested by:** ${current.info.requester.user.toString()}`,
                 )
                 .setFooter({
@@ -75,6 +78,10 @@ export const command: Command = {
 
         function hasSourceEmoji(value: string): value is keyof typeof client.config.emojis.sources {
             return value in client.config.emojis.sources;
+        }
+
+        function hasSourceFullName(value: string): value is keyof typeof client.util.fullSourceNames {
+            return value in client.util.fullSourceNames;
         }
 
         function createNowPlayingBar(current: number, duration: number, size = 20) {
