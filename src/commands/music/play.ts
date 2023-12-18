@@ -116,11 +116,7 @@ export const command: Command = {
                 if (!result || result.loadType === 'empty' || result.loadType === 'error')
                     return client.respond(context.channel, `${client.config.emojis.error} | **No results found for \`${urls[i]}\`.**`, 'error');
                 if (result.loadType === 'track' && result.data.info.isStream)
-                    return client.respond(
-                        context.channel,
-                        `${client.config.emojis.error} | **Streams are currently unsupported, but will be in the future.**`,
-                        'error',
-                    );
+                    return client.respond(context.channel, `${client.config.emojis.error} | **Live / audio streams are not supported.**`, 'error');
                 const playlist = result.loadType === 'playlist';
                 if (playlist) {
                     const tracks = result.data.tracks
