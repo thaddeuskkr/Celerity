@@ -31,18 +31,24 @@ export const command: Command = {
             if (args.indexOf('--timeout') !== -1) index = args.indexOf('--timeout');
             if (args.indexOf('-t') !== -1) index = args.indexOf('-t');
             if (isNaN(Number(args[index + 1])))
-                return client.respond(context.channel, `${client.config.emojis.error} Expected an integer for \`timeout\`.`, 'error');
+                return client.respond(context.channel, `${client.config.emojis.error} | **Invalid integer.**\nAccepts: \`-1 - ∞\`.`, 'error');
             else timeout = Number(args[index + 1]);
         }
         const embed = getEmbed();
         if (!dynamic) return client.respond(context.channel, embed, 'none');
         else {
             const message = await context.channel.send({ embeds: [getEmbed()] });
-            const interval = setInterval(() => {
-                message.edit({ embeds: [getEmbed()] });
+            const interval = setInterval(async () => {
+                if (!player.current) return;
+                if (!player) clearInterval(interval);
+                await message.edit({ embeds: [getEmbed()] });
             }, 5000);
-            if (timeout === 0) player.player.once('end', () => clearInterval(interval));
-            if (timeout === -1) {
+            if (timeout === 0) {
+                player.player.once('end', async () => {
+                    await message.edit({ embeds: [getEmbed()] });
+                    clearInterval(interval);
+                });
+            } else if (timeout === -1) {
                 client.on('voiceStateUpdate', (oldState, newState) => {
                     if (oldState.guild.id !== context.guild!.id) return;
                     if (oldState.channelId === client.shoukaku.connections.get(oldState.guild.id)?.channelId && !newState.channelId)
@@ -50,6 +56,7 @@ export const command: Command = {
                 });
             } else setTimeout(() => clearInterval(interval), timeout * 60 * 1000);
         }
+        console.log(dynamic, timeout);
 
         function getEmbed() {
             const current = player.current!;
@@ -63,12 +70,12 @@ export const command: Command = {
                 .setColor(settings.color)
                 .setImage(player.current!.info.artworkUrl || null)
                 .setDescription(
-                    `\`${player.ms(player.player.position)}\` ${createNowPlayingBar(player.position, current.info.length, 20)} \`${player.ms(
-                        current.info.length,
-                    )}\`\n` +
-                        `**[${current.info.title} by ${current.info.author}](${current.info.uri})**\n` +
+                    `**[${current.info.title} by ${current.info.author}](${current.info.uri})**\n` +
                         `on ${sourceEmoji} **${sourceFullName}**\n` +
-                        `**Requested by:** ${current.info.requester.user.toString()}`,
+                        `**Requested by:** ${current.info.requester.user.toString()}\n\n` +
+                        `\`${player.ms(player.player.position)}\` ${createNowPlayingBar(player.position, current.info.length, 22)} \`${player.ms(
+                            current.info.length,
+                        )}\`\n`,
                 )
                 .setFooter({
                     text: `${player.player.paused ? '⏸️ | ' : ''}🔊 ${(player.player.filters.volume || 1) * 100}% | ${
