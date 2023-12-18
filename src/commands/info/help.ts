@@ -6,7 +6,7 @@ import _ from 'lodash';
 export const command: Command = {
     name: 'help',
     description: "Returns information about Celerity's commands.",
-    aliases: ['commands'],
+    aliases: ['commands', 'h'],
     checks: [],
     options: [
         {
