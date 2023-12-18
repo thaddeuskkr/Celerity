@@ -23,6 +23,7 @@ export class CelerityPlayer {
 
         this.current = null;
         this.nowPlayingMessage = null;
+        this.nowPlayingInterval = null;
         this.loop = 'off';
         this.stopped = false;
         this.previousUsed = false;
@@ -110,11 +111,7 @@ export class CelerityPlayer {
         }
         await this.client.shoukaku.leaveVoiceChannel(this.guild.id);
         if (this.nowPlayingMessage && settings.cleanup) this.nowPlayingMessage.delete().catch(() => null);
-        /*
-        this.queue.clear();
-        this.player.stopTrack().then();
-        this.player.destroyPlayer().then();
-        */
+        clearInterval(this.nowPlayingInterval || undefined);
         this.client.players.delete(this.guild.id);
     }
 
@@ -148,6 +145,7 @@ export interface CelerityPlayer {
     previous: CelerityTrack[];
     loop: 'off' | 'track' | 'queue';
     nowPlayingMessage: Message | null;
+    nowPlayingInterval: NodeJS.Timeout | null;
     stopped: boolean;
     previousUsed: boolean;
     timeout: NodeJS.Timeout | null;

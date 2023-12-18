@@ -35,28 +35,26 @@ export const command: Command = {
             else timeout = Number(args[index + 1]);
         }
         const embed = getEmbed();
+        if (player.nowPlayingInterval) {
+            clearInterval(player.nowPlayingInterval);
+            player.nowPlayingInterval = null;
+        }
         if (!dynamic) return client.respond(context.channel, embed, 'none');
         else {
             const message = await context.channel.send({ embeds: [getEmbed()] });
-            const interval = setInterval(async () => {
+            player.nowPlayingInterval = setInterval(async () => {
                 if (!player.current) return;
-                if (!player) clearInterval(interval);
                 await message.edit({ embeds: [getEmbed()] });
             }, 5000);
             if (timeout === 0) {
                 player.player.once('end', async () => {
                     await message.edit({ embeds: [getEmbed()] });
-                    clearInterval(interval);
+                    clearInterval(player.nowPlayingInterval || undefined);
                 });
             } else if (timeout === -1) {
-                client.on('voiceStateUpdate', (oldState, newState) => {
-                    if (oldState.guild.id !== context.guild!.id) return;
-                    if (oldState.channelId === client.shoukaku.connections.get(oldState.guild.id)?.channelId && !newState.channelId)
-                        clearInterval(interval);
-                });
-            } else setTimeout(() => clearInterval(interval), timeout * 60 * 1000);
+                return;
+            } else setTimeout(() => clearInterval(player.nowPlayingInterval || undefined), timeout * 60 * 1000);
         }
-        console.log(dynamic, timeout);
 
         function getEmbed() {
             const current = player.current!;
