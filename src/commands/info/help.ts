@@ -31,14 +31,14 @@ export const command: Command = {
                     'error',
                 );
             const embed = new EmbedBuilder()
-                .setColor('#cba6f7')
+                .setColor(settings.color)
                 .setAuthor({
                     name: 'Command information',
                     iconURL: client.user!.displayAvatarURL({ size: 4096 }),
-                    url: 'https://celerity.tkkr.one',
+                    url: 'https://go.tkkr.dev/c-inv',
                 })
                 .setFooter({
-                    text: `Made with ♡ by @${owner.username}`,
+                    text: `Made with ♡ by @${owner.username} | ${client.version}`,
                     iconURL: owner.displayAvatarURL({ size: 4096 }),
                 })
                 .addFields(
@@ -85,10 +85,10 @@ export const command: Command = {
         const paginatedMessage = new CelerityPaginatedMessage(client, {
             template: new EmbedBuilder()
                 .setAuthor({ name: 'Celerity', iconURL: client.user!.displayAvatarURL({ size: 4096 }) })
-                .setURL('https://celerity.tkkr.one')
+                .setURL('https://go.tkkr.dev/c-inv')
                 .setColor(settings.color)
                 .setFooter({
-                    text: `Made with ♡ by @${owner.username}`,
+                    text: `Made with ♡ by @${owner.username} | ${client.version}`,
                     iconURL: owner.displayAvatarURL({ size: 4096 }),
                 }),
         });

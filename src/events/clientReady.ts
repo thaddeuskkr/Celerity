@@ -26,6 +26,8 @@ export const event: Event = {
         client.guildSettings = new Collection(guildSettingsInit);
         client.logger.info(`Retrieved ${client.guildSettings.size} server settings from database`);
 
+        client.version = require('../../package.json').version;
+
         // Write server settings to database every 10 seconds (if outdated)
         setInterval(async () => {
             const guildSettings = client.guildSettings;
