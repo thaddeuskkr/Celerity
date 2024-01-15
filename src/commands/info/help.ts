@@ -38,7 +38,7 @@ export const command: Command = {
                     url: 'https://go.tkkr.dev/c-inv',
                 })
                 .setFooter({
-                    text: `Made with ♡ by @${owner.username} | ${client.version}`,
+                    text: `Made with ♡ by @${owner.username} • ${client.version}`,
                     iconURL: owner.displayAvatarURL({ size: 4096 }),
                 })
                 .addFields(
@@ -88,7 +88,7 @@ export const command: Command = {
                 .setURL('https://go.tkkr.dev/c-inv')
                 .setColor(settings.color)
                 .setFooter({
-                    text: `Made with ♡ by @${owner.username} | ${client.version}`,
+                    text: `Made with ♡ by @${owner.username} • ${client.version}`,
                     iconURL: owner.displayAvatarURL({ size: 4096 }),
                 }),
         });
