@@ -44,7 +44,11 @@ export const command: Command = {
             const message = await context.channel.send({ embeds: [getEmbed()] });
             player.nowPlayingInterval = setInterval(async () => {
                 if (!player.current) return;
-                await message.edit({ embeds: [getEmbed()] });
+                try {
+                    await message.edit({ embeds: [getEmbed()] });
+                } catch () {
+                    clearInterval(player.nowPlayingInterval || undefined);
+                }
             }, 5000);
             if (timeout === 0) {
                 player.player.once('end', async () => {
