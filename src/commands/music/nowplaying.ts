@@ -52,7 +52,6 @@ export const command: Command = {
             }, 5000);
             if (timeout === 0) {
                 player.player.once('end', async () => {
-                    await message.edit({ embeds: [getEmbed()] });
                     clearInterval(player.nowPlayingInterval || undefined);
                 });
             } else if (timeout === -1) {
