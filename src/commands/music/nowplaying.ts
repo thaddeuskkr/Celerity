@@ -46,7 +46,7 @@ export const command: Command = {
                 if (!player.current) return;
                 try {
                     await message.edit({ embeds: [getEmbed()] });
-                } catch () {
+                } catch {
                     clearInterval(player.nowPlayingInterval || undefined);
                 }
             }, 5000);
