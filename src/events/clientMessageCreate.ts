@@ -32,8 +32,9 @@ export const event: Event = {
                         .setColor(settings.color)
                         .setAuthor({ name: 'You mentioned me?', iconURL: client.user.displayAvatarURL({ size: 4096 }) })
                         .setDescription(
-                            `**Here is a list of prefixes I respond to:**\n${prefixes.map((prefix) => `- \`${prefix}\``).join('\n')}\n- \`@${client
-                                .user?.username}\``,
+                            `**Here is a list of prefixes I respond to:**\n${prefixes.map((prefix) => `- \`${prefix}\``).join('\n')}\n- \`@${
+                                client.user?.username
+                            }\``,
                         ),
                 ],
             });

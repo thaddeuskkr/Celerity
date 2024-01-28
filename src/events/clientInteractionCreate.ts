@@ -165,13 +165,11 @@ export const event: Event = {
                     if (player.loop === 'queue') loopText = '\n🔁 Looping the queue';
                     else if (player.loop === 'track') loopText = '\n🔂 Looping the current track';
                     const paginatedMessage = new CelerityPaginatedMessage(client, {
-                        template: new EmbedBuilder()
-                            .setColor(settings.color)
-                            .setFooter({
-                                text: `${queue.length} track(s) in queue • ${player.ms(queue.totalDuration)} • Requested by ${
-                                    interaction.user.username
-                                }${loopText}`,
-                            }),
+                        template: new EmbedBuilder().setColor(settings.color).setFooter({
+                            text: `${queue.length} track(s) in queue • ${player.ms(queue.totalDuration)} • Requested by ${
+                                interaction.user.username
+                            }${loopText}`,
+                        }),
                     });
                     for (let x = 0; x < chunkedQueue.length; x++) {
                         const descriptionLines = [];

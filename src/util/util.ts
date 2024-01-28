@@ -31,18 +31,22 @@ export class Util {
             celerity.timeout = null;
         }
         this.client.logger.debug(`Started timeout for ${celerity.guild.id}.`);
-        celerity.timeout = setTimeout(() => {
-            const player = this.client.players.get(celerity.guild.id);
-            const settings = this.client.guildSettings.get(celerity.guild.id) || _.cloneDeep(this.client.config.defaultSettings);
-            if (!player) return;
-            if (player.timeout) clearTimeout(player.timeout);
-            if (!player.queue.length && !player.current) {
-                if (settings.announceDisconnect)
-                    this.client.respond(player.channel, `${this.client.config.emojis.timeout} | **Disconnected due to inactivity.**`, 'warn');
-                return player.destroy();
-            }
-            return;
-        }, (this.client.guildSettings.get(celerity.guild.id)?.disconnectTimeout || _.cloneDeep(this.client.config.defaultSettings).disconnectTimeout) * 1000);
+        celerity.timeout = setTimeout(
+            () => {
+                const player = this.client.players.get(celerity.guild.id);
+                const settings = this.client.guildSettings.get(celerity.guild.id) || _.cloneDeep(this.client.config.defaultSettings);
+                if (!player) return;
+                if (player.timeout) clearTimeout(player.timeout);
+                if (!player.queue.length && !player.current) {
+                    if (settings.announceDisconnect)
+                        this.client.respond(player.channel, `${this.client.config.emojis.timeout} | **Disconnected due to inactivity.**`, 'warn');
+                    return player.destroy();
+                }
+                return;
+            },
+            (this.client.guildSettings.get(celerity.guild.id)?.disconnectTimeout ||
+                _.cloneDeep(this.client.config.defaultSettings).disconnectTimeout) * 1000,
+        );
     }
 
     removeSuppress(channel: TextBasedChannel) {
