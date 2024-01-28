@@ -7,6 +7,7 @@
     "scripts": {
         "build": "tsc",
         "start": "tsc && node dist/index.js",
+        "prettier": "prettier --write .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
@@ -56,6 +57,7 @@
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-deprecation": "^2.0.0",
         "node-gyp": "^10.0.1",
+        "prettier": "^3.2.4",
         "typescript": "^5.3.3"
     },
     "engines": {
