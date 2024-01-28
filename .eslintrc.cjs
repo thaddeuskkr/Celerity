@@ -18,7 +18,7 @@ module.exports = {
         '@typescript-eslint/no-this-alias': 'off',
         '@typescript-eslint/no-unsafe-declaration-merging': 'off',
         'deprecation/deprecation': 'error',
-        indent: ['error', 4, { SwitchCase: 1 }],
+        indent: ['off'],
         'linebreak-style': ['error', 'unix'],
         quotes: ['error', 'single', { avoidEscape: true }],
         semi: ['error', 'always'],
