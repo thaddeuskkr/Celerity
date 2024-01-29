@@ -1,6 +1,6 @@
 /*
     Celerity, a music Discord bot focused on performance, without sacrificing functionality, features and quality.
-    Copyright (C) 2023 • Thaddeus Kuah • thaddeuskkr
+    Copyright (C) 2024 • Thaddeus Kuah • thaddeuskkr
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
