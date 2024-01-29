@@ -39,10 +39,10 @@ lavalink:
             email: '' # Email of Google account
             password: '' # Password of Google account
     plugins:
-        - dependency: 'com.github.topi314.lavasearch:lavasearch-plugin:1ad3951'
-          repository: 'https://maven.topi.wtf/snapshots'
-        - dependency: 'com.github.topi314.lavasrc:lavasrc-plugin:5a24554'
-          repository: 'https://maven.topi.wtf/snapshots'
+        - dependency: 'com.github.topi314.lavasearch:lavasearch-plugin:3d0f4f6'
+          repository: 'https://maven.lavalink.dev/snapshots'
+        - dependency: 'com.github.topi314.lavasrc:lavasrc-plugin:62560f2'
+          repository: 'https://maven.lavalink.dev/snapshots'
         - dependency: 'com.dunctebot:skybot-lavalink-plugin:1.4.2'
           repository: 'https://m2.duncte123.dev/releases'
 plugins:
