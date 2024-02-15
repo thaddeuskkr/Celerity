@@ -60,8 +60,8 @@ export class Celerity extends Client {
             ],
             {
                 userAgent: 'Celerity',
-                reconnectTries: 100,
-                reconnectInterval: 10, // Tries to reconnect every 10 seconds, 100 times.
+                reconnectTries: 9999,
+                reconnectInterval: 10, // Tries to reconnect every 10 seconds, 9999 times.
             },
         );
         this.messageContent = '';
