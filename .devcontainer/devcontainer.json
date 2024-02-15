@@ -1,9 +1,9 @@
 // For format details, see https://aka.ms/devcontainer.json.
 {
-	"name": "Celerity",
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bookworm",
-	"features": {
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
-	},
-	"postCreateCommand": "npm install"
+    "name": "Celerity",
+    "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bookworm",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    },
+    "postCreateCommand": "npm install",
 }
