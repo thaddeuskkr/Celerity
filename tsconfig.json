@@ -44,6 +44,6 @@
         "experimentalDecorators": true,
         "lib": ["ESNext"],
         "target": "ES2022",
-        "useDefineForClassFields": true,
-    },
+        "useDefineForClassFields": true
+    }
 }
