@@ -76,6 +76,7 @@ export type Command = {
 
 declare module 'discord.js' {
     interface Client {
+        ready: boolean;
         version: string;
         config: Config;
         util: Util;
