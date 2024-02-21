@@ -158,7 +158,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
             client.util.timeout(player);
             return (player.current = null);
         }
-    } else if (!player.player.paused) return player.play();
+    } else return player.play();
 };
 
 export const stuck = async (player: CelerityPlayer, client: Celerity, err: TrackStuckEvent) => {

@@ -54,7 +54,7 @@ export class CelerityPlayer {
             this.queue.clear();
             this.queue.push(track);
             this.player.stopTrack().then();
-            // this.player.setPaused(false);
+            this.player.setPaused(false);
             return;
         }
         if (next) this.queue.unshift(track);
@@ -71,7 +71,7 @@ export class CelerityPlayer {
             this.queue.clear();
             this.queue.push(...tracks);
             this.player.stopTrack().then();
-            // this.player.setPaused(false);
+            this.player.setPaused(false);
             return;
         }
         if (next) this.queue.unshift(...tracks);
