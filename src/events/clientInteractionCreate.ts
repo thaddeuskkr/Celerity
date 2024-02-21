@@ -71,6 +71,7 @@ export const event: Event = {
                     player.queue.unshift(player.current!);
                     player.queue.unshift(prev!);
                     await player.player.stopTrack();
+                    player.player.setPaused(false);
                     if (!settings.announceNowPlaying)
                         successResponse(
                             `${client.config.emojis.previous} | **Returned to [${prev!.info.title} by ${prev!.info.author}](${prev!.info.uri}).**`,
@@ -101,6 +102,7 @@ export const event: Event = {
                         }).**`,
                     );
                     await player.player.stopTrack();
+                    player.player.setPaused(false);
                     break;
                 }
                 case 'stop': {
@@ -109,6 +111,7 @@ export const event: Event = {
                     player.setLoop('off');
                     player.stopped = true;
                     await player.player.stopTrack();
+                    player.player.setPaused(false);
                     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
                         new ButtonBuilder()
                             .setCustomId('disconnect')

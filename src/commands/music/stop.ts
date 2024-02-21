@@ -14,6 +14,7 @@ export const command: Command = {
         player.setLoop('off');
         player.stopped = true;
         await player.player.stopTrack();
+        player.player.setPaused(false);
         const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
                 .setCustomId('disconnect')
