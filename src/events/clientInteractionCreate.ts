@@ -71,7 +71,6 @@ export const event: Event = {
                     player.queue.unshift(player.current!);
                     player.queue.unshift(prev!);
                     await player.player.stopTrack();
-                    player.player.setPaused(false);
                     if (!settings.announceNowPlaying)
                         successResponse(
                             `${client.config.emojis.previous} | **Returned to [${prev!.info.title} by ${prev!.info.author}](${prev!.info.uri}).**`,
