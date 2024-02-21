@@ -15,7 +15,6 @@ export const command: Command = {
         player.queue.unshift(player.current!);
         player.queue.unshift(prev!);
         await player.player.stopTrack();
-        player.player.setPaused(false);
         if (!settings.announceNowPlaying)
             client.respond(
                 context.channel,

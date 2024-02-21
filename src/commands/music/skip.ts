@@ -17,6 +17,5 @@ export const command: Command = {
             'success',
         );
         await player.player.stopTrack();
-        player.player.setPaused(false);
     },
 };

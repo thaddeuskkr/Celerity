@@ -102,7 +102,6 @@ export const event: Event = {
                         }).**`,
                     );
                     await player.player.stopTrack();
-                    player.player.setPaused(false);
                     break;
                 }
                 case 'stop': {
@@ -111,7 +110,6 @@ export const event: Event = {
                     player.setLoop('off');
                     player.stopped = true;
                     await player.player.stopTrack();
-                    player.player.setPaused(false);
                     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
                         new ButtonBuilder()
                             .setCustomId('disconnect')
