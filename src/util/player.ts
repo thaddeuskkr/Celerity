@@ -84,6 +84,7 @@ export class CelerityPlayer {
     play() {
         if (!this.queue.length) return;
         if (this.stopped) this.stopped = false;
+        if (this.player.paused) this.player.setPaused(false);
         this.current = this.queue.shift()!;
         if (this.guild.members.me!.voice.channel?.type === ChannelType.GuildStageVoice)
             this.guild!.members.me!.voice.setSuppressed(false).catch(() => null);
