@@ -89,6 +89,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
             const trackIdentifiers: Array<string> = [];
             for (let n = 0; n < Math.min(player.previous.length, 5); n++) {
                 const t = player.previous[n]!;
+                if (t.info.title === 'Unknown title' || t.info.author === 'Unknown artist') continue;
                 if (t.info.sourceName === 'spotify') trackIdentifiers.push(t.info.identifier);
                 else {
                     const res = await player.node.rest.resolve(`spsearch:${t.info.title} - ${t.info.author}`);
@@ -115,6 +116,16 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                     trackIdentifiers.push(finalTrack.info.identifier);
                 }
             }
+            if (!trackIdentifiers.length) {
+                if (settings.disconnectTimeout === 0) return player.destroy();
+                client.util.timeout(player);
+                player.current = null;
+                return client.respond(
+                    player.channel,
+                    `${client.config.emojis.error} | **Failed to autoplay.**\nFailed to retrieve information for previously played tracks.`,
+                    'error',
+                );
+            }
             const similarTracks = await player.node.rest.resolve(
                 `sprec:seed_tracks=${trackIdentifiers.join(',')}` +
                     (settings.autoplay.targetPopularity === -1 ? '' : `&target_popularity=${settings.autoplay.targetPopularity}`) +
@@ -122,13 +133,12 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                     (settings.autoplay.maximumPopularity === -1 ? '' : `&max_popularity=${settings.autoplay.maximumPopularity}`),
             );
             if (!similarTracks || similarTracks.loadType !== 'playlist' || !similarTracks.data.tracks.length) {
-                settings.autoplay.enabled = false;
                 if (settings.disconnectTimeout === 0) return player.destroy();
                 client.util.timeout(player);
                 player.current = null;
                 return client.respond(
                     player.channel,
-                    `${client.config.emojis.error} | **Failed to autoplay.**\nNo similar tracks found, automatically disabled autoplay.`,
+                    `${client.config.emojis.error} | **Failed to autoplay.**\nNo similar tracks found.`,
                     'error',
                 );
             }
