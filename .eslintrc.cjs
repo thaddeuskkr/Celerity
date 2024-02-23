@@ -3,7 +3,7 @@ module.exports = {
         es2022: true,
         node: true,
     },
-    ignorePatterns: ['.eslintrc.cjs'],
+    ignorePatterns: ['.eslintrc.cjs', 'src/**/*.exclude.ts'],
     extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
     overrides: [],
     parser: '@typescript-eslint/parser',

@@ -1,5 +1,6 @@
 {
     "include": ["src/**/*"],
+    "exclude": ["src/**/*.exclude.ts"],
     "compileOnSave": true,
     "compilerOptions": {
         // Type Checking
