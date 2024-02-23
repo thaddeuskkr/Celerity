@@ -117,11 +117,11 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                 }
             }
             const similarTracks = await player.node.rest.resolve(
-                    `sprec:seed_tracks=${trackIdentifiers.join(',')}` + 
+                `sprec:seed_tracks=${trackIdentifiers.join(',')}` +
                     (settings.autoplay.targetPopularity === -1 ? '' : `&target_popularity=${settings.autoplay.targetPopularity}`) +
                     (settings.autoplay.minimumPopularity === -1 ? '' : `&min_popularity=${settings.autoplay.minimumPopularity}`) +
-                    (settings.autoplay.maximumPopularity === -1 ? '' : `&max_popularity=${settings.autoplay.maximumPopularity}`)
-                );
+                    (settings.autoplay.maximumPopularity === -1 ? '' : `&max_popularity=${settings.autoplay.maximumPopularity}`),
+            );
             if (!similarTracks || similarTracks.loadType !== 'playlist' || !similarTracks.data.tracks.length) {
                 settings.autoplay.enabled = false;
                 if (settings.disconnectTimeout === 0) return player.destroy();
@@ -134,7 +134,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                 );
             }
             player.autoplayQueue.push(...similarTracks.data.tracks.map((t) => new CelerityTrack(t, player.guild.members.me!)));
-            player.autoplayQueue = new Queue(player.autoplayQueue.filter(val => !player.previous.includes(val))); // Remove duplicates from autoplay queue
+            player.autoplayQueue = new Queue(player.autoplayQueue.filter((val) => !player.previous.includes(val))); // Remove duplicates from autoplay queue
             player.autoplay();
         } else if (settings.autoplay.enabled && player.autoplayQueue.length) return player.autoplay();
         else {

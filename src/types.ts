@@ -18,7 +18,7 @@ export type GuildSettings = {
         targetPopularity: number;
         minimumPopularity: number;
         maximumPopularity: number;
-    }
+    };
     banned: string[];
     buttons: 'off' | 'base' | 'extra';
     cleanup: boolean;

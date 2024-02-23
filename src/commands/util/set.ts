@@ -42,9 +42,21 @@ export const command: Command = {
             { name: 'announce disconnect', default: client.config.defaultSettings.announceDisconnect },
             { name: 'announce now playing', aliases: ['announce np'], default: client.config.defaultSettings.announceNowPlaying },
             { name: 'autoplay', aliases: ['ap'], default: client.config.defaultSettings.autoplay.enabled },
-            { name: 'autoplay target popularity', aliases: ['autoplay popularity target', 'ap popularity', 'ap target', 'ap tp'], default: client.config.defaultSettings.autoplay.targetPopularity },
-            { name: 'autoplay minimum popularity', aliases: ['autoplay popularity minimum', 'ap min', 'ap minimum', 'ap mp'], default: client.config.defaultSettings.autoplay.minimumPopularity },
-            { name: 'autoplay maximum popularity', aliases: ['autoplay popularity maximum', 'ap max', 'ap maximum', 'ap xp'], default: client.config.defaultSettings.autoplay.maximumPopularity },
+            {
+                name: 'autoplay target popularity',
+                aliases: ['autoplay popularity target', 'ap popularity', 'ap target', 'ap tp'],
+                default: client.config.defaultSettings.autoplay.targetPopularity,
+            },
+            {
+                name: 'autoplay minimum popularity',
+                aliases: ['autoplay popularity minimum', 'ap min', 'ap minimum', 'ap mp'],
+                default: client.config.defaultSettings.autoplay.minimumPopularity,
+            },
+            {
+                name: 'autoplay maximum popularity',
+                aliases: ['autoplay popularity maximum', 'ap max', 'ap maximum', 'ap xp'],
+                default: client.config.defaultSettings.autoplay.maximumPopularity,
+            },
             { name: 'banned users', aliases: ['banned'], default: client.config.defaultSettings.banned },
             { name: 'buttons', default: client.config.defaultSettings.buttons },
             { name: 'cleanup', aliases: ['auto delete', 'delete'], default: client.config.defaultSettings.cleanup },
@@ -266,7 +278,7 @@ export const command: Command = {
                                 embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)],
                             });
                             return;
-                        } else if ((Number(msg.content) < -1 || Number(msg.content) > 100)) {
+                        } else if (Number(msg.content) < -1 || Number(msg.content) > 100) {
                             await msg.delete().catch(() => null);
                             message.edit({
                                 embeds: [
@@ -329,7 +341,7 @@ export const command: Command = {
                                 embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)],
                             });
                             return;
-                        } else if ((Number(msg.content) < -1 || Number(msg.content) > 100)) {
+                        } else if (Number(msg.content) < -1 || Number(msg.content) > 100) {
                             await msg.delete().catch(() => null);
                             message.edit({
                                 embeds: [
@@ -392,7 +404,7 @@ export const command: Command = {
                                 embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)],
                             });
                             return;
-                        } else if ((Number(msg.content) < -1 || Number(msg.content) > 100)) {
+                        } else if (Number(msg.content) < -1 || Number(msg.content) > 100) {
                             await msg.delete().catch(() => null);
                             message.edit({
                                 embeds: [
@@ -964,7 +976,7 @@ export const command: Command = {
                     iconURL: context.guild!.iconURL({ size: 4096 }) || undefined,
                 })
                 .setDescription(
-                    'These are the settings that are currently available for you to configure on Celerity.\n' +
+                    'These are the settings that are currently available.\n' +
                         `To modify a setting or view more information about it, use \`${client.util.escapeBackticks(
                             prefix.replace(/<@!?\d+>/g, `@${client.user!.tag} `),
                         )}set <setting>\`, where \`<setting>\` is the name of the setting you want to change, found below.\n`,
@@ -988,7 +1000,7 @@ export const command: Command = {
                     },
                     {
                         name: 'autoplay target popularity',
-                        value: 'Automatically queue tracks based on how close they are to the target popularity.'
+                        value: 'Automatically queue tracks based on how close they are to the target popularity.',
                     },
                     {
                         name: 'autoplay minimum popularity',
