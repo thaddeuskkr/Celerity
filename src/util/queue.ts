@@ -1,8 +1,8 @@
 import type { CelerityTrack } from './track';
 
 export class Queue extends Array<CelerityTrack> {
-    constructor() {
-        super();
+    constructor(tracks: CelerityTrack[] = []) {
+        super(...tracks);
     }
 
     move(oldPosition: number, newPosition: number): CelerityTrack {
