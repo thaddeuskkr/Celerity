@@ -235,7 +235,7 @@ export const command: Command = {
                 });
             } else if (foundSetting.name === 'autoplay target popularity') {
                 embed.setDescription(
-                    tags.stripIndents`*If enabled, Celerity will select tracks closest to the set popularity as candidates for autoplay. For example, 100 would mean that tracks selected for autoplay would be the most popular, and 0 would mean that tracks selected for autoplay would not be popular at all. To disable, set to \`-1\`.*
+                    tags.stripIndents`*If enabled, Celerity will select tracks closest to the set popularity as candidates for autoplay. For example, 100 would mean that tracks selected for autoplay would be the most popular, and 0 would mean that tracks selected for autoplay would not be popular at all. To disable, set to -1.*
                         **----------**
                         **Default value:** ${foundSetting.default}
                         **Current value:** ${settings.autoplay.targetPopularity}`,
@@ -298,7 +298,7 @@ export const command: Command = {
                 });
             } else if (foundSetting.name === 'autoplay minimum popularity') {
                 embed.setDescription(
-                    tags.stripIndents`*If enabled, Celerity will only select tracks above or equal to the set popularity as candidates for autoplay. For example, if set to 100, Celerity will only select the most popular tracks, and if set to 0 or -1, Celerity will select any track. To disable, set to \`-1\`.*
+                    tags.stripIndents`*If enabled, Celerity will only select tracks above or equal to the set popularity as candidates for autoplay. For example, if set to 100, Celerity will only select the most popular tracks, and if set to 0 or -1, Celerity will select any track. To disable, set to -1.*
                         **----------**
                         **Default value:** ${foundSetting.default}
                         **Current value:** ${settings.autoplay.minimumPopularity}`,
@@ -361,7 +361,7 @@ export const command: Command = {
                 });
             } else if (foundSetting.name === 'autoplay maximum popularity') {
                 embed.setDescription(
-                    tags.stripIndents`*If enabled, Celerity will only select tracks below or equal to the set popularity as candidates for autoplay. For example, if set to 100 or -1, Celerity will select any track, and if set to 0, Celerity will select the least popular tracks. To disable, set to \`-1\`.*
+                    tags.stripIndents`*If enabled, Celerity will only select tracks below or equal to the set popularity as candidates for autoplay. For example, if set to 100 or -1, Celerity will select any track, and if set to 0, Celerity will select the least popular tracks. To disable, set to -1.*
                         **----------**
                         **Default value:** ${foundSetting.default}
                         **Current value:** ${settings.autoplay.maximumPopularity}`,
