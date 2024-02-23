@@ -4,6 +4,7 @@ import type { CelerityPlayer } from './player';
 import type { Celerity } from './client';
 import { CelerityTrack } from './track.js';
 import type { TrackExceptionEvent, TrackStuckEvent } from 'shoukaku';
+import { Queue } from './queue.js';
 
 export const start = async (player: CelerityPlayer, client: Celerity) => {
     if (!player.current) return;
@@ -85,69 +86,24 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
     }
     if (!player.queue.length) {
         if (settings.disconnectTimeout === 0) return player.destroy();
-        else if (settings.autoplay && !player.autoplayQueue.length && !player.stopped) {
-            const identifiers: Array<string> = [];
-            if (player.current!.info.sourceName === 'spotify') identifiers.push(player.current!.info.identifier);
-            else {
-                const res = await player.node.rest.resolve(`spsearch:${player.current!.info.title} - ${player.current!.info.author}`);
-                if (!res || res.loadType !== 'search' || !res.data.length) {
-                    settings.autoplay = false;
-                    if (settings.disconnectTimeout === 0) return player.destroy();
-                    client.util.timeout(player);
-                    player.current = null;
-                    return client.respond(
-                        player.channel,
-                        `${client.config.emojis.error} | **Failed to autoplay.**\nFailed to resolve last track, automatically disabled autoplay.`,
-                        'error',
-                    );
-                }
-                const tracks = res.data;
-                let finalTrack;
-                for (let i = 0; i < tracks.length; i++) {
-                    const playing = tracks[i]!;
-                    if (
-                        client.util.stringMatchPercentage(playing.info.title, player.current!.info.title) < 90 &&
-                        client.util.stringMatchPercentage(playing.info.author, player.current!.info.author.replace(' - Topic', '').trim()) < 75 &&
-                        client.util.stringMatchPercentage(
-                            `${playing.info.title} - ${playing.info.author}`,
-                            `${player.current!.info.title} - ${player.current!.info.author.replace(' - Topic', '').trim()}`,
-                        ) < 75
-                    )
-                        continue;
-                    else {
-                        finalTrack = playing;
-                        break;
-                    }
-                }
-                if (!finalTrack) {
-                    settings.autoplay = false;
-                    if (settings.disconnectTimeout === 0) return player.destroy();
-                    client.util.timeout(player);
-                    player.current = null;
-                    return client.respond(
-                        player.channel,
-                        `${client.config.emojis.error} | **Failed to autoplay.**\nFailed to resolve last track, automatically disabled autoplay.`,
-                        'error',
-                    );
-                }
-                identifiers.push(finalTrack.info.identifier);
-            }
-            for (let n = 0; n < player.previous.length; n++) {
+        else if (settings.autoplay.enabled && !player.autoplayQueue.length && !player.stopped) {
+            const trackIdentifiers: Array<string> = [];
+            for (let n = 0; n < Math.min(player.previous.length, 5); n++) {
                 const t = player.previous[n]!;
-                if (t.info.sourceName === 'spotify') identifiers.push(t.info.identifier);
+                if (t.info.sourceName === 'spotify') trackIdentifiers.push(t.info.identifier);
                 else {
-                    const res = await player.node.rest.resolve(`spsearch:${player.current!.info.title} - ${player.current!.info.author}`);
+                    const res = await player.node.rest.resolve(`spsearch:${t.info.title} - ${t.info.author}`);
                     if (!res || res.loadType !== 'search' || !res.data.length) continue;
                     const tracks = res.data;
                     let finalTrack;
                     for (let i = 0; i < tracks.length; i++) {
                         const playing = tracks[i]!;
                         if (
-                            client.util.stringMatchPercentage(playing.info.title, player.current!.info.title) < 90 &&
-                            client.util.stringMatchPercentage(playing.info.author, player.current!.info.author.replace(' - Topic', '').trim()) < 75 &&
+                            client.util.stringMatchPercentage(playing.info.title, t.info.title) < 90 &&
+                            client.util.stringMatchPercentage(playing.info.author, t.info.author.replace(' - Topic', '').trim()) < 75 &&
                             client.util.stringMatchPercentage(
                                 `${playing.info.title} - ${playing.info.author}`,
-                                `${player.current!.info.title} - ${player.current!.info.author.replace(' - Topic', '').trim()}`,
+                                `${t.info.title} - ${t.info.author.replace(' - Topic', '').trim()}`,
                             ) < 75
                         )
                             continue;
@@ -157,12 +113,21 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                         }
                     }
                     if (!finalTrack) continue;
-                    identifiers.push(finalTrack.info.identifier);
+                    trackIdentifiers.push(finalTrack.info.identifier);
                 }
             }
-            const similarTracks = await player.node.rest.resolve(`sprec:seed_tracks=${identifiers.join(',')}`);
+            const similarTracks = await player.node.rest.resolve(
+                    `sprec:seed_tracks=${trackIdentifiers.join(',')}` + 
+                    (settings.autoplay.targetPopularity.toString() === 'false' ? '' : `&target_popularity=${settings.autoplay.targetPopularity}`) +
+                    (settings.autoplay.minimumPopularity.toString() === 'false' ? '' : `&min_popularity=${settings.autoplay.minimumPopularity}`) +
+                    (settings.autoplay.maximumPopularity.toString() === 'false' ? '' : `&max_popularity=${settings.autoplay.maximumPopularity}`)
+                );
+            console.log(`sprec:seed_tracks=${trackIdentifiers.join(',')}` + 
+                    (settings.autoplay.targetPopularity.toString() === 'false' ? '' : `&target_popularity=${settings.autoplay.targetPopularity}`) +
+                    (settings.autoplay.minimumPopularity.toString() === 'false' ? '' : `&min_popularity=${settings.autoplay.minimumPopularity}`) +
+                    (settings.autoplay.maximumPopularity.toString() === 'false' ? '' : `&max_popularity=${settings.autoplay.maximumPopularity}`));
             if (!similarTracks || similarTracks.loadType !== 'playlist' || !similarTracks.data.tracks.length) {
-                settings.autoplay = false;
+                settings.autoplay.enabled = false;
                 if (settings.disconnectTimeout === 0) return player.destroy();
                 client.util.timeout(player);
                 player.current = null;
@@ -173,8 +138,9 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                 );
             }
             player.autoplayQueue.push(...similarTracks.data.tracks.map((t) => new CelerityTrack(t, player.guild.members.me!)));
+            player.autoplayQueue = new Queue(player.autoplayQueue.filter(val => !player.previous.includes(val))); // Remove duplicates from autoplay queue
             player.autoplay();
-        } else if (settings.autoplay && player.autoplayQueue.length) return player.autoplay();
+        } else if (settings.autoplay.enabled && player.autoplayQueue.length) return player.autoplay();
         else {
             if (player.guild.members.me!.voice.channel?.type === ChannelType.GuildStageVoice) {
                 player.guild!.members.me!.voice.setSuppressed(true).catch(() => null);
