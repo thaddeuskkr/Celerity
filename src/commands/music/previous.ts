@@ -12,8 +12,10 @@ export const command: Command = {
         if (player.loop === 'track') player.setLoop('off');
         const prev = player.previous.shift();
         player.previousUsed = true;
-        player.queue.unshift(player.current!);
-        player.queue.unshift(prev!);
+        if (player.current!.info.requester.id === client.user!.id) player.autoplayQueue.unshift(player.current!);
+        else player.queue.unshift(player.current!);
+        if (prev!.info.requester.id === client.user!.id) player.autoplayQueue.unshift(prev!);
+        else player.queue.unshift(prev!);
         await player.player.stopTrack();
         if (!settings.announceNowPlaying)
             client.respond(
