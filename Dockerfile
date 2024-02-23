@@ -1,4 +1,4 @@
-FROM node:latest AS base
+FROM node:lts AS base
 
 LABEL org.opencontainers.image.description="Docker image for Celerity, a Discord music bot that focuses on performance without sacrificing functionality." \
       org.opencontainers.image.source=https://github.com/thaddeuskkr/Celerity \
