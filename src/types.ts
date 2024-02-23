@@ -13,7 +13,12 @@ export type GuildSettings = {
     announceConnect: boolean;
     announceDisconnect: boolean;
     announceNowPlaying: boolean;
-    autoplay: boolean;
+    autoplay: {
+        enabled: boolean;
+        targetPopularity: number | false;
+        minimumPopularity: number | false;
+        maximumPopularity: number | false;
+    }
     banned: string[];
     buttons: 'off' | 'base' | 'extra';
     cleanup: boolean;

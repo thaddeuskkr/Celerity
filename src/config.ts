@@ -59,7 +59,12 @@ export class Config {
         announceConnect: true,
         announceDisconnect: true,
         announceNowPlaying: true,
-        autoplay: false,
+        autoplay: {
+            enabled: false,
+            targetPopularity: false,
+            minimumPopularity: false,
+            maximumPopularity: false,
+        },
         banned: [],
         buttons: 'base',
         cleanup: true,
