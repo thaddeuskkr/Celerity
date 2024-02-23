@@ -1,5 +1,6 @@
 node_modules/**
 dist/**
+src/**/*.exclude.ts
 
 .env
 application.yml
