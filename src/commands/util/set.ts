@@ -42,6 +42,9 @@ export const command: Command = {
             { name: 'announce disconnect', default: client.config.defaultSettings.announceDisconnect },
             { name: 'announce now playing', aliases: ['announce np'], default: client.config.defaultSettings.announceNowPlaying },
             { name: 'autoplay', aliases: ['ap'], default: client.config.defaultSettings.autoplay.enabled },
+            { name: 'autoplay target popularity', aliases: ['autoplay popularity target', 'ap popularity', 'ap target', 'ap tp'], default: client.config.defaultSettings.autoplay.targetPopularity },
+            { name: 'autoplay minimum popularity', aliases: ['autoplay popularity minimum', 'ap min', 'ap minimum', 'ap mp'], default: client.config.defaultSettings.autoplay.minimumPopularity },
+            { name: 'autoplay maximum popularity', aliases: ['autoplay popularity maximum', 'ap max', 'ap maximum', 'ap xp'], default: client.config.defaultSettings.autoplay.maximumPopularity },
             { name: 'banned users', aliases: ['banned'], default: client.config.defaultSettings.banned },
             { name: 'buttons', default: client.config.defaultSettings.buttons },
             { name: 'cleanup', aliases: ['auto delete', 'delete'], default: client.config.defaultSettings.cleanup },
@@ -199,7 +202,7 @@ export const command: Command = {
                 });
             } else if (foundSetting.name === 'autoplay') {
                 embed.setDescription(
-                    tags.stripIndents`*If enabled, Celerity will play related tracks to the last played track when the queue ends. If no related tracks can be found, this setting will be automatically disabled. 
+                    tags.stripIndents`*If enabled, Celerity will play related tracks to the previous tracks when the queue ends. If no related tracks can be found, this setting will be automatically disabled. 
                         Tracks added using this feature will have their requester shown as <@${client.user!.id}>.*
                         **----------**
                         **Default value:** ${foundSetting.default}
@@ -225,6 +228,195 @@ export const command: Command = {
                             ),
                         ],
                         components: [],
+                    });
+                });
+                collector.on('end', async (collected) => {
+                    if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
+                });
+            } else if (foundSetting.name === 'autoplay target popularity') {
+                embed.setDescription(
+                    tags.stripIndents`*If enabled, Celerity will select tracks closest to the set popularity as candidates for autoplay. For example, 100 would mean that tracks selected for autoplay would be the most popular, and 0 would mean that tracks selected for autoplay would not be popular at all. To disable, set to \`-1\`.*
+                        **----------**
+                        **Default value:** ${foundSetting.default}
+                        **Current value:** ${settings.autoplay.targetPopularity}`,
+                );
+                buttonRow.addComponents(new ButtonBuilder().setCustomId('set').setLabel('Set Target Popularity').setStyle(ButtonStyle.Primary));
+                const message = await context.channel.send({ embeds: [embed], components: [buttonRow] });
+                const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
+                collector.on('collect', async () => {
+                    const messageCollector = context.channel!.createMessageCollector({
+                        time: 120000,
+                        filter: (message) => message.author.id === context.author.id,
+                        max: 1,
+                    });
+                    await message.edit({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setDescription(
+                                    `${client.config.emojis.loading} | **Type and send the target popularity you would like here.**\nAccepts a number from -1 to 100.`,
+                                )
+                                .setColor('#F5C2E7'),
+                        ],
+                        components: [],
+                    });
+                    messageCollector.on('collect', async (msg: Message) => {
+                        if (isNaN(Number(msg.content))) {
+                            await msg.delete().catch(() => null);
+                            message.edit({
+                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)],
+                            });
+                            return;
+                        } else if ((Number(msg.content) < -1 || Number(msg.content) > 100)) {
+                            await msg.delete().catch(() => null);
+                            message.edit({
+                                embeds: [
+                                    successEmbed
+                                        .setColor('#F38BA8')
+                                        .setDescription(`${client.config.emojis.error} | **Invalid number.**\nAccepts: \`-1 - 100\``),
+                                ],
+                            });
+                            return;
+                        }
+                        await msg.delete().catch(() => null);
+                        settings.autoplay.targetPopularity = Number(msg.content);
+                        message.edit({
+                            embeds: [
+                                successEmbed.setDescription(
+                                    `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay.targetPopularity}\`.`,
+                                ),
+                            ],
+                            components: [],
+                        });
+                        return;
+                    });
+                    messageCollector.on('end', async (collected) => {
+                        if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
+                    });
+                });
+                collector.on('end', async (collected) => {
+                    if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
+                });
+            } else if (foundSetting.name === 'autoplay minimum popularity') {
+                embed.setDescription(
+                    tags.stripIndents`*If enabled, Celerity will only select tracks above or equal to the set popularity as candidates for autoplay. For example, if set to 100, Celerity will only select the most popular tracks, and if set to 0 or -1, Celerity will select any track. To disable, set to \`-1\`.*
+                        **----------**
+                        **Default value:** ${foundSetting.default}
+                        **Current value:** ${settings.autoplay.minimumPopularity}`,
+                );
+                buttonRow.addComponents(new ButtonBuilder().setCustomId('set').setLabel('Set Minimum Popularity').setStyle(ButtonStyle.Primary));
+                const message = await context.channel.send({ embeds: [embed], components: [buttonRow] });
+                const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
+                collector.on('collect', async () => {
+                    const messageCollector = context.channel!.createMessageCollector({
+                        time: 120000,
+                        filter: (message) => message.author.id === context.author.id,
+                        max: 1,
+                    });
+                    await message.edit({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setDescription(
+                                    `${client.config.emojis.loading} | **Type and send the minimum popularity you would like here.**\nAccepts a number from -1 to 100.`,
+                                )
+                                .setColor('#F5C2E7'),
+                        ],
+                        components: [],
+                    });
+                    messageCollector.on('collect', async (msg: Message) => {
+                        if (isNaN(Number(msg.content))) {
+                            await msg.delete().catch(() => null);
+                            message.edit({
+                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)],
+                            });
+                            return;
+                        } else if ((Number(msg.content) < -1 || Number(msg.content) > 100)) {
+                            await msg.delete().catch(() => null);
+                            message.edit({
+                                embeds: [
+                                    successEmbed
+                                        .setColor('#F38BA8')
+                                        .setDescription(`${client.config.emojis.error} | **Invalid number.**\nAccepts: \`-1 - 100\``),
+                                ],
+                            });
+                            return;
+                        }
+                        await msg.delete().catch(() => null);
+                        settings.autoplay.minimumPopularity = Number(msg.content);
+                        message.edit({
+                            embeds: [
+                                successEmbed.setDescription(
+                                    `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay.minimumPopularity}\`.`,
+                                ),
+                            ],
+                            components: [],
+                        });
+                        return;
+                    });
+                    messageCollector.on('end', async (collected) => {
+                        if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
+                    });
+                });
+                collector.on('end', async (collected) => {
+                    if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
+                });
+            } else if (foundSetting.name === 'autoplay maximum popularity') {
+                embed.setDescription(
+                    tags.stripIndents`*If enabled, Celerity will only select tracks below or equal to the set popularity as candidates for autoplay. For example, if set to 100 or -1, Celerity will select any track, and if set to 0, Celerity will select the least popular tracks. To disable, set to \`-1\`.*
+                        **----------**
+                        **Default value:** ${foundSetting.default}
+                        **Current value:** ${settings.autoplay.maximumPopularity}`,
+                );
+                buttonRow.addComponents(new ButtonBuilder().setCustomId('set').setLabel('Set Maximum Popularity').setStyle(ButtonStyle.Primary));
+                const message = await context.channel.send({ embeds: [embed], components: [buttonRow] });
+                const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
+                collector.on('collect', async () => {
+                    const messageCollector = context.channel!.createMessageCollector({
+                        time: 120000,
+                        filter: (message) => message.author.id === context.author.id,
+                        max: 1,
+                    });
+                    await message.edit({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setDescription(
+                                    `${client.config.emojis.loading} | **Type and send the maximum popularity you would like here.**\nAccepts a number from -1 to 100.`,
+                                )
+                                .setColor('#F5C2E7'),
+                        ],
+                        components: [],
+                    });
+                    messageCollector.on('collect', async (msg: Message) => {
+                        if (isNaN(Number(msg.content))) {
+                            await msg.delete().catch(() => null);
+                            message.edit({
+                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)],
+                            });
+                            return;
+                        } else if ((Number(msg.content) < -1 || Number(msg.content) > 100)) {
+                            await msg.delete().catch(() => null);
+                            message.edit({
+                                embeds: [
+                                    successEmbed
+                                        .setColor('#F38BA8')
+                                        .setDescription(`${client.config.emojis.error} | **Invalid number.**\nAccepts: \`-1 - 100\``),
+                                ],
+                            });
+                            return;
+                        }
+                        await msg.delete().catch(() => null);
+                        settings.autoplay.maximumPopularity = Number(msg.content);
+                        message.edit({
+                            embeds: [
+                                successEmbed.setDescription(
+                                    `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay.maximumPopularity}\`.`,
+                                ),
+                            ],
+                            components: [],
+                        });
+                        return;
+                    });
+                    messageCollector.on('end', async (collected) => {
+                        if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                     });
                 });
                 collector.on('end', async (collected) => {
@@ -793,6 +985,18 @@ export const command: Command = {
                     {
                         name: 'autoplay',
                         value: 'Automatically queue related tracks when a track ends.',
+                    },
+                    {
+                        name: 'autoplay target popularity',
+                        value: 'Automatically queue tracks based on how close they are to the target popularity.'
+                    },
+                    {
+                        name: 'autoplay minimum popularity',
+                        value: 'The minimum popularity a track must have to be considered for autoplay.',
+                    },
+                    {
+                        name: 'autoplay maximum popularity',
+                        value: 'The maximum popularity a track could have to be considered for autoplay.',
                     },
                     {
                         name: 'banned users',
