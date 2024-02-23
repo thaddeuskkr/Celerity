@@ -11,12 +11,18 @@ export const command: Command = {
         if (!player.previous.length) return client.respond(context.channel, `${client.config.emojis.error} | **No previous tracks.**`, 'error');
         if (player.loop === 'track') player.setLoop('off');
         const prev = player.previous.shift();
-        player.previousUsed = true;
-        if (player.current!.info.requester.id === client.user!.id) player.autoplayQueue.unshift(player.current!);
-        else player.queue.unshift(player.current!);
-        if (prev!.info.requester.id === client.user!.id) player.autoplayQueue.unshift(prev!);
-        else player.queue.unshift(prev!);
-        await player.player.stopTrack();
+        if (player.current) {
+            player.previousUsed = true;
+            if (player.current.info.requester.user.id === client.user!.id) player.autoplayQueue.unshift(player.current);
+            else player.queue.unshift(player.current);
+            if (prev!.info.requester.user.id === client.user!.id) player.autoplayQueue.unshift(prev!);
+            else player.queue.unshift(prev!);
+            await player.player.stopTrack();
+        } else {
+            if (prev!.info.requester.user.id === client.user!.id) player.autoplayQueue.unshift(prev!);
+            else player.queue.unshift(prev!);
+            player.autoplay();
+        }
         if (!settings.announceNowPlaying)
             client.respond(
                 context.channel,
