@@ -1000,7 +1000,7 @@ export const command: Command = {
                     },
                     {
                         name: 'autoplay target popularity',
-                        value: 'Automatically queue tracks based on how close they are to the target popularity.',
+                        value: 'Consider tracks for autoplay based on their closeness to the target popularity.',
                     },
                     {
                         name: 'autoplay minimum popularity',
