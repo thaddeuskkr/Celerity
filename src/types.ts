@@ -15,9 +15,9 @@ export type GuildSettings = {
     announceNowPlaying: boolean;
     autoplay: {
         enabled: boolean;
-        targetPopularity: number | false;
-        minimumPopularity: number | false;
-        maximumPopularity: number | false;
+        targetPopularity: number;
+        minimumPopularity: number;
+        maximumPopularity: number;
     }
     banned: string[];
     buttons: 'off' | 'base' | 'extra';

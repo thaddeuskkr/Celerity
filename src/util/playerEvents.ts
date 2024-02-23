@@ -118,14 +118,10 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
             }
             const similarTracks = await player.node.rest.resolve(
                     `sprec:seed_tracks=${trackIdentifiers.join(',')}` + 
-                    (settings.autoplay.targetPopularity.toString() === 'false' ? '' : `&target_popularity=${settings.autoplay.targetPopularity}`) +
-                    (settings.autoplay.minimumPopularity.toString() === 'false' ? '' : `&min_popularity=${settings.autoplay.minimumPopularity}`) +
-                    (settings.autoplay.maximumPopularity.toString() === 'false' ? '' : `&max_popularity=${settings.autoplay.maximumPopularity}`)
+                    (settings.autoplay.targetPopularity === -1 ? '' : `&target_popularity=${settings.autoplay.targetPopularity}`) +
+                    (settings.autoplay.minimumPopularity === -1 ? '' : `&min_popularity=${settings.autoplay.minimumPopularity}`) +
+                    (settings.autoplay.maximumPopularity === -1 ? '' : `&max_popularity=${settings.autoplay.maximumPopularity}`)
                 );
-            console.log(`sprec:seed_tracks=${trackIdentifiers.join(',')}` + 
-                    (settings.autoplay.targetPopularity.toString() === 'false' ? '' : `&target_popularity=${settings.autoplay.targetPopularity}`) +
-                    (settings.autoplay.minimumPopularity.toString() === 'false' ? '' : `&min_popularity=${settings.autoplay.minimumPopularity}`) +
-                    (settings.autoplay.maximumPopularity.toString() === 'false' ? '' : `&max_popularity=${settings.autoplay.maximumPopularity}`));
             if (!similarTracks || similarTracks.loadType !== 'playlist' || !similarTracks.data.tracks.length) {
                 settings.autoplay.enabled = false;
                 if (settings.disconnectTimeout === 0) return player.destroy();

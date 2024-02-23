@@ -61,9 +61,9 @@ export class Config {
         announceNowPlaying: true,
         autoplay: {
             enabled: false,
-            targetPopularity: false,
-            minimumPopularity: false,
-            maximumPopularity: false,
+            targetPopularity: -1,
+            minimumPopularity: -1,
+            maximumPopularity: -1,
         },
         banned: [],
         buttons: 'base',
