@@ -4,7 +4,6 @@ import type { CelerityPlayer } from './player';
 import type { Celerity } from './client';
 import { CelerityTrack } from './track.js';
 import type { TrackExceptionEvent, TrackStuckEvent } from 'shoukaku';
-import { Queue } from './queue.js';
 
 export const start = async (player: CelerityPlayer, client: Celerity) => {
     if (!player.current) return;
@@ -134,7 +133,9 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                 );
             }
             player.autoplayQueue.push(...similarTracks.data.tracks.map((t) => new CelerityTrack(t, player.guild.members.me!)));
-            player.autoplayQueue = new Queue(player.autoplayQueue.filter((val) => !player.previous.includes(val))); // Remove duplicates from autoplay queue
+            const newAutoplayQueue = _.cloneDeep(player.autoplayQueue.filter((val) => !player.previous.includes(val)));
+            player.autoplayQueue.clear();
+            player.autoplayQueue.push(...newAutoplayQueue);
             player.autoplay();
         } else if (settings.autoplay.enabled && player.autoplayQueue.length) return player.autoplay();
         else {
