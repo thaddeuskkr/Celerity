@@ -28,9 +28,9 @@ export const command: Command = {
         const embed = new EmbedBuilder()
             .setColor('#A6E3A1')
             .setDescription(
-                `${client.config.emojis.success} | **Celerity will now respond to commands prefixed by the following:**\n${prefixes
+                `${client.config.emojis.success} | **I will now respond to commands prefixed by the following:**\n${prefixes
                     .map((prefix) => `- \`${client.util.escapeBackticks(prefix)}\``)
-                    .join('\n')}`,
+                    .join('\n')}\n- \`@${client.user?.username}`,
             );
         client.respond(context.channel, embed, 'none');
         return;
