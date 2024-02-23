@@ -41,7 +41,7 @@ export const command: Command = {
             { name: 'announce connect', default: client.config.defaultSettings.announceConnect },
             { name: 'announce disconnect', default: client.config.defaultSettings.announceDisconnect },
             { name: 'announce now playing', aliases: ['announce np'], default: client.config.defaultSettings.announceNowPlaying },
-            { name: 'autoplay', aliases: ['ap'], default: client.config.defaultSettings.autoplay },
+            { name: 'autoplay', aliases: ['ap'], default: client.config.defaultSettings.autoplay.enabled },
             { name: 'banned users', aliases: ['banned'], default: client.config.defaultSettings.banned },
             { name: 'buttons', default: client.config.defaultSettings.buttons },
             { name: 'cleanup', aliases: ['auto delete', 'delete'], default: client.config.defaultSettings.cleanup },
@@ -203,7 +203,7 @@ export const command: Command = {
                         Tracks added using this feature will have their requester shown as <@${client.user!.id}>.*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.autoplay}`,
+                        **Current value:** ${settings.autoplay.enabled}`,
                 );
                 stringRow.addComponents(
                     new StringSelectMenuBuilder()
@@ -217,11 +217,11 @@ export const command: Command = {
                 const message = await context.channel.send({ embeds: [embed], components: [stringRow] });
                 const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
                 collector.on('collect', (i: StringSelectMenuInteraction) => {
-                    settings.autoplay = i.values[0] === 'true';
+                    settings.autoplay.enabled = i.values[0] === 'true';
                     message.edit({
                         embeds: [
                             successEmbed.setDescription(
-                                `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay}\`.`,
+                                `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay.enabled}\`.`,
                             ),
                         ],
                         components: [],

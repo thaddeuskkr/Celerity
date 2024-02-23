@@ -194,8 +194,8 @@ export const event: Event = {
                     return paginatedMessage.run(interaction);
                 }
                 case 'autoplay': {
-                    settings.autoplay = !settings.autoplay;
-                    successResponse(`${client.config.emojis.autoplay} | **Autoplay is now ${settings.autoplay ? 'enabled' : 'disabled'}.**`);
+                    settings.autoplay.enabled = !settings.autoplay.enabled;
+                    successResponse(`${client.config.emojis.autoplay} | **Autoplay is now ${settings.autoplay.enabled ? 'enabled' : 'disabled'}.**`);
                     break;
                 }
             }
