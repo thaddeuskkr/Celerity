@@ -20,8 +20,12 @@ export const command: Command = {
         if (context.mentions.users.size > 0) user = context.mentions.users.first()!;
         else if (args.length) {
             if (!args[0]) return client.respond(context.channel, `${client.config.emojis.error} | **User ID not provided.**`, 'error');
-            if (isNaN(Number(args[0]))) return client.respond(context.channel, `${client.config.emojis.error} | **Invalid user ID.**`, 'error');
-            const fetchedUser = await client.users.fetch(args[0]);
+            await context.guild?.members.fetch(); // I can see this becoming a huge memory issue in the future, but we'll have to see.
+            const fetchedUser =
+                context.guild!.members.cache.find((m) => m.user.username.toLowerCase() === args.join(' ').toLowerCase())?.user ||
+                context.guild!.members.cache.find((m) => m.user.globalName?.toLowerCase() === args.join(' ').toLowerCase())?.user ||
+                context.guild!.members.cache.find((m) => m.nickname?.toLowerCase() === args.join(' ').toLowerCase())?.user ||
+                (await client.users.fetch(args[0]));
             if (fetchedUser) user = fetchedUser;
             else return client.respond(context.channel, `${client.config.emojis.error} | **Invalid user.**`, 'error');
         }
