@@ -58,7 +58,7 @@ export class CelerityPlayer {
         }
         if (next) this.queue.unshift(track);
         else this.queue.push(track);
-        if (!this.current) this.play();
+        if (!this.current) this.play(); // might be being called multiple times causing loops
         if (this.autoplayQueue.length) this.autoplayQueue.clear();
         return;
     }
@@ -94,6 +94,8 @@ export class CelerityPlayer {
         else if (!this.autoplayQueue.length && !this.queue.length) return;
         if (this.stopped) this.stopped = false;
         this.current = this.autoplayQueue.shift()!;
+        if (this.guild.members.me!.voice.channel?.type === ChannelType.GuildStageVoice)
+            this.guild!.members.me!.voice.setSuppressed(false).catch(() => null);
         if (this.previous.map((t) => t.info.identifier).includes(this.current!.info.identifier)) {
             this.autoplay();
             return;
