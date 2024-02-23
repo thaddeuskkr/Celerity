@@ -86,10 +86,10 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
     if (!player.queue.length) {
         if (settings.disconnectTimeout === 0) return player.destroy();
         else if (settings.autoplay && !player.autoplayQueue.length && !player.stopped) {
-            let identifier: string;
-            if (player.current!.info.sourceName === 'youtube') identifier = player.current!.info.identifier;
+            const identifiers: Array<string> = [];
+            if (player.current!.info.sourceName === 'spotify') identifiers.push(player.current!.info.identifier);
             else {
-                const res = await player.node.rest.resolve(`ytmsearch:${player.current!.info.title} - ${player.current!.info.author}`);
+                const res = await player.node.rest.resolve(`spsearch:${player.current!.info.title} - ${player.current!.info.author}`);
                 if (!res || res.loadType !== 'search' || !res.data.length) {
                     settings.autoplay = false;
                     if (settings.disconnectTimeout === 0) return player.destroy();
@@ -107,10 +107,10 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                     const playing = tracks[i]!;
                     if (
                         client.util.stringMatchPercentage(playing.info.title, player.current!.info.title) < 90 &&
-                        client.util.stringMatchPercentage(playing.info.author.replace(' - Topic', '').trim(), player.current!.info.author) < 75 &&
+                        client.util.stringMatchPercentage(playing.info.author, player.current!.info.author.replace(' - Topic', '').trim()) < 75 &&
                         client.util.stringMatchPercentage(
-                            `${playing.info.title} - ${playing.info.author.replace(' - Topic', '').trim()}`,
-                            `${player.current!.info.title} - ${player.current!.info.author}`,
+                            `${playing.info.title} - ${playing.info.author}`,
+                            `${player.current!.info.title} - ${player.current!.info.author.replace(' - Topic', '').trim()}`,
                         ) < 75
                     )
                         continue;
@@ -130,9 +130,37 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                         'error',
                     );
                 }
-                identifier = finalTrack.info.identifier;
+                identifiers.push(finalTrack.info.identifier);
             }
-            const similarTracks = await player.node.rest.resolve(`https://music.youtube.com/watch?v=${identifier}&list=RD${identifier}`);
+            for (let n = 0; n < player.previous.length; n++) {
+                const t = player.previous[n]!;
+                if (t.info.sourceName === 'spotify') identifiers.push(t.info.identifier);
+                else {
+                    const res = await player.node.rest.resolve(`spsearch:${player.current!.info.title} - ${player.current!.info.author}`);
+                    if (!res || res.loadType !== 'search' || !res.data.length) continue;
+                    const tracks = res.data;
+                    let finalTrack;
+                    for (let i = 0; i < tracks.length; i++) {
+                        const playing = tracks[i]!;
+                        if (
+                            client.util.stringMatchPercentage(playing.info.title, player.current!.info.title) < 90 &&
+                            client.util.stringMatchPercentage(playing.info.author, player.current!.info.author.replace(' - Topic', '').trim()) < 75 &&
+                            client.util.stringMatchPercentage(
+                                `${playing.info.title} - ${playing.info.author}`,
+                                `${player.current!.info.title} - ${player.current!.info.author.replace(' - Topic', '').trim()}`,
+                            ) < 75
+                        )
+                            continue;
+                        else {
+                            finalTrack = playing;
+                            break;
+                        }
+                    }
+                    if (!finalTrack) continue;
+                    identifiers.push(finalTrack.info.identifier);
+                }
+            }
+            const similarTracks = await player.node.rest.resolve(`sprec:seed_tracks=${identifiers.join(',')}`);
             if (!similarTracks || similarTracks.loadType !== 'playlist' || !similarTracks.data.tracks.length) {
                 settings.autoplay = false;
                 if (settings.disconnectTimeout === 0) return player.destroy();
@@ -144,8 +172,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                     'error',
                 );
             }
-            similarTracks.data.tracks.shift();
-            player.autoplayQueue.push(...similarTracks.data.tracks.map((t) => new CelerityTrack(t, player.guild.members.me!, 'ytmsearch')));
+            player.autoplayQueue.push(...similarTracks.data.tracks.map((t) => new CelerityTrack(t, player.guild.members.me!)));
             player.autoplay();
         } else if (settings.autoplay && player.autoplayQueue.length) return player.autoplay();
         else {
