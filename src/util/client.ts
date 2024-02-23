@@ -18,7 +18,7 @@ export class Celerity extends Client {
                 GatewayIntentBits.GuildVoiceStates,
                 GatewayIntentBits.Guilds,
                 /* ============== Privileged intents ============== */
-                // GatewayIntentBits.GuildPresences,
+                GatewayIntentBits.GuildPresences,
                 GatewayIntentBits.GuildMembers,
                 GatewayIntentBits.MessageContent,
             ],
