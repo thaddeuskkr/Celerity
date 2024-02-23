@@ -9,7 +9,7 @@ export const command: Command = {
     options: [
         {
             name: 'user',
-            description: 'The user to get the avatar for. Could be a mention or a user ID.',
+            description: 'The user to get the avatar for. Could be a mention, username, global name, nickname, or user ID.',
             type: ApplicationCommandOptionType.User,
             required: false,
         },
@@ -19,7 +19,7 @@ export const command: Command = {
         let user = context.author;
         if (context.mentions.users.size > 0) user = context.mentions.users.first()!;
         else if (args.length) {
-            if (!args[0]) return client.respond(context.channel, `${client.config.emojis.error} | **User ID not provided.**`, 'error');
+            if (!args[0]) return client.respond(context.channel, `${client.config.emojis.error} | **User not provided.**`, 'error');
             await context.guild?.members.fetch(); // I can see this becoming a huge memory issue in the future, but we'll have to see.
             const fetchedUser =
                 context.guild!.members.cache.find((m) => m.user.username.toLowerCase() === args.join(' ').toLowerCase())?.user ||
