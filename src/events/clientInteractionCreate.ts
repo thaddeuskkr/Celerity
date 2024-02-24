@@ -60,8 +60,8 @@ export const event: Event = {
                 return;
             }
             if (!player.current || !me.voice.channel?.id) return errorResponse('There is nothing playing.');
-            if (member.voice.channelId === null) return errorResponse("You're not in a voice channel.");
-            if (member.voice.channelId !== me.voice.channelId) return errorResponse(`You're not in <#${me.voice.channel.id}>.`);
+            if (member.voice.channelId === null && id !== 'queue') return errorResponse("You're not in a voice channel.");
+            if (member.voice.channelId !== me.voice.channelId && id !== 'queue') return errorResponse(`You're not in <#${me.voice.channel.id}>.`);
             switch (id) {
                 case 'previous': {
                     if (!player.previous.length) return errorResponse('No previous tracks.');
