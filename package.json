@@ -1,6 +1,6 @@
 {
     "name": "celerity",
-    "version": "65D8972D",
+    "version": "65D9B699",
     "description": "A music Discord bot focused on performance, without sacrificing functionality, features and quality.",
     "main": "dist/index.js",
     "type": "module",
@@ -53,7 +53,7 @@
         "@types/node": "^20.11.20",
         "@typescript-eslint/eslint-plugin": "^7.0.2",
         "@typescript-eslint/parser": "^7.0.2",
-        "eslint": "^8.56.0",
+        "eslint": "^8.57.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-deprecation": "^2.0.0",
         "node-gyp": "^10.0.1",
