@@ -1,6 +1,6 @@
 import type { ActivityOptions, Client, PresenceStatusData } from 'discord.js';
 import { ActivityType } from 'discord.js';
-import type { GuildSettings } from './types';
+import type { GuildSettings, Statistics } from './types';
 
 export class Config {
     constructor(client: Client) {
@@ -81,6 +81,15 @@ export class Config {
         statistics: true,
         voteSkip: false,
         voteSkipPercentage: 50,
+    };
+
+    // Statistics - base object
+    baseStatistics: Statistics = {
+        commands: {
+            executed: [],
+            errored: [],
+        },
+        tracks: [],
     };
 
     // Emojis

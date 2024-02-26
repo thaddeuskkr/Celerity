@@ -7,6 +7,7 @@ import type { CelerityPlayer } from './util/player';
 import type Keyv from 'keyv';
 import type { Connection, Shoukaku } from 'shoukaku';
 import type { Celerity } from './util/client';
+import type { CelerityTrack } from './util/track';
 import { ApplicationCommandOptionType, Attachment, Embed } from 'discord.js';
 
 export type GuildSettings = {
@@ -35,6 +36,23 @@ export type GuildSettings = {
     statistics: boolean;
     voteSkip: boolean;
     voteSkipPercentage: number;
+};
+
+export type Statistics = {
+    commands: {
+        executed: Array<{
+            commandName: string;
+            executionTime: number;
+            user: string;
+            guild: string;
+        }>;
+        errored: Array<{
+            commandName: string;
+            user: string;
+            guild: string;
+        }>;
+    };
+    tracks: Array<{ track: CelerityTrack; guild: string }>;
 };
 
 export type Respond = (
@@ -82,6 +100,7 @@ export type Command = {
 declare module 'discord.js' {
     interface Client {
         ready: boolean;
+        statistics: Statistics;
         version: string;
         dependencies: Record<string, string>;
         config: Config;

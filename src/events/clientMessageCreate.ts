@@ -134,13 +134,14 @@ export const event: Event = {
         try {
             await command.execute({ client, context: message, args, settings, prefix, player, connection });
             const endTime = performance.now();
-            client.logger.debug(
-                `${message.author.username} (${message.author.id}) used command ${command.name}, executed in ${endTime - startTime}ms`,
-            );
+            const executionTime = endTime - startTime;
+            client.logger.debug(`${message.author.username} (${message.author.id}) used command ${command.name}, executed in ${executionTime}ms`);
+            client.statistics.commands.executed.push({ commandName: command.name, executionTime, user: message.author.id, guild: message.guild.id });
         } catch (err) {
             client.logger.error(`Error executing command ${command.name}:`);
             client.logger.error(err);
             client.respond(message, `${client.config.emojis.error} | **'An unknown error occurred while executing this command.**`, 'error');
+            client.statistics.commands.errored.push({ commandName: command.name, user: message.author.id, guild: message.guild.id });
         }
 
         function errorResponse(text: string) {
