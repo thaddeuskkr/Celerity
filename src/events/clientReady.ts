@@ -27,6 +27,7 @@ export const event: Event = {
         client.logger.info(`Retrieved ${client.guildSettings.size} server settings from database`);
 
         client.version = require('../../package.json').version;
+        client.dependencies = require('../../package.json').dependencies;
 
         client.ready = true;
         client.logger.info('Ready to receive commands');
