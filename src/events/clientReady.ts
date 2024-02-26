@@ -44,7 +44,8 @@ export const event: Event = {
                 else await client.db.set('server-settings', [...guildSettings]);
             }
             client.logger.debug('Updated per-server settings in database');
-
+        }, 10000);
+        setInterval(async () => {
             // Bot statistics
             if (equal(await client.db.get('statistics'), client.statistics)) return;
             else await client.db.set('statistics', client.statistics);
