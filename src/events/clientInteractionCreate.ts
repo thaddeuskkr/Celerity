@@ -11,6 +11,7 @@ export const event: Event = {
     emitter: 'client',
 
     async run(client, interaction: Interaction) {
+        if (!client.ready) return;
         if (interaction.isButton() && interaction.guild && interaction.member) {
             const id = interaction.customId;
             const member = interaction.guild.members.cache.get(interaction.user.id)!;

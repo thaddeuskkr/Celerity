@@ -9,6 +9,7 @@ export const event: Event = {
     emitter: 'client',
 
     async run(client, o: VoiceState, n: VoiceState) {
+        if (!client.ready) return;
         if (!o.guild || !n.guild) return;
         const player: CelerityPlayer | undefined = client.players.get(o?.guild.id) || client.players.get(n?.guild.id);
         const settings = client.guildSettings.get(o?.guild.id) || client.guildSettings.get(n?.guild.id) || _.cloneDeep(client.config.defaultSettings);

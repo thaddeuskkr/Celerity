@@ -33,6 +33,7 @@ export class Celerity extends Client {
                 status: 'online',
             },
         });
+        this.ready = false;
         this.config = new Config(this);
         this.util = new Util(this);
         this.commands = new Collection();

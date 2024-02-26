@@ -29,6 +29,9 @@ export const event: Event = {
         client.version = require('../../package.json').version;
         client.dependencies = require('../../package.json').dependencies;
 
+        client.ready = true;
+        client.logger.info('Ready to receive commands');
+
         // Write server settings to database every 10 seconds (if outdated)
         setInterval(async () => {
             const guildSettings = client.guildSettings;
