@@ -19,7 +19,7 @@ export const command: Command = {
                     `- **${guild.name} (\`${guild.id}\`)** | ${player.queue.length} tracks in queue (\`${player.ms(player.queue.totalDuration)}\`) | ${player.stopped ? 'Stopped' : player.player.paused ? 'Paused' : 'Playing'}${player.current ? ` [**${player.current.info.title}** by **${player.current.info.author}**](<${player.current.info.uri}>) \`${player.ms(player.current.info.length)}\`` : ''}`,
                 );
             });
-            return context.reply({ content: `## Active players\n${playerList.join('\n')}`, options: { allowedMentions: { repliedUser: false } } });
+            return context.reply({ content: `## Active players\n${playerList.join('\n')}`, allowedMentions: { repliedUser: false } });
         }
     },
 };
