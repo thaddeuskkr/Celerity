@@ -61,6 +61,8 @@ export const command: Command = {
                     );
                 player = new CelerityPlayer(client, context.member!, context.channel!, newPlayer);
                 client.players.set(context.guild!.id, player);
+                player.stopped = true;
+                client.util.timeout(player);
             } catch (err) {
                 client.respond(
                     context.channel,
