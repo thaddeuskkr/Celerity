@@ -1,6 +1,6 @@
 {
     "name": "celerity",
-    "version": "65DCAB6A",
+    "version": "65DCB20B",
     "description": "A music Discord bot focused on performance, without sacrificing functionality, features and quality.",
     "main": "dist/index.js",
     "type": "module",
