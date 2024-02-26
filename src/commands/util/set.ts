@@ -836,7 +836,7 @@ export const command: Command = {
                                         client.config.emojis.success
                                     } | **Celerity will now respond to commands prefixed by the following:**\n${prefixes
                                         .map((prefix) => `- \`${client.util.escapeBackticks(prefix)}\``)
-                                        .join('\n')}`,
+                                        .join('\n')}\n- \`@${client.user?.username}\``,
                                 ),
                             ],
                             components: [],
