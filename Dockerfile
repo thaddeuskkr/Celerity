@@ -6,15 +6,13 @@ LABEL org.opencontainers.image.description="Docker image for Celerity, a Discord
 
 WORKDIR /celerity
 
-CMD [ "node", "." ]
+CMD [ "node", "./dist/index.js" ]
 
 FROM base AS prod-deps
-WORKDIR /celerity
 COPY package.json package-lock.json .
 RUN npm install --omit=dev
 
 FROM base AS builder
-WORKDIR /celerity
 COPY . .
 RUN npm install -g typescript && npm install && tsc
 
