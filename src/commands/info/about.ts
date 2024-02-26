@@ -27,6 +27,8 @@ export const command: Command = {
                         Celerity receives constant updates and improvements, and its developer is always open to suggestions and feedback. Please do note that Celerity is developed in its developer's free time, so updates may not be as frequent as one might expect.
 
                         **To contact the developer, please drop an email to \`tk@tkkr.dev\` or send a text to \`@t.kkr\` on Discord.**
+
+                        [Invite Celerity to your server](https://discord.com/oauth2/authorize?client_id=${client.user.id}&permissions=279176399888&scope=bot%20applications.commands) • [Vote for Celerity on top.gg](https://top.gg/bot/${client.user.id}/vote)
                     `,
                     )
                     .setColor(settings.color),
