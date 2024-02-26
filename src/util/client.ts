@@ -18,7 +18,7 @@ export class Celerity extends Client {
                 GatewayIntentBits.GuildVoiceStates,
                 GatewayIntentBits.Guilds,
                 /* ============== Privileged intents ============== */
-                GatewayIntentBits.GuildPresences,
+                // GatewayIntentBits.GuildPresences,
                 GatewayIntentBits.GuildMembers,
                 GatewayIntentBits.MessageContent,
             ],
@@ -33,7 +33,6 @@ export class Celerity extends Client {
                 status: 'online',
             },
         });
-        this.ready = false;
         this.config = new Config(this);
         this.util = new Util(this);
         this.commands = new Collection();

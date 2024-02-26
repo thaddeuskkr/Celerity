@@ -8,7 +8,6 @@ export const event: Event = {
     emitter: 'client',
 
     async run(client, message: Message) {
-        if (client.ready !== true) return;
         const startTime = performance.now();
         if (!message.guild || message.channel.isDMBased() || !message.member || !client.user || !message.guild.members.me) return;
         let settings = client.guildSettings.get(message.guild.id);
