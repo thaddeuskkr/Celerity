@@ -21,7 +21,7 @@ export const event: Event = {
         const { username, id } = client.user;
         client.logger.info(`Logged in as ${username} (${id})`);
 
-        // Get server settings from database for first startup
+        // Get server settings and statistics from database for first startup
         const guildSettingsInit = await client.db.get('server-settings');
         client.statistics = (await client.db.get('statistics')) || client.config.baseStatistics;
         client.guildSettings = new Collection(guildSettingsInit);
