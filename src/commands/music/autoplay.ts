@@ -25,6 +25,10 @@ export const command: Command = {
         } else {
             settings.autoplay.enabled = !settings.autoplay.enabled;
         }
-        return client.respond(context, `${client.config.emojis.autoplay} | **Autoplay is now ${settings.autoplay.enabled ? 'enabled' : 'disabled'}.**`, 'success');
+        return client.respond(
+            context,
+            `${client.config.emojis.autoplay} | **Autoplay is now ${settings.autoplay.enabled ? 'enabled' : 'disabled'}.**`,
+            'success',
+        );
     },
 };

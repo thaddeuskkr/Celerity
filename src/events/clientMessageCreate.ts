@@ -27,15 +27,18 @@ export const event: Event = {
         if (!prefix && (message.content.startsWith(`<@!${client.user!.id}>`) || message.content.startsWith(`<@${client.user!.id}>`)))
             prefix = client.user!.toString();
         if (message.content === `<@!${client.user!.id}>` || message.content === `<@${client.user!.id}>`) {
-            client.respond(message, new EmbedBuilder()
-                        .setColor(settings.color)
-                        .setAuthor({ name: 'You mentioned me?', iconURL: client.user.displayAvatarURL({ size: 4096 }) })
-                        .setDescription(
-                            `**Here is a list of prefixes I respond to:**\n${prefixes.map((prefix) => `- \`${prefix}\``).join('\n')}\n- \`@${
-                                client.user?.username
-                            }\``,
-                        ),
-                    'none');
+            client.respond(
+                message,
+                new EmbedBuilder()
+                    .setColor(settings.color)
+                    .setAuthor({ name: 'You mentioned me?', iconURL: client.user.displayAvatarURL({ size: 4096 }) })
+                    .setDescription(
+                        `**Here is a list of prefixes I respond to:**\n${prefixes.map((prefix) => `- \`${prefix}\``).join('\n')}\n- \`@${
+                            client.user?.username
+                        }\``,
+                    ),
+                'none',
+            );
             return;
         }
         if (!prefix) return;

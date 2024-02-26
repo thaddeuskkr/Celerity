@@ -20,11 +20,7 @@ export const command: Command = {
         const index = Number(args[0]);
         if (isNaN(index)) return client.respond(context, `${client.config.emojis.error} | **Invalid integer.**`, 'error');
         if (index < 1 || index > queue.length)
-            return client.respond(
-                context,
-                `${client.config.emojis.error} | **Invalid integer.**\nAccepts: \`1 - ${queue.length}\`.`,
-                'error',
-            );
+            return client.respond(context, `${client.config.emojis.error} | **Invalid integer.**\nAccepts: \`1 - ${queue.length}\`.`, 'error');
         const track = player.queue.remove(index - 1)!;
         return client.respond(
             context,

@@ -31,10 +31,8 @@ export const command: Command = {
             );
         const oldPosition = Number(args[0]);
         const newPosition = Number(args[1]);
-        if (isNaN(oldPosition))
-            return client.respond(context, `${client.config.emojis.error} | **Invalid integer 1 (old position).**`, 'error');
-        if (isNaN(newPosition))
-            return client.respond(context, `${client.config.emojis.error} | **Invalid integer 2 (new position).**`, 'error');
+        if (isNaN(oldPosition)) return client.respond(context, `${client.config.emojis.error} | **Invalid integer 1 (old position).**`, 'error');
+        if (isNaN(newPosition)) return client.respond(context, `${client.config.emojis.error} | **Invalid integer 2 (new position).**`, 'error');
         if (oldPosition < 1 || oldPosition > queue.length)
             return client.respond(
                 context,

@@ -42,11 +42,7 @@ export const command: Command = {
             const spotifyURL = query.startsWith('https://open.spotify.com/track/');
             const node = client.shoukaku.nodes.get(client.config.lavalink.name);
             if (!node)
-                return client.respond(
-                    context,
-                    `${client.config.emojis.error} | **No audio node available - cannot resolve lyrics.**`,
-                    'error',
-                );
+                return client.respond(context, `${client.config.emojis.error} | **No audio node available - cannot resolve lyrics.**`, 'error');
             let result;
             let finalResult;
             if (spotifyURL) result = await node.rest.resolve(`${query}`);
