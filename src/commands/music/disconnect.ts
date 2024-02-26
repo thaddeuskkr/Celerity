@@ -26,6 +26,7 @@ export const command: Command = {
                 'error',
             );
         client.respond(context, `${client.config.emojis.disconnect} | **Disconnected from <#${connection!.channelId}>.**`, 'success');
+        player.stopped = true;
         connection!.disconnect();
         player.destroy();
         return;
