@@ -31,7 +31,7 @@ export const command: Command = {
             if (args.indexOf('--timeout') !== -1) index = args.indexOf('--timeout');
             if (args.indexOf('-t') !== -1) index = args.indexOf('-t');
             if (isNaN(Number(args[index + 1])))
-                return client.respond(context.channel, `${client.config.emojis.error} | **Invalid integer.**\nAccepts: \`-1 - ∞\`.`, 'error');
+                return client.respond(context, `${client.config.emojis.error} | **Invalid integer.**\nAccepts: \`-1 - ∞\`.`, 'error');
             else timeout = Number(args[index + 1]);
         }
         const embed = getEmbed();
@@ -39,9 +39,9 @@ export const command: Command = {
             clearInterval(player.nowPlayingInterval);
             player.nowPlayingInterval = null;
         }
-        if (!dynamic) return client.respond(context.channel, embed, 'none');
+        if (!dynamic) return client.respond(context, embed, 'none');
         else {
-            const message = await context.channel.send({ embeds: [getEmbed()] });
+            const message = await context.reply({ embeds: [getEmbed()], allowedMentions: { repliedUser: false } });
             player.nowPlayingInterval = setInterval(async () => {
                 if (!player.current) return;
                 try {

@@ -24,7 +24,7 @@ export const command: Command = {
             const command = client.commands.get(cmd) || client.commands.find((c) => c.aliases && c.aliases.includes(cmd));
             if (!command)
                 return client.respond(
-                    context.channel,
+                    context,
                     `${client.config.emojis.error} | **Invalid command.**\nUse \`${client.util.escapeBackticks(
                         prefix.replace(/<@!?\d+>/g, `@${client.user!.tag} `),
                     )}help\` for a list of commands.`,
@@ -80,7 +80,7 @@ export const command: Command = {
                     },
                 )
                 .setDescription('**Note:** `<>` denotes a required argument, while `[]` denotes an optional argument.');
-            return client.respond(context.channel, embed, 'none');
+            return client.respond(context, embed, 'none');
         }
         const paginatedMessage = new CelerityPaginatedMessage(client, {
             template: new EmbedBuilder()

@@ -18,17 +18,17 @@ export const command: Command = {
     async execute({ client, context, args, player }) {
         if (!args.length)
             return client.respond(
-                context.channel,
+                context,
                 `${client.config.emojis.volume} | **Currently playing at ${(player.player.filters.volume || 1) * 100}% volume.**`,
                 'info',
             );
         else {
             const newVolume = Number(args[0]);
-            if (isNaN(newVolume)) return client.respond(context.channel, `${client.config.emojis.error} | **Invalid integer.**`, 'error');
+            if (isNaN(newVolume)) return client.respond(context, `${client.config.emojis.error} | **Invalid integer.**`, 'error');
             if (newVolume > 250 || newVolume < 0)
-                return client.respond(context.channel, `${client.config.emojis.error} | **Invalid integer.**\nAccepts: \`0 - 100\`.`, 'error');
+                return client.respond(context, `${client.config.emojis.error} | **Invalid integer.**\nAccepts: \`0 - 100\`.`, 'error');
             else await player.player.setGlobalVolume(newVolume);
-            return client.respond(context.channel, `${client.config.emojis.volume} | **Player volume set to __${newVolume}%__.**`, 'success');
+            return client.respond(context, `${client.config.emojis.volume} | **Player volume set to __${newVolume}%__.**`, 'success');
         }
     },
 };

@@ -10,7 +10,7 @@ export const command: Command = {
     async execute({ client, context, player }) {
         if (player.loop === 'track') player.setLoop('off');
         client.respond(
-            context.channel,
+            context,
             `${client.config.emojis.skip} | **Skipped [${player.current!.info.title} by ${player.current!.info.author}](${
                 player.current!.info.uri
             }).**`,

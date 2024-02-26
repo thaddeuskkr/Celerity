@@ -9,6 +9,6 @@ export const command: Command = {
 
     async execute({ client, context, player }) {
         player.queue.shuffle();
-        client.respond(context.channel, `${client.config.emojis.shuffle} | **Shuffled ${player.queue.length} tracks.**`, 'success');
+        client.respond(context, `${client.config.emojis.shuffle} | **Shuffled ${player.queue.length} tracks.**`, 'success');
     },
 };

@@ -8,7 +8,7 @@ export const command: Command = {
     options: [],
 
     async execute({ client, context, player, settings }) {
-        if (!player.previous.length) return client.respond(context.channel, `${client.config.emojis.error} | **No previous tracks.**`, 'error');
+        if (!player.previous.length) return client.respond(context, `${client.config.emojis.error} | **No previous tracks.**`, 'error');
         if (player.loop === 'track') player.setLoop('off');
         const prev = player.previous.shift();
         if (player.current) {
@@ -25,7 +25,7 @@ export const command: Command = {
         }
         if (!settings.announceNowPlaying)
             client.respond(
-                context.channel,
+                context,
                 `${client.config.emojis.previous} | **Returned to [${prev!.info.title} by ${prev!.info.author}](${prev!.info.uri}).**`,
                 'success',
             );

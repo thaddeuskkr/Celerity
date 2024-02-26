@@ -18,16 +18,16 @@ export const command: Command = {
     async execute({ client, context, args, player }) {
         const queue = player.queue;
         const index = Number(args[0]);
-        if (isNaN(index)) return client.respond(context.channel, `${client.config.emojis.error} | **Invalid integer.**`, 'error');
+        if (isNaN(index)) return client.respond(context, `${client.config.emojis.error} | **Invalid integer.**`, 'error');
         if (index < 1 || index > queue.length)
             return client.respond(
-                context.channel,
+                context,
                 `${client.config.emojis.error} | **Invalid integer.**\nAccepts: \`1 - ${queue.length}\`.`,
                 'error',
             );
         const track = player.queue.remove(index - 1)!;
         return client.respond(
-            context.channel,
+            context,
             `${client.config.emojis.remove} | **Removed [${track.info.title} by ${track.info.author}](${track.info.uri}) from the queue.**`,
             'success',
         );

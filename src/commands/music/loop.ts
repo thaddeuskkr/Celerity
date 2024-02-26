@@ -40,13 +40,13 @@ export const command: Command = {
             else if (args[0] === 'queue' || args[0] === 'q' || args[0] === 'all') player.setLoop('queue');
             else
                 return client.respond(
-                    context.channel,
+                    context,
                     `${client.config.emojis.error} | **Invalid loop mode.**\nAccepts: \`off\`, \`track\`, \`queue\`.`,
                     'error',
                 );
         }
         return client.respond(
-            context.channel,
+            context,
             `${
                 player.loop === 'off'
                     ? client.config.emojis.loopOff

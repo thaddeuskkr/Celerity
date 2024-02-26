@@ -12,9 +12,7 @@ export const command: Command = {
 
     async execute({ client, context, settings }) {
         if (!client.user) return;
-        context.channel.send({
-            embeds: [
-                new EmbedBuilder()
+        client.respond(context, new EmbedBuilder()
                     .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ size: 4096 }) })
                     .setTitle('About')
                     .setURL('https://celerity.tkkr.dev')
@@ -31,8 +29,7 @@ export const command: Command = {
                         [Invite Celerity to your server](https://discord.com/oauth2/authorize?client_id=${client.user.id}&permissions=279176399888&scope=bot%20applications.commands) • [Vote for Celerity on top.gg](https://top.gg/bot/${client.user.id}/vote)
                     `,
                     )
-                    .setColor(settings.color),
-            ],
-        });
+                    .setColor(settings.color), 
+                'none');
     },
 };

@@ -8,7 +8,7 @@ export const command: Command = {
     options: [],
 
     async execute({ client, context, player }) {
-        client.respond(context.channel, `${client.config.emojis.clear} | **Cleared the queue of ${player.queue.length} tracks.**`, 'success');
+        client.respond(context, `${client.config.emojis.clear} | **Cleared the queue of ${player.queue.length} track(s).**`, 'success');
         player.queue.clear();
     },
 };

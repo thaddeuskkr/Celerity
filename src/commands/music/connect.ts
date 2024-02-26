@@ -17,17 +17,16 @@ export const command: Command = {
                     channelId: context.member!.voice.channel!.id,
                     shardId: context.guild!.shardId,
                 });
-                if (settings.announceConnect)
-                    client.respond(
-                        context.channel,
-                        `${client.config.emojis.connect} | **Joined <#${context.member!.voice.channel!.id}> and bound to <#${context.channel.id}>.**`,
-                        'success',
-                    );
+                client.respond(
+                    context,
+                    `${client.config.emojis.connect} | **Joined <#${context.member!.voice.channel!.id}> and bound to <#${context.channel.id}>.**`,
+                    'success',
+                );
                 player = new CelerityPlayer(client, context.member!, context.channel!, newPlayer);
                 client.players.set(context.guild!.id, player);
             } catch (err) {
                 client.respond(
-                    context.channel,
+                    context,
                     `${client.config.emojis.error} | **Failed to connect to <#${context.member!.voice.channel!.id}>.**`,
                     'error',
                 );
@@ -46,7 +45,7 @@ export const command: Command = {
                         context.guild!.id
                     }) due to an unknown channel type: ${voiceChannel.type}`,
                 );
-                return client.respond(context.channel, `${client.config.emojis.error} | **Disconnected due to an internal error.**`, 'error');
+                return client.respond(context, `${client.config.emojis.error} | **Disconnected due to an internal error.**`, 'error');
             }
             const members = voiceChannel.members.filter((m: GuildMember) => !m.user.bot && !m.voice.deaf);
             if (
@@ -57,7 +56,7 @@ export const command: Command = {
                 !context.member!.roles.cache.has(settings.dj.role)
             )
                 return client.respond(
-                    context.channel,
+                    context,
                     `${client.config.emojis.error} | **You don't have permission to do that.**\nCelerity is playing music in another channel with users connected and undeafened. You will need the 'Moderate Members' permission to forcefully move Celerity to your channel.`,
                     'error',
                 );
@@ -65,13 +64,13 @@ export const command: Command = {
                 if (context.member!.voice.channelId === context.guild!.members.me!.voice.channelId) {
                     if (context.guild!.members.me!.voice.channel?.type === ChannelType.GuildStageVoice) client.util.removeSuppress(context.channel);
                     player.channel = context.channel;
-                    return client.respond(context.channel, `${client.config.emojis.connect} | **Bound to <#${context.channel.id}>.**`, 'success');
+                    return client.respond(context, `${client.config.emojis.connect} | **Bound to <#${context.channel.id}>.**`, 'success');
                 } else {
                     connection.channelId = context.member!.voice.channel!.id;
                     await connection.connect();
                     player.channel = context.channel;
                     return client.respond(
-                        context.channel,
+                        context,
                         `${client.config.emojis.connect} | **Moved to <#${context.member!.voice.channel!.id}> and bound to <#${
                             context.channel.id
                         }>.**`,

@@ -58,13 +58,13 @@ export const command: Command = {
             source = args[index + 1];
             if (!source)
                 return client.respond(
-                    context.channel,
+                    context,
                     `${client.config.emojis.error} | **Invalid usage.**\nUsage: \`--source <source>\` or \`-s <source>\`.`,
                     'error',
                 );
             if (!['ytm', 'yt', 'sp', 'dz', 'sc', 'am', 'ym'].includes(source))
                 return client.respond(
-                    context.channel,
+                    context,
                     `${client.config.emojis.error} | **Invalid source.**\nAccepts: \`ytm\`, \`yt\`, \`sp\`, \`dz\`, \`sc\`, \`am\`, \`ym\`.`,
                     'error',
                 );
@@ -77,10 +77,10 @@ export const command: Command = {
             for (let i = 0; i < urls.length; i++) {
                 const result = await player.node.rest.resolve(urls[i]!);
                 if (!result || result.loadType === 'empty' || result.loadType === 'error')
-                    return client.respond(context.channel, `${client.config.emojis.error} | **No results found for \`${urls[i]}\`.**`, 'error');
+                    return client.respond(context, `${client.config.emojis.error} | **No results found for \`${urls[i]}\`.**`, 'error');
                 if (result.loadType === 'track' && result.data.info.isStream)
                     return client.respond(
-                        context.channel,
+                        context,
                         `${client.config.emojis.error} | **Streams are currently unsupported, but will be in the future.**`,
                         'error',
                     );
@@ -90,7 +90,7 @@ export const command: Command = {
                         .filter((t) => !t.info.isStream)
                         .map((t) => new CelerityTrack(t, context.member!, isYouTubeMusicUrl(urls[i]!) ? 'ytmsearch' : undefined));
                     client.respond(
-                        context.channel,
+                        context,
                         `${client.config.emojis.queued} | **Playing ${tracks.length} tracks from __${result.data.info.name}__.**`,
                         'success',
                     );
@@ -100,7 +100,7 @@ export const command: Command = {
                 const track = result.data as Track;
                 if (!settings.announceNowPlaying)
                     client.respond(
-                        context.channel,
+                        context,
                         `${client.config.emojis.queued} | **Playing [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
                             track.info.uri
                         }).**`,
@@ -112,11 +112,11 @@ export const command: Command = {
         }
         const result = await player.node.rest.resolve(`${source || settings.searchProvider}:${query}`);
         if (!result || result.loadType !== 'search' || !result.data.length)
-            return client.respond(context.channel, `${client.config.emojis.error} | **No results found for \`${query}\`.**`, 'error');
+            return client.respond(context, `${client.config.emojis.error} | **No results found for \`${query}\`.**`, 'error');
         const track = result.data.shift()!;
         if (!settings.announceNowPlaying)
             client.respond(
-                context.channel,
+                context,
                 `${client.config.emojis.queued} | **Playing [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
                     track.info.uri
                 }).**`,

@@ -22,7 +22,7 @@ export const command: Command = {
     async execute({ client, context, args, player, settings }) {
         if (!args.length && (!player || !player.current))
             return client.respond(
-                context.channel,
+                context,
                 `${client.config.emojis.error} | **Invalid usage.**\nNothing is playing and you did not provide a query.`,
                 'error',
             );
@@ -43,7 +43,7 @@ export const command: Command = {
             const node = client.shoukaku.nodes.get(client.config.lavalink.name);
             if (!node)
                 return client.respond(
-                    context.channel,
+                    context,
                     `${client.config.emojis.error} | **No audio node available - cannot resolve lyrics.**`,
                     'error',
                 );
@@ -53,7 +53,7 @@ export const command: Command = {
             else result = await node.rest.resolve(`spsearch:${query}`);
             if (!result || result.loadType !== 'search' || !result.data.length)
                 return client.respond(
-                    context.channel,
+                    context,
                     `${client.config.emojis.error} | **No results for \`${query}\`.**${
                         args.length ? '' : '\nTry using a custom search query instead.'
                     }`,
@@ -77,7 +77,7 @@ export const command: Command = {
             }
             if (!finalResult)
                 return client.respond(
-                    context.channel,
+                    context,
                     `${client.config.emojis.error} | **No results for \`${query}\`.**${
                         args.length ? '' : '\nTry using a custom search query instead.'
                     }`,
@@ -115,11 +115,11 @@ export const command: Command = {
             })
             .catch((err) => {
                 if (err.toJSON().status == 404) {
-                    client.respond(context.channel, `${client.config.emojis.error} | **Lyrics are unavailable for this track.**`, 'error');
+                    client.respond(context, `${client.config.emojis.error} | **Lyrics are unavailable for this track.**`, 'error');
                     return;
                 }
                 client.logger.error('Lyrics fetching error: ' + String(err));
-                client.respond(context.channel, `${client.config.emojis.error} | **An unknown error occurred while fetching lyrics.**`, 'error');
+                client.respond(context, `${client.config.emojis.error} | **An unknown error occurred while fetching lyrics.**`, 'error');
                 return;
             });
         return;

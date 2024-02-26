@@ -78,12 +78,16 @@ export class Celerity extends Client {
             else if (color === 'info') color = '#CBA6F7';
             if (text instanceof EmbedBuilder) {
                 if (color !== 'none') text.setColor(color);
-                context.send({ embeds: [text], ...options });
+                if ('reply' in context) context.reply({ content: this.messageContent, embeds: [text], allowedMentions: { repliedUser: false }, ...options });
+                else context.send({ content: this.messageContent, embeds: [text], allowedMentions: { repliedUser: false }, ...options });
                 return;
             } else {
                 if (color === 'none') color = '#11111B';
-                context.send({
+                if ('reply' in context) context.reply({ content: this.messageContent, embeds: [new EmbedBuilder().setDescription(text).setColor(color)], allowedMentions: { repliedUser: false }, ...options });
+                else context.send({
+                    content: this.messageContent,
                     embeds: [new EmbedBuilder().setDescription(text).setColor(color)],
+                    allowedMentions: { repliedUser: false },
                     ...options,
                 });
             }

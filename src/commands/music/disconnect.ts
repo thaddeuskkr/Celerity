@@ -16,7 +16,7 @@ export const command: Command = {
                     context.guild!.id
                 }) due to an unknown channel type: ${voiceChannel.type}`,
             );
-            return client.respond(context.channel, `${client.config.emojis.error} | **Disconnected due to an internal error.**`, 'error');
+            return client.respond(context, `${client.config.emojis.error} | **Disconnected due to an internal error.**`, 'error');
         }
         const members = voiceChannel.members.filter((m: GuildMember) => !m.user.bot && !m.voice.deaf);
         if (members.size > 0 && player.current && context.member!.voice.channelId !== context.guild!.members.me!.voice.channelId)
@@ -25,7 +25,7 @@ export const command: Command = {
                 `${client.config.emojis.error} | **You're not in <#${context.guild!.members.me!.voice.channel!.id}>.**`,
                 'error',
             );
-        client.respond(context.channel, `${client.config.emojis.disconnect} | **Disconnected from <#${connection!.channelId}>.**`, 'success');
+        client.respond(context, `${client.config.emojis.disconnect} | **Disconnected from <#${connection!.channelId}>.**`, 'success');
         connection!.disconnect();
         player.destroy();
         return;

@@ -20,18 +20,18 @@ export const command: Command = {
         const ms = convertToMs(position);
         if (!ms)
             return client.respond(
-                context.channel,
+                context,
                 `${client.config.emojis.error} | **Invalid position.**\nAccepts: \`hh:mm:ss • e.g. 1:00:00, 30, 7:47\`.`,
                 'error',
             );
         if (ms < 0 || ms > player.current!.info.length)
             return client.respond(
-                context.channel,
+                context,
                 `${client.config.emojis.error} | **Invalid position.**\nAccepts: \`0:00 - ${player.ms(player.current!.info.length)}\`.`,
                 'error',
             );
         client.respond(
-            context.channel,
+            context,
             `${client.config.emojis.seek} | **Seeked to \`${player.ms(ms)}\` in [${player.current!.info.title} by ${player.current!.info.author}](${
                 player.current!.info.uri
             }).**`,

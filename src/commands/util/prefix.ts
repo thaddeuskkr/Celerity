@@ -12,7 +12,7 @@ export const command: Command = {
     async execute({ client, context, settings, args }) {
         if (!args.length) {
             return client.respond(
-                context.channel,
+                context,
                 new EmbedBuilder()
                     .setColor(settings.color)
                     .setDescription(
@@ -32,7 +32,7 @@ export const command: Command = {
                     .map((prefix) => `- \`${client.util.escapeBackticks(prefix)}\``)
                     .join('\n')}\n- \`@${client.user?.username}`,
             );
-        client.respond(context.channel, embed, 'none');
+        client.respond(context, embed, 'none');
         return;
     },
 };

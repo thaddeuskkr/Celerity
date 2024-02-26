@@ -11,7 +11,7 @@ export const command: Command = {
         const track = player.current!;
         await player.player.seekTo(0);
         client.respond(
-            context.channel,
+            context,
             `${client.config.emojis.rewind} | **Rewound [${track.info.title} by ${track.info.author}](${track.info.uri}).**`,
             'success',
         );

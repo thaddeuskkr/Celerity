@@ -21,6 +21,6 @@ export const command: Command = {
                 .setStyle(ButtonStyle.Danger)
                 .setEmoji(client.config.emojis.disconnect),
         );
-        client.respond(context.channel, `${client.config.emojis.stop} | **Stopped the player.**`, 'success', { components: [row] });
+        client.respond(context, `${client.config.emojis.stop} | **Stopped the player.**`, 'success', { components: [row] });
     },
 };

@@ -27,9 +27,7 @@ export const event: Event = {
         if (!prefix && (message.content.startsWith(`<@!${client.user!.id}>`) || message.content.startsWith(`<@${client.user!.id}>`)))
             prefix = client.user!.toString();
         if (message.content === `<@!${client.user!.id}>` || message.content === `<@${client.user!.id}>`) {
-            message.channel.send({
-                embeds: [
-                    new EmbedBuilder()
+            client.respond(message, new EmbedBuilder()
                         .setColor(settings.color)
                         .setAuthor({ name: 'You mentioned me?', iconURL: client.user.displayAvatarURL({ size: 4096 }) })
                         .setDescription(
@@ -37,8 +35,7 @@ export const event: Event = {
                                 client.user?.username
                             }\``,
                         ),
-                ],
-            });
+                    'none');
             return;
         }
         if (!prefix) return;
@@ -104,7 +101,7 @@ export const event: Event = {
             const permissions = new PermissionsBitField(clientPermissions);
             if (!message.guild.members.me!.permissions.has(permissions))
                 return client.respond(
-                    message.channel,
+                    message,
                     `${client.config.emojis.error} | **Celerity needs the following permission(s) to execute this command:**\n${permissions
                         .toArray()
                         .map((p) => `- \`${p.replace(/([A-Z])/g, ' $1').trim()}\``)
@@ -116,7 +113,7 @@ export const event: Event = {
             const permissions = new PermissionsBitField(userPermissions);
             if (!message.member.permissions.has(permissions) && !client.config.owners.includes(message.author.id))
                 return client.respond(
-                    message.channel,
+                    message,
                     `${client.config.emojis.error} | **You need the following permission(s) to use this command:**\n${permissions
                         .toArray()
                         .map((p) => `- \`${p.replace(/([A-Z])/g, ' $1').trim()}\``)
@@ -126,7 +123,7 @@ export const event: Event = {
         }
         if (command.options && command.options.filter((o) => o.required).length && !args.length)
             return client.respond(
-                message.channel,
+                message,
                 `${client.config.emojis.error} | **Invalid usage.** Use \`${prefix}help ${command.name}\` for more information.`,
                 'error',
             );
@@ -140,19 +137,11 @@ export const event: Event = {
         } catch (err) {
             client.logger.error(`Error executing command ${command.name}:`);
             client.logger.error(err);
-            message.channel.send({
-                embeds: [
-                    new EmbedBuilder()
-                        .setColor('#F38BA8')
-                        .setDescription(`${client.config.emojis.error} | **An unknown error occurred while executing this command.**`),
-                ],
-            });
+            client.respond(message, `${client.config.emojis.error} | **'An unknown error occurred while executing this command.**`, 'error');
         }
 
         function errorResponse(text: string) {
-            message.channel.send({
-                embeds: [new EmbedBuilder().setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **${text}**`)],
-            });
+            client.respond(message, `${client.config.emojis.error} | **${text}**`, 'error');
         }
     },
 };

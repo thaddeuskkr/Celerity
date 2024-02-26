@@ -1,7 +1,7 @@
 import type { Logger } from 'pino';
 import type { Config } from './config';
 import type { Util } from './util/util';
-import type { ColorResolvable, EmbedBuilder, TextBasedChannel, Message, MessageCreateOptions } from 'discord.js';
+import type { ColorResolvable, EmbedBuilder, Message, MessageCreateOptions, TextBasedChannel } from 'discord.js';
 import type { Collection } from '@discordjs/collection';
 import type { CelerityPlayer } from './util/player';
 import type Keyv from 'keyv';
@@ -38,7 +38,7 @@ export type GuildSettings = {
 };
 
 export type Respond = (
-    channel: TextBasedChannel,
+    context: Message | TextBasedChannel,
     text: string | EmbedBuilder,
     color: ColorResolvable | 'success' | 'error' | 'loading' | 'warn' | 'info' | 'none',
     options?: MessageCreateOptions,

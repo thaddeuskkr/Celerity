@@ -85,7 +85,7 @@ export const command: Command = {
             );
             if (!foundSetting)
                 return client.respond(
-                    context.channel,
+                    context,
                     `**Invalid usage.** Use \`${client.util.escapeBackticks(
                         prefix.replace(/<@!?\d+>/g, `@${client.user!.tag} `),
                     )}set\` to see all available settings.`,

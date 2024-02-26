@@ -26,13 +26,13 @@ export const command: Command = {
                 context.guild!.members.cache.find((m) => m.nickname?.toLowerCase() === args.join(' ').toLowerCase())?.user ||
                 (await client.users.fetch(args[0]).catch(() => null));
             if (fetchedUser) user = fetchedUser;
-            else return client.respond(context.channel, `${client.config.emojis.error} | **Invalid user.**`, 'error');
+            else return client.respond(context, `${client.config.emojis.error} | **Invalid user.**`, 'error');
         }
         const avatar = user.avatarURL({ size: 4096, forceStatic: false });
-        if (!avatar) return client.respond(context.channel, `${client.config.emojis.error} | **No avatar found.**`, 'error');
+        if (!avatar) return client.respond(context, `${client.config.emojis.error} | **No avatar found.**`, 'error');
         else {
             const embed = new EmbedBuilder().setAuthor({ name: `@${user.username}` }).setImage(avatar);
-            return client.respond(context.channel, embed, settings.color);
+            return client.respond(context, embed, settings.color);
         }
     },
 };
