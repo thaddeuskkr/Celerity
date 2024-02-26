@@ -30,7 +30,7 @@ export const command: Command = {
             .setDescription(
                 `${client.config.emojis.success} | **I will now respond to commands prefixed by the following:**\n${prefixes
                     .map((prefix) => `- \`${client.util.escapeBackticks(prefix)}\``)
-                    .join('\n')}\n- \`@${client.user?.username}`,
+                    .join('\n')}\n- \`@${client.user?.username}\``,
             );
         client.respond(context, embed, 'none');
         return;
