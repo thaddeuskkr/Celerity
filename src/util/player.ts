@@ -58,7 +58,7 @@ export class CelerityPlayer {
         }
         if (next) this.queue.unshift(track);
         else this.queue.push(track);
-        if (!this.current) this.play(); // might be being called multiple times causing loops
+        if (!this.current) this.play();
         if (this.autoplayQueue.length) this.autoplayQueue.clear();
         return;
     }
