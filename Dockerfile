@@ -9,10 +9,12 @@ WORKDIR /celerity
 CMD [ "node", "." ]
 
 FROM base AS prod-deps
+WORKDIR /celerity
 COPY package.json package-lock.json .
 RUN npm install --omit=dev
 
 FROM base AS builder
+WORKDIR /celerity
 COPY . .
 RUN npm install -g typescript && npm install && tsc
 
