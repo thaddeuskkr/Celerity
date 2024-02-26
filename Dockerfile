@@ -1,21 +1,15 @@
-FROM node:lts AS base
-
-LABEL org.opencontainers.image.description="Docker image for Celerity, a Discord music bot that focuses on performance without sacrificing functionality." \
-      org.opencontainers.image.source=https://github.com/thaddeuskkr/Celerity \
-      org.opencontainers.image.licenses=GPL-3.0-or-later
-
+FROM node:lts-alpine AS base
 WORKDIR /celerity
-COPY package.json package-lock.json /celerity/
+COPY package.json package-lock.json .
 
 CMD [ "node", "." ]
 
-FROM base AS prod-deps
-RUN npm install --omit=dev
-
-FROM base AS builder
-COPY . .
+FROM node:lts AS builder
+WORKDIR /celerity
+COPY . . 
+RUN npm install --omit=dev && cp -R node_modules prod_node_modules
 RUN npm install -g typescript && npm install && tsc
 
-FROM base
-COPY --from=prod-deps /celerity/node_modules /celerity/node_modules
+FROM base AS copier
+COPY --from=builder /celerity/prod_node_modules /celerity/node_modules
 COPY --from=builder /celerity/dist /celerity/dist
