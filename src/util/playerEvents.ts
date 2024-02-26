@@ -120,6 +120,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                 if (settings.disconnectTimeout === 0) return player.destroy();
                 client.util.timeout(player);
                 player.current = null;
+                player.stopped = true;
                 return client.respond(
                     player.channel,
                     `${client.config.emojis.error} | **Failed to autoplay.**\nFailed to retrieve information for previously played tracks.`,
@@ -136,6 +137,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                 if (settings.disconnectTimeout === 0) return player.destroy();
                 client.util.timeout(player);
                 player.current = null;
+                player.stopped = true;
                 return client.respond(player.channel, `${client.config.emojis.error} | **Failed to autoplay.**\nNo similar tracks found.`, 'error');
             }
             player.autoplayQueue.push(...similarTracks.data.tracks.map((t) => new CelerityTrack(t, player.guild.members.me!)));
@@ -152,6 +154,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                 }
             }
             client.util.timeout(player);
+            player.stopped = true;
             return (player.current = null);
         }
     } else return player.play();
