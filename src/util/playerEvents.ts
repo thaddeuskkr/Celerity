@@ -136,11 +136,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                 if (settings.disconnectTimeout === 0) return player.destroy();
                 client.util.timeout(player);
                 player.current = null;
-                return client.respond(
-                    player.channel,
-                    `${client.config.emojis.error} | **Failed to autoplay.**\nNo similar tracks found.`,
-                    'error',
-                );
+                return client.respond(player.channel, `${client.config.emojis.error} | **Failed to autoplay.**\nNo similar tracks found.`, 'error');
             }
             player.autoplayQueue.push(...similarTracks.data.tracks.map((t) => new CelerityTrack(t, player.guild.members.me!)));
             const newAutoplayQueue = _.cloneDeep(player.autoplayQueue.filter((val) => !player.previous.includes(val)));
