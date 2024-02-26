@@ -63,6 +63,7 @@ export const command: Command = {
                     return client.respond(context, `${client.config.emojis.connect} | **Bound to <#${context.channel.id}>.**`, 'success');
                 } else {
                     connection.channelId = context.member!.voice.channel!.id;
+                    connection.state = State.DISCONNECTED;
                     await connection.connect();
                     player.channel = context.channel;
                     return client.respond(
@@ -77,3 +78,12 @@ export const command: Command = {
         }
     },
 };
+
+enum State {
+    CONNECTING,
+    NEARLY,
+    CONNECTED,
+    RECONNECTING,
+    DISCONNECTING,
+    DISCONNECTED
+}
