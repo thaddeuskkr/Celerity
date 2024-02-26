@@ -5,11 +5,11 @@ LABEL org.opencontainers.image.description="Docker image for Celerity, a Discord
       org.opencontainers.image.licenses=GPL-3.0-or-later
 
 WORKDIR /celerity
+COPY package.json package-lock.json /celerity/
 
-CMD [ "node", "./dist/index.js" ]
+CMD [ "node", "." ]
 
 FROM base AS prod-deps
-COPY package.json package-lock.json .
 RUN npm install --omit=dev
 
 FROM base AS builder
