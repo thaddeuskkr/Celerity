@@ -25,8 +25,8 @@ export const command: Command = {
         else {
             const newVolume = Number(args[0]);
             if (isNaN(newVolume)) return client.respond(context, `${client.config.emojis.error} | **Invalid integer.**`, 'error');
-            if (newVolume > 250 || newVolume < 0)
-                return client.respond(context, `${client.config.emojis.error} | **Invalid integer.**\nAccepts: \`0 - 100\`.`, 'error');
+            if ((newVolume > 250 || newVolume < 0) && !(args.includes('--override') || args.includes('-o')))
+                return client.respond(context, `${client.config.emojis.error} | **Invalid integer.**\nAccepts: \`0 - 250\`.`, 'error');
             else await player.player.setGlobalVolume(newVolume);
             return client.respond(context, `${client.config.emojis.volume} | **Player volume set to __${newVolume}%__.**`, 'success');
         }
