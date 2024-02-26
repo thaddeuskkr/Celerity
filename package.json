@@ -1,6 +1,6 @@
 {
     "name": "celerity",
-    "version": "65DC5B65",
+    "version": "65DC616F",
     "description": "A music Discord bot focused on performance, without sacrificing functionality, features and quality.",
     "main": "dist/index.js",
     "type": "module",
@@ -8,6 +8,7 @@
         "build": "tsc",
         "start": "tsc && node dist/index.js",
         "prettier": "prettier --write .",
+        "version": "new_version=\"$(echo \"obase=16; $(date +%s)\" | bc)\" && jq --arg new_version \"$new_version\" '.version = $new_version' package.json > package_temp.json && mv package_temp.json package.json && npm install && prettier --write .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
