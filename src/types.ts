@@ -115,7 +115,6 @@ declare module 'discord.js' {
         ready: boolean;
         statistics: Statistics;
         version: string;
-        dependencies: Record<string, string>;
         config: Config;
         util: Util;
         commands: Collection<string, Command>;
