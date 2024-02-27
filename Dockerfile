@@ -1,6 +1,7 @@
 FROM node:lts-alpine AS base
 WORKDIR /celerity
 COPY package.json package-lock.json .
+COPY lines.json .
 
 CMD [ "node", "." ]
 
