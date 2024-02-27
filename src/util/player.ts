@@ -54,6 +54,7 @@ export class CelerityPlayer {
             this.queue.forEach((t) => (t.skipped = true));
             this.previous.push(...this.queue.clear());
             this.queue.push(track);
+            if (this.current) this.current.skipped = true;
             this.player.stopTrack().then();
             return;
         }
@@ -71,6 +72,7 @@ export class CelerityPlayer {
             this.queue.forEach((t) => (t.skipped = true));
             this.previous.push(...this.queue.clear());
             this.queue.push(...tracks);
+            if (this.current) this.current.skipped = true;
             this.player.stopTrack().then();
             return;
         }
