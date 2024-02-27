@@ -61,9 +61,9 @@ export type Statistics = {
         title: string;
         uri?: string;
         sourceName: string;
-        artworkUrl?: string
-        isrc?: string
-        requester: string
+        artworkUrl?: string;
+        isrc?: string;
+        requester: string;
         guild: string;
     }>;
 };

@@ -74,21 +74,22 @@ export const start = async (player: CelerityPlayer, client: Celerity) => {
 
 export const end = async (player: CelerityPlayer, client: Celerity) => {
     const settings = client.guildSettings.get(player.guild.id) || _.cloneDeep(client.config.defaultSettings);
-    if (settings.statistics && !player.previousUsed) client.statistics.tracks.push({
-        skipped: player.current!.skipped,
-        encoded: player.current!.encoded,
-        identifier: player.current!.info.identifier,
-        author: player.current!.info.author,
-        length: player.current!.info.length,
-        isStream: player.current!.info.isStream,
-        title: player.current!.info.title,
-        uri: player.current!.info.uri,
-        sourceName: player.current!.info.sourceName,
-        artworkUrl: player.current!.info.artworkUrl,
-        isrc: player.current!.info.isrc,
-        requester: player.current!.info.requester.id,
-        guild: player.guild.id,
-    });
+    if (settings.statistics && !player.previousUsed)
+        client.statistics.tracks.push({
+            skipped: player.current!.skipped,
+            encoded: player.current!.encoded,
+            identifier: player.current!.info.identifier,
+            author: player.current!.info.author,
+            length: player.current!.info.length,
+            isStream: player.current!.info.isStream,
+            title: player.current!.info.title,
+            uri: player.current!.info.uri,
+            sourceName: player.current!.info.sourceName,
+            artworkUrl: player.current!.info.artworkUrl,
+            isrc: player.current!.info.isrc,
+            requester: player.current!.info.requester.id,
+            guild: player.guild.id,
+        });
     if (player.loop === 'track') player.queue.unshift(player.current!);
     if (player.loop === 'queue' && !player.previousUsed && player.current!.info.requester.id !== client.user!.id) player.queue.push(player.current!);
     if (!player.previousUsed) player.previous.unshift(player.current!);
