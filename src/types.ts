@@ -7,7 +7,6 @@ import type { CelerityPlayer } from './util/player';
 import type Keyv from 'keyv';
 import type { Connection, Shoukaku } from 'shoukaku';
 import type { Celerity } from './util/client';
-import type { CelerityTrack } from './util/track';
 import { ApplicationCommandOptionType, Attachment, Embed } from 'discord.js';
 
 export type GuildSettings = {
@@ -52,7 +51,21 @@ export type Statistics = {
             guild: string;
         }>;
     };
-    tracks: Array<{ track: CelerityTrack; guild: string }>;
+    tracks: Array<{
+        skipped: boolean;
+        encoded: string;
+        identifier: string;
+        author: string;
+        length: number;
+        isStream: boolean;
+        title: string;
+        uri?: string;
+        sourceName: string;
+        artworkUrl?: string
+        isrc?: string
+        requester: string
+        guild: string;
+    }>;
 };
 
 export type Respond = (

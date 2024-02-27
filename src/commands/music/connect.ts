@@ -49,7 +49,7 @@ export const command: Command = {
                 player.current &&
                 !context.member!.permissions.has(PermissionFlagsBits.ModerateMembers) &&
                 settings.dj.role &&
-                !context.member!.roles.cache.has(settings.dj.role)
+                !context.member!.roles?.cache.has(settings.dj.role)
             )
                 return client.respond(
                     context,

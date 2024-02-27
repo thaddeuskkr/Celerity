@@ -50,7 +50,7 @@ export const event: Event = {
         if (!command) return;
 
         if (settings.banned.includes(message.author.id)) return errorResponse('You are banned from using Celerity.');
-        if (settings.banned.some((id) => message.member!.roles.cache.has(id))) return errorResponse('One of your roles is banned from using Celerity.');
+        if (settings.banned.some((id) => message.member!.roles?.cache.has(id))) return errorResponse('One of your roles is banned from using Celerity.');
         if (settings.disabledChannels.includes(message.channel.id)) return errorResponse('Celerity is disabled in this channel.');
         if (message.channel.parentId && settings.disabledChannels.includes(message.channel.parentId))
             return errorResponse('Celerity is disabled in all channels under this category.');
@@ -90,8 +90,8 @@ export const event: Event = {
                     settings.dj.enabled &&
                     settings.dj.role.length > 0 &&
                     message.guild.members.me!.voice.channel &&
-                    message.guild.members.me!.voice.channel.members.filter((m) => m.roles.cache.has(settings!.dj.role)).size > 0 &&
-                    !message.member.roles.cache.has(settings.dj.role) &&
+                    message.guild.members.me!.voice.channel.members.filter((m) => m.roles?.cache.has(settings!.dj.role)).size > 0 &&
+                    !message.member.roles?.cache.has(settings.dj.role) &&
                     !client.config.owners.includes(message.author.id)
                 )
                     return errorResponse(`You need the <@&${settings.dj.role}> role to use this command while DJ only mode is enabled.`);

@@ -430,7 +430,7 @@ export const command: Command = {
                 const currentValue: string[] = [];
                 const currentlyBanned = settings.banned;
                 for (let x = 0; x < currentlyBanned.length; x++) {
-                    const role = context.guild!.roles.cache.has(currentlyBanned[x]!);
+                    const role = context.guild!.roles?.cache.has(currentlyBanned[x]!);
                     if (role) currentValue.push(`<@&${currentlyBanned[x]!}>`);
                     else currentValue.push(`<@${currentlyBanned[x]!}>`);
                 }
@@ -464,7 +464,7 @@ export const command: Command = {
                             }
                         }
                     for (let x = 0; x < currentlyBanned.length; x++) {
-                        const role = context.guild!.roles.cache.has(currentlyBanned[x]!);
+                        const role = context.guild!.roles?.cache.has(currentlyBanned[x]!);
                         if (role) response.push(`<@&${currentlyBanned[x]!}>`);
                         else response.push(`<@${currentlyBanned[x]!}>`);
                     }

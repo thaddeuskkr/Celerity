@@ -74,7 +74,21 @@ export const start = async (player: CelerityPlayer, client: Celerity) => {
 
 export const end = async (player: CelerityPlayer, client: Celerity) => {
     const settings = client.guildSettings.get(player.guild.id) || _.cloneDeep(client.config.defaultSettings);
-    if (settings.statistics && !player.previousUsed) client.statistics.tracks.push({ track: player.current!, guild: player.guild.id });
+    if (settings.statistics && !player.previousUsed) client.statistics.tracks.push({
+        skipped: player.current!.skipped,
+        encoded: player.current!.encoded,
+        identifier: player.current!.info.identifier,
+        author: player.current!.info.author,
+        length: player.current!.info.length,
+        isStream: player.current!.info.isStream,
+        title: player.current!.info.title,
+        uri: player.current!.info.uri,
+        sourceName: player.current!.info.sourceName,
+        artworkUrl: player.current!.info.artworkUrl,
+        isrc: player.current!.info.isrc,
+        requester: player.current!.info.requester.id,
+        guild: player.guild.id,
+    });
     if (player.loop === 'track') player.queue.unshift(player.current!);
     if (player.loop === 'queue' && !player.previousUsed && player.current!.info.requester.id !== client.user!.id) player.queue.push(player.current!);
     if (!player.previousUsed) player.previous.unshift(player.current!);
@@ -88,7 +102,13 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
         if (settings.disconnectTimeout === 0) return player.destroy();
         else if (settings.autoplay.enabled && !player.autoplayQueue.length && !player.stopped) {
             const trackIdentifiers: Array<string> = [];
-            const usableTracks = player.previous.filter((t) => !t.skipped && t.info.title !== 'Unknown title' && t.info.author !== 'Unknown artist');
+            const usableTracks = player.previous.filter((t) =>
+                t.info.title === 'Unknown title' && t.info.author === 'Unknown artist'
+                    ? false
+                    : t.skipped && t.info.requester.id === client.user!.id
+                      ? false
+                      : true,
+            );
             for (let n = 0; n < Math.min(usableTracks.length, 5); n++) {
                 const t = usableTracks[n]!;
                 if (t.info.sourceName === 'spotify') trackIdentifiers.push(t.info.identifier);
@@ -146,7 +166,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
             player.autoplayQueue.clear();
             player.autoplayQueue.push(...newAutoplayQueue);
             player.autoplay();
-        } else if (settings.autoplay.enabled && player.autoplayQueue.length) return player.autoplay();
+        } else if (settings.autoplay.enabled && player.autoplayQueue.length && !player.stopped) return player.autoplay();
         else {
             if (player.guild.members.me!.voice.channel?.type === ChannelType.GuildStageVoice) {
                 player.guild!.members.me!.voice.setSuppressed(true).catch(() => null);
@@ -158,7 +178,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
             player.stopped = true;
             return (player.current = null);
         }
-    } else return player.play();
+    } else if (!player.stopped) return player.play();
 };
 
 export const stuck = async (player: CelerityPlayer, client: Celerity, err: TrackStuckEvent) => {
@@ -171,7 +191,7 @@ export const stuck = async (player: CelerityPlayer, client: Celerity, err: Track
         }), skipping.**`,
         'warn',
     );
-    player.play();
+    if (!player.stopped) player.play();
 };
 
 export const exception = async (player: CelerityPlayer, client: Celerity, err: TrackExceptionEvent) => {

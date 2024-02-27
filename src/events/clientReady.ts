@@ -47,7 +47,8 @@ export const event: Event = {
         }, 10000);
         setInterval(async () => {
             // Bot statistics
-            if (equal(await client.db.get('statistics'), client.statistics)) return;
+            const currentDatabase = await client.db.get('statistics');
+            if (equal(currentDatabase, client.statistics)) return;
             else await client.db.set('statistics', client.statistics);
             client.logger.debug('Updated bot statistics in database');
         }, 10000);
