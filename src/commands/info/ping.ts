@@ -9,7 +9,7 @@ export const command: Command = {
     options: [],
 
     async execute({ client, context, player, settings }) {
-        const msg = await context.channel.send({
+        const msg = await context.reply({
             embeds: [new EmbedBuilder().setDescription(`${client.config.emojis.loading} | **Pinging...**`).setColor('#F5C2E7')],
         });
         msg.edit({
