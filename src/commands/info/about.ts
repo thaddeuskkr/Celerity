@@ -15,6 +15,7 @@ export const command: Command = {
 
     async execute({ client, context, settings }) {
         if (!client.user) return;
+        const lines = require('../../../lines.json');
         let userCount = 0;
         client.guilds.cache.forEach((guild) => (userCount += guild.memberCount));
         client.respond(
@@ -29,7 +30,7 @@ export const command: Command = {
 
                         Celerity is programmed in [TypeScript](https://www.typescriptlang.org/) and is currently running on [Node.js®](https://nodejs.org) ${process.version}. Celerity utilises [discord.js](https://discord.js.org) v${require('discord.js').version}, along with [Lavalink](https://lavalink.dev) to play high-quality audio without sacrificing performance.
                         
-                        Celerity was created on <t:1682870400:D> (<t:1682870400:R>) and is currently on version \`${client.version}\`. This instance of Celerity has been running for ${ms(process.uptime() * 1000, { verbose: true, secondsDecimalDigits: 0, millisecondsDecimalDigits: 0 })}. 
+                        Celerity was created on <t:1682870400:D> (<t:1682870400:R>) and is currently on version \`${client.version}\`, with ${lines['SUM']['code']} total lines of code in its codebase (not including libraries). This instance of Celerity has been running for ${ms(process.uptime() * 1000, { verbose: true, secondsDecimalDigits: 0, millisecondsDecimalDigits: 0 })}.
                         
                         Celerity receives constant updates and improvements, and its developer is always open to suggestions and feedback. Please do note that Celerity is developed in its developer's free time, so updates may not be as frequent as one might expect.
 
