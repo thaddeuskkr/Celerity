@@ -139,15 +139,6 @@ declare module 'discord.js' {
     }
 }
 
-export type Snipe = {
-    content: string;
-    embeds: Embed[];
-    attachments: Attachment[];
-    channel: string;
-    author: string;
-    timestamp: number;
-};
-
 export type Event = {
     name: string;
     once: boolean;
