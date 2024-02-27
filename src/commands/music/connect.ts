@@ -28,9 +28,7 @@ export const command: Command = {
                 client.util.timeout(player);
             } catch (err) {
                 client.respond(context, `${client.config.emojis.error} | **Failed to connect to <#${context.member!.voice.channel!.id}>.**`, 'error');
-                client.logger.error(
-                    `Failed to connect to voice channel ${context.member!.voice.channel!.id} in ${context.guild!.name} (${context.guild!.id})`,
-                );
+                client.logger.error(`Failed to connect to voice channel ${context.member!.voice.channel!.id} in ${context.guild!.name} (${context.guild!.id})`);
                 client.logger.error(err);
                 return;
             }
@@ -70,9 +68,7 @@ export const command: Command = {
                     player.channel = context.channel;
                     return client.respond(
                         context,
-                        `${client.config.emojis.connect} | **Moved to <#${context.member!.voice.channel!.id}> and bound to <#${
-                            context.channel.id
-                        }>.**`,
+                        `${client.config.emojis.connect} | **Moved to <#${context.member!.voice.channel!.id}> and bound to <#${context.channel.id}>.**`,
                         'success',
                     );
                 }

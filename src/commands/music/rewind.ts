@@ -10,10 +10,6 @@ export const command: Command = {
     async execute({ client, context, player }) {
         const track = player.current!;
         await player.player.seekTo(0);
-        client.respond(
-            context,
-            `${client.config.emojis.rewind} | **Rewound [${track.info.title} by ${track.info.author}](${track.info.uri}).**`,
-            'success',
-        );
+        client.respond(context, `${client.config.emojis.rewind} | **Rewound [${track.info.title} by ${track.info.author}](${track.info.uri}).**`, 'success');
     },
 };

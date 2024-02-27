@@ -53,8 +53,7 @@ export const command: Command = {
             const split = inspected.split('\n');
             const last = inspected.length - 1;
             const prependPart = inspected[0] !== '{' && inspected[0] !== '[' && inspected[0] !== "'" ? split[0] : inspected[0];
-            const appendPart =
-                inspected[last] !== '}' && inspected[last] !== ']' && inspected[last] !== "'" ? split[split.length - 1] : inspected[last];
+            const appendPart = inspected[last] !== '}' && inspected[last] !== ']' && inspected[last] !== "'" ? split[split.length - 1] : inspected[last];
             const prepend = `\`\`\`javascript\n${prependPart}\n`;
             const append = `\n${appendPart}\n\`\`\``;
             if (input) {

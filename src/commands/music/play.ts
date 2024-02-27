@@ -64,14 +64,8 @@ export const command: Command = {
                 player.stopped = true;
                 client.util.timeout(player);
             } catch (err) {
-                client.respond(
-                    context.channel,
-                    `${client.config.emojis.error} | **Failed to connect to <#${context.member!.voice.channel!.id}>.**`,
-                    'error',
-                );
-                client.logger.error(
-                    `Failed to connect to voice channel ${context.member!.voice.channel!.id} in ${context.guild!.name} (${context.guild!.id})`,
-                );
+                client.respond(context.channel, `${client.config.emojis.error} | **Failed to connect to <#${context.member!.voice.channel!.id}>.**`, 'error');
+                client.logger.error(`Failed to connect to voice channel ${context.member!.voice.channel!.id} in ${context.guild!.name} (${context.guild!.id})`);
                 client.logger.error(err);
                 return;
             }
@@ -96,11 +90,7 @@ export const command: Command = {
             if (args.indexOf('-s') !== -1) index = args.indexOf('-s');
             source = args[index + 1];
             if (!source)
-                return client.respond(
-                    context,
-                    `${client.config.emojis.error} | **Invalid usage.**\nUsage: \`--source <source>\` or \`-s <source>\`.`,
-                    'error',
-                );
+                return client.respond(context, `${client.config.emojis.error} | **Invalid usage.**\nUsage: \`--source <source>\` or \`-s <source>\`.`, 'error');
             if (!['ytm', 'yt', 'sp', 'dz', 'sc', 'am', 'ym'].includes(source))
                 return client.respond(
                     context,

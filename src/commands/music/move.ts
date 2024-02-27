@@ -24,27 +24,15 @@ export const command: Command = {
     async execute({ client, context, args, player }) {
         const queue = player.queue;
         if (args.length < 2)
-            return client.respond(
-                context,
-                `${client.config.emojis.error} | **Invalid usage.**\nAccepts: \`2 integers, 1 - ${queue.length}\`.`,
-                'error',
-            );
+            return client.respond(context, `${client.config.emojis.error} | **Invalid usage.**\nAccepts: \`2 integers, 1 - ${queue.length}\`.`, 'error');
         const oldPosition = Number(args[0]);
         const newPosition = Number(args[1]);
         if (isNaN(oldPosition)) return client.respond(context, `${client.config.emojis.error} | **Invalid integer 1 (old position).**`, 'error');
         if (isNaN(newPosition)) return client.respond(context, `${client.config.emojis.error} | **Invalid integer 2 (new position).**`, 'error');
         if (oldPosition < 1 || oldPosition > queue.length)
-            return client.respond(
-                context,
-                `${client.config.emojis.error} | **Invalid integer 1 (old position).**\nAccepts: \`1 - ${queue.length}\`.`,
-                'error',
-            );
+            return client.respond(context, `${client.config.emojis.error} | **Invalid integer 1 (old position).**\nAccepts: \`1 - ${queue.length}\`.`, 'error');
         if (newPosition < 1 || newPosition > queue.length)
-            return client.respond(
-                context,
-                `${client.config.emojis.error} | **Invalid integer 2 (new position).**\nAccepts: \`1 - ${queue.length}\`.`,
-                'error',
-            );
+            return client.respond(context, `${client.config.emojis.error} | **Invalid integer 2 (new position).**\nAccepts: \`1 - ${queue.length}\`.`, 'error');
         const track = player.queue.move(Math.round(oldPosition) - 1, Math.round(newPosition) - 1);
         return client.respond(
             context,

@@ -77,8 +77,7 @@ export const event: Event = {
         // Check / update Spotify access token every 5 seconds
         setInterval(async () => {
             const spotify = client.spotify;
-            if (!spotify || typeof spotify !== 'object' || Array.isArray(spotify) || spotify?.isAnonymous == true)
-                return client.util.refreshSpotifyToken();
+            if (!spotify || typeof spotify !== 'object' || Array.isArray(spotify) || spotify?.isAnonymous == true) return client.util.refreshSpotifyToken();
             const expiry = spotify.accessTokenExpirationTimestampMs;
             const now = Date.now();
             if (expiry < now) {

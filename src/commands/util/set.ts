@@ -79,8 +79,7 @@ export const command: Command = {
                     s.name.toLowerCase() === setting ||
                     s.name.split(' ').join('') === setting ||
                     (s.aliases?.length
-                        ? s.aliases.map((a) => a.toLowerCase()).includes(setting) ||
-                          s.aliases.map((a) => a.toLowerCase().split(' ').join('')).includes(setting)
+                        ? s.aliases.map((a) => a.toLowerCase()).includes(setting) || s.aliases.map((a) => a.toLowerCase().split(' ').join('')).includes(setting)
                         : false),
             );
             if (!foundSetting)
@@ -133,9 +132,7 @@ export const command: Command = {
                     settings.announceConnect = i.values[0] === 'true';
                     message.edit({
                         embeds: [
-                            successEmbed.setDescription(
-                                `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.announceConnect}\`.`,
-                            ),
+                            successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.announceConnect}\`.`),
                         ],
                         components: [],
                     });
@@ -157,10 +154,7 @@ export const command: Command = {
                         .setPlaceholder('Select an option...')
                         .addOptions(
                             new StringSelectMenuOptionBuilder().setLabel('true').setValue('true').setDescription('Enables disconnect notifications.'),
-                            new StringSelectMenuOptionBuilder()
-                                .setLabel('false')
-                                .setValue('false')
-                                .setDescription('Disables disconnect notifications.'),
+                            new StringSelectMenuOptionBuilder().setLabel('false').setValue('false').setDescription('Disables disconnect notifications.'),
                         ),
                 );
                 const message = await context.channel.send({ embeds: [embed], components: [stringRow] });
@@ -235,9 +229,7 @@ export const command: Command = {
                     settings.autoplay.enabled = i.values[0] === 'true';
                     message.edit({
                         embeds: [
-                            successEmbed.setDescription(
-                                `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay.enabled}\`.`,
-                            ),
+                            successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay.enabled}\`.`),
                         ],
                         components: [],
                     });
@@ -506,10 +498,7 @@ export const command: Command = {
                         .setCustomId('set')
                         .setPlaceholder('Select an option...')
                         .addOptions(
-                            new StringSelectMenuOptionBuilder()
-                                .setLabel('off')
-                                .setValue('off')
-                                .setDescription('Disables all buttons on now playing messages.'),
+                            new StringSelectMenuOptionBuilder().setLabel('off').setValue('off').setDescription('Disables all buttons on now playing messages.'),
                             new StringSelectMenuOptionBuilder()
                                 .setLabel('base')
                                 .setValue('base')
@@ -526,9 +515,7 @@ export const command: Command = {
                     if (i.values[0] !== 'base' && i.values[0] !== 'extra' && i.values[0] !== 'off') return;
                     settings.buttons = i.values[0];
                     message.edit({
-                        embeds: [
-                            successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.buttons}\`.`),
-                        ],
+                        embeds: [successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.buttons}\`.`)],
                         components: [],
                     });
                 });
@@ -563,9 +550,7 @@ export const command: Command = {
                 collector.on('collect', (i: StringSelectMenuInteraction) => {
                     settings.cleanup = i.values[0] === 'true';
                     message.edit({
-                        embeds: [
-                            successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.cleanup}\`.`),
-                        ],
+                        embeds: [successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.cleanup}\`.`)],
                         components: [],
                     });
                 });
@@ -606,9 +591,7 @@ export const command: Command = {
                             settings.color = `#${color}` as ColorResolvable;
                             message.edit({
                                 embeds: [
-                                    successEmbed.setDescription(
-                                        `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.color}\`.`,
-                                    ),
+                                    successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.color}\`.`),
                                 ],
                                 components: [],
                             });
@@ -634,9 +617,7 @@ export const command: Command = {
                         **----------**
                         **Default value:** No default value
                         **Current value:** ${
-                            settings.disabledChannels.length
-                                ? settings.disabledChannels.map((c) => `<#${c}>`).join(', ')
-                                : 'No disabled channels / categories'
+                            settings.disabledChannels.length ? settings.disabledChannels.map((c) => `<#${c}>`).join(', ') : 'No disabled channels / categories'
                         }`,
                 );
                 channelRow.addComponents(
@@ -753,11 +734,7 @@ export const command: Command = {
                 collector.on('collect', (i: StringSelectMenuInteraction) => {
                     settings.dj.enabled = i.values[0] === 'true';
                     message.edit({
-                        embeds: [
-                            successEmbed.setDescription(
-                                `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.dj.enabled}\`.`,
-                            ),
-                        ],
+                        embeds: [successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.dj.enabled}\`.`)],
                         components: [],
                     });
                 });
@@ -832,9 +809,7 @@ export const command: Command = {
                         message.edit({
                             embeds: [
                                 successEmbed.setDescription(
-                                    `${
-                                        client.config.emojis.success
-                                    } | **Celerity will now respond to commands prefixed by the following:**\n${prefixes
+                                    `${client.config.emojis.success} | **Celerity will now respond to commands prefixed by the following:**\n${prefixes
                                         .map((prefix) => `- \`${client.util.escapeBackticks(prefix)}\``)
                                         .join('\n')}\n- \`@${client.user?.username}\``,
                                 ),
@@ -873,22 +848,13 @@ export const command: Command = {
                         .setCustomId('set')
                         .setPlaceholder('Select an option...')
                         .addOptions(
-                            new StringSelectMenuOptionBuilder()
-                                .setLabel('YouTube')
-                                .setValue('ytsearch')
-                                .setDescription('Uses YouTube as the search provider.'),
+                            new StringSelectMenuOptionBuilder().setLabel('YouTube').setValue('ytsearch').setDescription('Uses YouTube as the search provider.'),
                             new StringSelectMenuOptionBuilder()
                                 .setLabel('YouTube Music')
                                 .setValue('ytmsearch')
                                 .setDescription('Uses YouTube Music as the search provider.'),
-                            new StringSelectMenuOptionBuilder()
-                                .setLabel('Deezer')
-                                .setValue('dzsearch')
-                                .setDescription('Uses Deezer as the search provider.'),
-                            new StringSelectMenuOptionBuilder()
-                                .setLabel('Spotify')
-                                .setValue('spsearch')
-                                .setDescription('Uses Spotify as the search provider.'),
+                            new StringSelectMenuOptionBuilder().setLabel('Deezer').setValue('dzsearch').setDescription('Uses Deezer as the search provider.'),
+                            new StringSelectMenuOptionBuilder().setLabel('Spotify').setValue('spsearch').setDescription('Uses Spotify as the search provider.'),
                             new StringSelectMenuOptionBuilder()
                                 .setLabel('SoundCloud')
                                 .setValue('scsearch')
@@ -906,20 +872,11 @@ export const command: Command = {
                 const message = await context.channel.send({ embeds: [embed], components: [stringRow] });
                 const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
                 collector.on('collect', (i: StringSelectMenuInteraction) => {
-                    settings.searchProvider = i.values[0] as
-                        | 'ytsearch'
-                        | 'ytmsearch'
-                        | 'dzsearch'
-                        | 'spsearch'
-                        | 'scsearch'
-                        | 'amsearch'
-                        | 'ymsearch';
+                    settings.searchProvider = i.values[0] as 'ytsearch' | 'ytmsearch' | 'dzsearch' | 'spsearch' | 'scsearch' | 'amsearch' | 'ymsearch';
                     message.edit({
                         embeds: [
                             successEmbed.setDescription(
-                                `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${resolveProviderToString(
-                                    settings.searchProvider,
-                                )}\`.`,
+                                `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${resolveProviderToString(settings.searchProvider)}\`.`,
                             ),
                         ],
                         components: [],
@@ -941,10 +898,7 @@ export const command: Command = {
                         .setCustomId('set')
                         .setPlaceholder('Select an option...')
                         .addOptions(
-                            new StringSelectMenuOptionBuilder()
-                                .setLabel('true')
-                                .setValue('true')
-                                .setDescription('Enables automatic setting of stage topics.'),
+                            new StringSelectMenuOptionBuilder().setLabel('true').setValue('true').setDescription('Enables automatic setting of stage topics.'),
                             new StringSelectMenuOptionBuilder()
                                 .setLabel('false')
                                 .setValue('false')
@@ -957,9 +911,7 @@ export const command: Command = {
                     settings.setStageTopic = i.values[0] === 'true';
                     message.edit({
                         embeds: [
-                            successEmbed.setDescription(
-                                `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.setStageTopic}\`.`,
-                            ),
+                            successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.setStageTopic}\`.`),
                         ],
                         components: [],
                     });

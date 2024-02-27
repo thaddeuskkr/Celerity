@@ -19,11 +19,7 @@ export const command: Command = {
         const position = args.join(' ');
         const ms = convertToMs(position);
         if (!ms)
-            return client.respond(
-                context,
-                `${client.config.emojis.error} | **Invalid position.**\nAccepts: \`hh:mm:ss • e.g. 1:00:00, 30, 7:47\`.`,
-                'error',
-            );
+            return client.respond(context, `${client.config.emojis.error} | **Invalid position.**\nAccepts: \`hh:mm:ss • e.g. 1:00:00, 30, 7:47\`.`, 'error');
         if (ms < 0 || ms > player.current!.info.length)
             return client.respond(
                 context,

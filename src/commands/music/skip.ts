@@ -11,9 +11,7 @@ export const command: Command = {
         if (player.loop === 'track') player.setLoop('off');
         client.respond(
             context,
-            `${client.config.emojis.skip} | **Skipped [${player.current!.info.title} by ${player.current!.info.author}](${
-                player.current!.info.uri
-            }).**`,
+            `${client.config.emojis.skip} | **Skipped [${player.current!.info.title} by ${player.current!.info.author}](${player.current!.info.uri}).**`,
             'success',
         );
         await player.player.stopTrack();

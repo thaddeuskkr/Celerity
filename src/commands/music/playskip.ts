@@ -57,11 +57,7 @@ export const command: Command = {
             if (args.indexOf('-s') !== -1) index = args.indexOf('-s');
             source = args[index + 1];
             if (!source)
-                return client.respond(
-                    context,
-                    `${client.config.emojis.error} | **Invalid usage.**\nUsage: \`--source <source>\` or \`-s <source>\`.`,
-                    'error',
-                );
+                return client.respond(context, `${client.config.emojis.error} | **Invalid usage.**\nUsage: \`--source <source>\` or \`-s <source>\`.`, 'error');
             if (!['ytm', 'yt', 'sp', 'dz', 'sc', 'am', 'ym'].includes(source))
                 return client.respond(
                     context,
@@ -117,9 +113,7 @@ export const command: Command = {
         if (!settings.announceNowPlaying)
             client.respond(
                 context,
-                `${client.config.emojis.queued} | **Playing [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
-                    track.info.uri
-                }).**`,
+                `${client.config.emojis.queued} | **Playing [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${track.info.uri}).**`,
                 'success',
             );
         player.handleTrack(new CelerityTrack(track, context.member!, source || settings.searchProvider), false, true);

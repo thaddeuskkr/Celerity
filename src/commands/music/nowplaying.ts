@@ -15,8 +15,7 @@ export const command: Command = {
         },
         {
             name: 'timeout',
-            description:
-                'The amount of time, in minutes, for which the embed should be updated. By default, stops at the end of the track. (-t / --timeout)',
+            description: 'The amount of time, in minutes, for which the embed should be updated. By default, stops at the end of the track. (-t / --timeout)',
             type: ApplicationCommandOptionType.Integer,
             required: false,
         },
@@ -79,9 +78,7 @@ export const command: Command = {
                         )}\`\n`,
                 )
                 .setFooter({
-                    text: `${player.player.paused ? '⏸️ | ' : ''}🔊 ${(player.player.filters.volume || 1) * 100}% | ${
-                        player.queue.length
-                    } track(s) in queue`,
+                    text: `${player.player.paused ? '⏸️ | ' : ''}🔊 ${(player.player.filters.volume || 1) * 100}% | ${player.queue.length} track(s) in queue`,
                 });
         }
 

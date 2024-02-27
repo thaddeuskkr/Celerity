@@ -21,11 +21,7 @@ export const command: Command = {
 
     async execute({ client, context, args, player, settings }) {
         if (!args.length && (!player || !player.current))
-            return client.respond(
-                context,
-                `${client.config.emojis.error} | **Invalid usage.**\nNothing is playing and you did not provide a query.`,
-                'error',
-            );
+            return client.respond(context, `${client.config.emojis.error} | **Invalid usage.**\nNothing is playing and you did not provide a query.`, 'error');
         let identifier: string;
         let customQuery: string;
         if (!args.length && player.current!.info.sourceName === 'spotify') {
@@ -35,14 +31,10 @@ export const command: Command = {
                 ? args.join(' ')
                 : `${player
                       .current!.info.title.replace('(Lyrics)', '')
-                      .replace(`(${player.current!.info.title.replace(/\(.*?\)/g, '').trim()})`, '')} - ${player.current!.info.author.replace(
-                      ' - Topic',
-                      '',
-                  )}`;
+                      .replace(`(${player.current!.info.title.replace(/\(.*?\)/g, '').trim()})`, '')} - ${player.current!.info.author.replace(' - Topic', '')}`;
             const spotifyURL = query.startsWith('https://open.spotify.com/track/');
             const node = client.shoukaku.nodes.get(client.config.lavalink.name);
-            if (!node)
-                return client.respond(context, `${client.config.emojis.error} | **No audio node available - cannot resolve lyrics.**`, 'error');
+            if (!node) return client.respond(context, `${client.config.emojis.error} | **No audio node available - cannot resolve lyrics.**`, 'error');
             let result;
             let finalResult;
             if (spotifyURL) result = await node.rest.resolve(`${query}`);
@@ -50,9 +42,7 @@ export const command: Command = {
             if (!result || result.loadType !== 'search' || !result.data.length)
                 return client.respond(
                     context,
-                    `${client.config.emojis.error} | **No results for \`${query}\`.**${
-                        args.length ? '' : '\nTry using a custom search query instead.'
-                    }`,
+                    `${client.config.emojis.error} | **No results for \`${query}\`.**${args.length ? '' : '\nTry using a custom search query instead.'}`,
                     'error',
                 );
             const tracks = result.data;
@@ -74,9 +64,7 @@ export const command: Command = {
             if (!finalResult)
                 return client.respond(
                     context,
-                    `${client.config.emojis.error} | **No results for \`${query}\`.**${
-                        args.length ? '' : '\nTry using a custom search query instead.'
-                    }`,
+                    `${client.config.emojis.error} | **No results for \`${query}\`.**${args.length ? '' : '\nTry using a custom search query instead.'}`,
                     'error',
                 );
             identifier = finalResult.info.identifier;

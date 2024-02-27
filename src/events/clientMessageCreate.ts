@@ -50,8 +50,7 @@ export const event: Event = {
         if (!command) return;
 
         if (settings.banned.includes(message.author.id)) return errorResponse('You are banned from using Celerity.');
-        if (settings.banned.some((id) => message.member!.roles.cache.has(id)))
-            return errorResponse('One of your roles is banned from using Celerity.');
+        if (settings.banned.some((id) => message.member!.roles.cache.has(id))) return errorResponse('One of your roles is banned from using Celerity.');
         if (settings.disabledChannels.includes(message.channel.id)) return errorResponse('Celerity is disabled in this channel.');
         if (message.channel.parentId && settings.disabledChannels.includes(message.channel.parentId))
             return errorResponse('Celerity is disabled in all channels under this category.');

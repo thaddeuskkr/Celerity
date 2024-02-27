@@ -44,8 +44,7 @@ export class Util {
                 }
                 return;
             },
-            (this.client.guildSettings.get(celerity.guild.id)?.disconnectTimeout ||
-                _.cloneDeep(this.client.config.defaultSettings).disconnectTimeout) * 1000,
+            (this.client.guildSettings.get(celerity.guild.id)?.disconnectTimeout || _.cloneDeep(this.client.config.defaultSettings).disconnectTimeout) * 1000,
         );
     }
 

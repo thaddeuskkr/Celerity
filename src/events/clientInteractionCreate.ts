@@ -75,9 +75,7 @@ export const event: Event = {
                     else player.queue.unshift(prev!);
                     await player.player.stopTrack();
                     if (!settings.announceNowPlaying)
-                        successResponse(
-                            `${client.config.emojis.previous} | **Returned to [${prev!.info.title} by ${prev!.info.author}](${prev!.info.uri}).**`,
-                        );
+                        successResponse(`${client.config.emojis.previous} | **Returned to [${prev!.info.title} by ${prev!.info.author}](${prev!.info.uri}).**`);
                     else interaction.deferUpdate();
                     break;
                 }
@@ -85,14 +83,10 @@ export const event: Event = {
                     const current = player.current!;
                     if (player.player.paused) {
                         await player.player.setPaused(false);
-                        successResponse(
-                            `${client.config.emojis.resume} | **Resumed [${current.info.title} by ${current.info.author}](${current.info.uri}).**`,
-                        );
+                        successResponse(`${client.config.emojis.resume} | **Resumed [${current.info.title} by ${current.info.author}](${current.info.uri}).**`);
                     } else {
                         await player.player.setPaused(true);
-                        successResponse(
-                            `${client.config.emojis.pause} | **Paused [${current.info.title} by ${current.info.author}](${current.info.uri}).**`,
-                        );
+                        successResponse(`${client.config.emojis.pause} | **Paused [${current.info.title} by ${current.info.author}](${current.info.uri}).**`);
                     }
                     break;
                 }
