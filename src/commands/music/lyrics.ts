@@ -24,8 +24,10 @@ export const command: Command = {
             return client.respond(context, `${client.config.emojis.error} | **Invalid usage.**\nNothing is playing and you did not provide a query.`, 'error');
         let identifier: string;
         let customQuery: string;
+        let albumArt: string | undefined;
         if (!args.length && player.current!.info.sourceName === 'spotify') {
             identifier = player.current!.info.identifier;
+            albumArt = player.current!.info.artworkUrl;
         } else {
             const query = args.length
                 ? args.join(' ')
@@ -68,6 +70,7 @@ export const command: Command = {
                     'error',
                 );
             identifier = finalResult.info.identifier;
+            albumArt = finalResult.info.artworkUrl;
         }
         const spotify = client.spotify;
         axios
@@ -92,6 +95,7 @@ export const command: Command = {
                         .setAuthor({ name: 'Lyrics' })
                         .setTitle(customQuery || `${player.current!.info.title} - ${player.current!.info.author}`)
                         .setURL(`https://open.spotify.com/track/${identifier}`)
+                        .setThumbnail(albumArt ? albumArt : null)
                         .setDescription(page);
                     paginatedMessage.addPageEmbed(embed);
                 }
