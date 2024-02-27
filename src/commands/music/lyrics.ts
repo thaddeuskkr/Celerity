@@ -99,6 +99,7 @@ export const command: Command = {
             })
             .catch((err) => {
                 if (err.toJSON().status == 404) {
+                    client.logger.error('Lyrics fetching error (404): ' + String(err));
                     client.respond(context, `${client.config.emojis.error} | **Lyrics are unavailable for this track.**`, 'error');
                     return;
                 }
