@@ -62,7 +62,7 @@ export const command: Command = {
             { name: 'cleanup', aliases: ['auto delete', 'delete'], default: client.config.defaultSettings.cleanup },
             { name: 'color', aliases: ['colour', 'embed color', 'embed colour'], default: client.config.defaultSettings.color },
             { name: 'disabled channels', aliases: ['disabled', 'channels'], default: client.config.defaultSettings.disabledChannels },
-            { name: 'disconnect timeout', aliases: ['dc timeout'], default: client.config.defaultSettings.disconnectTimeout },
+            { name: 'disconnect timeout', aliases: ['timeout', 'dc timeout'], default: client.config.defaultSettings.disconnectTimeout },
             { name: 'dj only', aliases: ['dj'], default: client.config.defaultSettings.dj.enabled },
             { name: 'dj role', aliases: ['djr'], default: client.config.defaultSettings.dj.role },
             { name: 'prefixes', aliases: ['prefix'], default: client.config.defaultSettings.prefixes },
