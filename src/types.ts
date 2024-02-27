@@ -7,7 +7,7 @@ import type { CelerityPlayer } from './util/player';
 import type Keyv from 'keyv';
 import type { Connection, Shoukaku } from 'shoukaku';
 import type { Celerity } from './util/client';
-import { ApplicationCommandOptionType, Attachment, Embed } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 
 export type GuildSettings = {
     announceConnect: boolean;
