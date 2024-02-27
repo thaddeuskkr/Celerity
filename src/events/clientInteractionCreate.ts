@@ -97,6 +97,7 @@ export const event: Event = {
                             player.current!.info.uri
                         }).**`,
                     );
+                    player.current.skipped = true;
                     await player.player.stopTrack();
                     break;
                 }

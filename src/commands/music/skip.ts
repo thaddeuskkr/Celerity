@@ -14,6 +14,7 @@ export const command: Command = {
             `${client.config.emojis.skip} | **Skipped [${player.current!.info.title} by ${player.current!.info.author}](${player.current!.info.uri}).**`,
             'success',
         );
+        player.current!.skipped = true;
         await player.player.stopTrack();
     },
 };

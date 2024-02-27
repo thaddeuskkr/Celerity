@@ -51,7 +51,8 @@ export class CelerityPlayer {
     handleTrack(track: CelerityTrack, next: boolean, playskip = false) {
         if (playskip) {
             if (this.loop === 'track') this.loop = 'off';
-            this.queue.clear();
+            this.queue.forEach((t) => t.skipped = true);
+            this.previous.push(...(this.queue.clear()));
             this.queue.push(track);
             this.player.stopTrack().then();
             return;
@@ -67,7 +68,8 @@ export class CelerityPlayer {
         if (shuffle) tracks = this.queue.shuffle(tracks);
         if (playskip) {
             if (this.loop === 'track') this.loop = 'off';
-            this.queue.clear();
+            this.queue.forEach((t) => t.skipped = true);
+            this.previous.push(...(this.queue.clear()));
             this.queue.push(...tracks);
             this.player.stopTrack().then();
             return;

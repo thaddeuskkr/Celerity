@@ -5,12 +5,14 @@ export class CelerityTrack {
     constructor(track: Track, requester: GuildMember, source?: string) {
         track.info.sourceName = source === 'ytmsearch' ? 'youtubemusic' : track.info.sourceName;
         track.info.author = track.info.author.replace(' - Topic', '');
+        this.skipped = false;
         this.encoded = track.encoded;
         this.info = { ...track.info, requester };
     }
 }
 
 export interface CelerityTrack extends Track {
+    skipped: boolean;
     info: {
         identifier: string;
         isSeekable: boolean;

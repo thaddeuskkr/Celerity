@@ -88,9 +88,9 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
         if (settings.disconnectTimeout === 0) return player.destroy();
         else if (settings.autoplay.enabled && !player.autoplayQueue.length && !player.stopped) {
             const trackIdentifiers: Array<string> = [];
-            for (let n = 0; n < Math.min(player.previous.length, 5); n++) {
-                const t = player.previous[n]!;
-                if (t.info.title === 'Unknown title' || t.info.author === 'Unknown artist') continue;
+            const usableTracks = player.previous.filter((t) => !t.skipped && t.info.title !== 'Unknown title' && t.info.author !== 'Unknown artist');
+            for (let n = 0; n < Math.min(usableTracks.length, 5); n++) {
+                const t = usableTracks[n]!;
                 if (t.info.sourceName === 'spotify') trackIdentifiers.push(t.info.identifier);
                 else {
                     const res = await player.node.rest.resolve(`spsearch:${t.info.title} - ${t.info.author}`);
@@ -142,7 +142,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                 return client.respond(player.channel, `${client.config.emojis.error} | **Failed to autoplay.**\nNo similar tracks found.`, 'error');
             }
             player.autoplayQueue.push(...similarTracks.data.tracks.map((t) => new CelerityTrack(t, player.guild.members.me!)));
-            const newAutoplayQueue = _.cloneDeep(player.autoplayQueue.filter((val) => !player.previous.includes(val)));
+            const newAutoplayQueue = _.cloneDeep(player.autoplayQueue.filter((val) => !usableTracks.includes(val)));
             player.autoplayQueue.clear();
             player.autoplayQueue.push(...newAutoplayQueue);
             player.autoplay();
