@@ -75,19 +75,20 @@ export const event: Event = {
         setInterval(() => (client.presenceUpdater.updateRequired = true), client.config.presenceUpdateInterval * 1000);
 
         // Check / update Spotify access token every 5 seconds
-        setInterval(async () => {
-            const spotify = client.spotify;
-            if (!spotify || typeof spotify !== 'object' || Array.isArray(spotify) || spotify?.isAnonymous == true) return client.util.refreshSpotifyToken();
-            const expiry = spotify.accessTokenExpirationTimestampMs;
-            const now = Date.now();
-            if (expiry < now) {
-                await client.util.refreshSpotifyToken();
-                return;
-            }
-        }, 5000);
+        if (client.config.sp_dc.length && client.config.sp_dc !== 'undefined')
+            setInterval(async () => {
+                const spotify = client.spotify;
+                if (!spotify || typeof spotify !== 'object' || Array.isArray(spotify) || spotify?.isAnonymous == true) return client.util.refreshSpotifyToken();
+                const expiry = spotify.accessTokenExpirationTimestampMs;
+                const now = Date.now();
+                if (expiry < now) {
+                    await client.util.refreshSpotifyToken();
+                    return;
+                }
+            }, 5000);
 
         // Post stats to top.gg every 30 minutes
-        if (client.config.topggToken.length)
+        if (client.config.topggToken.length && client.config.topggToken !== 'undefined')
             setInterval(async () => {
                 const topggClient = new topgg.Api(client.config.topggToken);
                 await topggClient.postStats({
