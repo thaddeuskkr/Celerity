@@ -68,6 +68,11 @@ export type Statistics = {
     }>;
 };
 
+export type Maintenance = {
+    active: boolean;
+    message: string;
+};
+
 export type Respond = (
     context: Message | TextBasedChannel,
     text: string | EmbedBuilder,
@@ -113,6 +118,7 @@ export type Command = {
 declare module 'discord.js' {
     interface Client {
         ready: boolean;
+        maintenance: Maintenance;
         statistics: Statistics;
         version: string;
         config: Config;

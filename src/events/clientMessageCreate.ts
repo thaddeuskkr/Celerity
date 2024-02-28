@@ -49,6 +49,16 @@ export const event: Event = {
         const command = client.commands.get(commandName) || client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
         if (!command) return;
 
+        if (client.maintenance.active === true && !client.config.owners.includes(message.author.id)) {
+            return message.reply({ embeds: [
+                new EmbedBuilder()
+                    .setDescription(`${client.config.emojis.error} | **Celerity is in maintenance mode. Please try again later.**${client.maintenance.message.length ? `\n${client.maintenance.message}` : ''}`)
+                    .setColor('#F38BA8')
+            ],
+            allowedMentions: { repliedUser: false }
+            });
+        }
+
         if (settings.banned.includes(message.author.id)) return errorResponse('You are banned from using Celerity.');
         if (settings.banned.some((id) => message.member!.roles?.cache.has(id))) return errorResponse('One of your roles is banned from using Celerity.');
         if (settings.disabledChannels.includes(message.channel.id)) return errorResponse('Celerity is disabled in this channel.');

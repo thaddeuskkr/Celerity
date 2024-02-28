@@ -1,6 +1,6 @@
 import type { ActivityOptions, Client, PresenceStatusData } from 'discord.js';
 import { ActivityType } from 'discord.js';
-import type { GuildSettings, Statistics } from './types';
+import type { GuildSettings, Maintenance, Statistics } from './types';
 
 export class Config {
     constructor(client: Client) {
@@ -90,6 +90,12 @@ export class Config {
             errored: [],
         },
         tracks: [],
+    };
+
+    // Maintenance status - base object
+    baseMaintenance: Maintenance = {
+        active: false,
+        message: ''
     };
 
     // Emojis
