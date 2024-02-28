@@ -73,21 +73,22 @@ export class CelerityPlayer {
                 });
             }
             const cleared = this.queue.clear();
-            for (const t of cleared) this.client.statistics.tracks.push({
-                skipped: t.skipped,
-                encoded: t.encoded,
-                identifier: t.info.identifier,
-                author: t.info.author,
-                length: t.info.length,
-                isStream: t.info.isStream,
-                title: t.info.title,
-                uri: t.info.uri,
-                sourceName: t.info.sourceName,
-                artworkUrl: t.info.artworkUrl,
-                isrc: t.info.isrc,
-                requester: t.info.requester.id,
-                guild: this.guild.id,
-            });;
+            for (const t of cleared)
+                this.client.statistics.tracks.push({
+                    skipped: t.skipped,
+                    encoded: t.encoded,
+                    identifier: t.info.identifier,
+                    author: t.info.author,
+                    length: t.info.length,
+                    isStream: t.info.isStream,
+                    title: t.info.title,
+                    uri: t.info.uri,
+                    sourceName: t.info.sourceName,
+                    artworkUrl: t.info.artworkUrl,
+                    isrc: t.info.isrc,
+                    requester: t.info.requester.id,
+                    guild: this.guild.id,
+                });
             this.previous.unshift(...cleared.reverse());
             this.queue.push(track);
             this.playskipUsed = true;
@@ -126,21 +127,22 @@ export class CelerityPlayer {
                 });
             }
             const cleared = this.queue.clear();
-            for (const t of cleared) this.client.statistics.tracks.push({
-                skipped: t.skipped,
-                encoded: t.encoded,
-                identifier: t.info.identifier,
-                author: t.info.author,
-                length: t.info.length,
-                isStream: t.info.isStream,
-                title: t.info.title,
-                uri: t.info.uri,
-                sourceName: t.info.sourceName,
-                artworkUrl: t.info.artworkUrl,
-                isrc: t.info.isrc,
-                requester: t.info.requester.id,
-                guild: this.guild.id,
-            });;
+            for (const t of cleared)
+                this.client.statistics.tracks.push({
+                    skipped: t.skipped,
+                    encoded: t.encoded,
+                    identifier: t.info.identifier,
+                    author: t.info.author,
+                    length: t.info.length,
+                    isStream: t.info.isStream,
+                    title: t.info.title,
+                    uri: t.info.uri,
+                    sourceName: t.info.sourceName,
+                    artworkUrl: t.info.artworkUrl,
+                    isrc: t.info.isrc,
+                    requester: t.info.requester.id,
+                    guild: this.guild.id,
+                });
             this.previous.unshift(...cleared.reverse());
             this.queue.push(...tracks);
             this.playskipUsed = true;
