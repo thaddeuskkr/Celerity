@@ -27,6 +27,7 @@ export class CelerityPlayer {
         this.loop = 'off';
         this.stopped = false;
         this.previousUsed = false;
+        this.playskipUsed = false;
 
         this.timeout = null;
         this.noUserTimeout = null;
@@ -52,9 +53,13 @@ export class CelerityPlayer {
         if (playskip) {
             if (this.loop === 'track') this.loop = 'off';
             this.queue.forEach((t) => (t.skipped = true));
-            this.previous.push(...this.queue.clear());
+            if (this.current) {
+                this.current.skipped = true;
+                this.previous.unshift(this.current);
+            }
+            this.previous.unshift(...((this.queue.clear()).reverse()));
             this.queue.push(track);
-            if (this.current) this.current.skipped = true;
+            this.playskipUsed = true;
             this.player.stopTrack().then();
             return;
         }
@@ -70,9 +75,13 @@ export class CelerityPlayer {
         if (playskip) {
             if (this.loop === 'track') this.loop = 'off';
             this.queue.forEach((t) => (t.skipped = true));
-            this.previous.push(...this.queue.clear());
+            if (this.current) {
+                this.current.skipped = true;
+                this.previous.unshift(this.current);
+            }
+            this.previous.unshift(...((this.queue.clear()).reverse()));
             this.queue.push(...tracks);
-            if (this.current) this.current.skipped = true;
+            this.playskipUsed = true;
             this.player.stopTrack().then();
             return;
         }
@@ -153,6 +162,7 @@ export interface CelerityPlayer {
     nowPlayingInterval: NodeJS.Timeout | null;
     stopped: boolean;
     previousUsed: boolean;
+    playskipUsed: boolean;
     timeout: NodeJS.Timeout | null;
     noUserTimeout: NodeJS.Timeout | null;
     lastPlayerUpdate: number;

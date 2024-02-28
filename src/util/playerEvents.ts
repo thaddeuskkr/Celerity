@@ -92,7 +92,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
         });
     if (player.loop === 'track') player.queue.unshift(player.current!);
     if (player.loop === 'queue' && !player.previousUsed && player.current!.info.requester.id !== client.user!.id) player.queue.push(player.current!);
-    if (!player.previousUsed) player.previous.unshift(player.current!);
+    if (!player.previousUsed && !player.playskipUsed) player.previous.unshift(player.current!);
     player.previousUsed = false;
     if (player.nowPlayingMessage && !player._notifiedOnce) {
         if (settings.cleanup) await player.nowPlayingMessage.delete().catch(() => null);
