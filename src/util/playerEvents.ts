@@ -74,7 +74,7 @@ export const start = async (player: CelerityPlayer, client: Celerity) => {
 
 export const end = async (player: CelerityPlayer, client: Celerity) => {
     const settings = client.guildSettings.get(player.guild.id) || _.cloneDeep(client.config.defaultSettings);
-    if (settings.statistics && !player.previousUsed)
+    if (!player.previousUsed)
         client.statistics.tracks.push({
             skipped: player.current!.skipped,
             encoded: player.current!.encoded,
