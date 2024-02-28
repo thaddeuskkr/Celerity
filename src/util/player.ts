@@ -57,7 +57,7 @@ export class CelerityPlayer {
                 this.current.skipped = true;
                 this.previous.unshift(this.current);
             }
-            this.previous.unshift(...((this.queue.clear()).reverse()));
+            this.previous.unshift(...this.queue.clear().reverse());
             this.queue.push(track);
             this.playskipUsed = true;
             this.player.stopTrack().then();
@@ -79,7 +79,7 @@ export class CelerityPlayer {
                 this.current.skipped = true;
                 this.previous.unshift(this.current);
             }
-            this.previous.unshift(...((this.queue.clear()).reverse()));
+            this.previous.unshift(...this.queue.clear().reverse());
             this.queue.push(...tracks);
             this.playskipUsed = true;
             this.player.stopTrack().then();
