@@ -74,7 +74,8 @@ export const start = async (player: CelerityPlayer, client: Celerity) => {
 
 export const end = async (player: CelerityPlayer, client: Celerity) => {
     const settings = client.guildSettings.get(player.guild.id) || _.cloneDeep(client.config.defaultSettings);
-    if (!player.previousUsed)
+    if (!player.previousUsed && !player.playskipUsed) {
+        player.previous.unshift(player.current!);
         client.statistics.tracks.push({
             skipped: player.current!.skipped,
             encoded: player.current!.encoded,
@@ -90,10 +91,11 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
             requester: player.current!.info.requester.id,
             guild: player.guild.id,
         });
+    }
     if (player.loop === 'track') player.queue.unshift(player.current!);
     if (player.loop === 'queue' && !player.previousUsed && player.current!.info.requester.id !== client.user!.id) player.queue.push(player.current!);
-    if (!player.previousUsed && !player.playskipUsed) player.previous.unshift(player.current!);
     player.previousUsed = false;
+    player.playskipUsed = false;
     if (player.nowPlayingMessage && !player._notifiedOnce) {
         if (settings.cleanup) await player.nowPlayingMessage.delete().catch(() => null);
         else await player.nowPlayingMessage.edit({ components: [] }).catch(() => null);
@@ -106,7 +108,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
             const usableTracks = player.previous.filter((t) =>
                 t.info.title === 'Unknown title' && t.info.author === 'Unknown artist'
                     ? false
-                    : t.skipped && t.info.requester.id === client.user!.id
+                    : t.skipped && t.info.requester.id === client.user!.id // TODO: Can be changed to separate these conditions - might be better.
                       ? false
                       : true,
             );
