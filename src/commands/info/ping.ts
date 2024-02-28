@@ -11,6 +11,7 @@ export const command: Command = {
     async execute({ client, context, player, settings }) {
         const msg = await context.reply({
             embeds: [new EmbedBuilder().setDescription(`${client.config.emojis.loading} | **Pinging...**`).setColor('#F5C2E7')],
+            allowedMentions: { repliedUser: false }
         });
         msg.edit({
             embeds: [
