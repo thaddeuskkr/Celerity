@@ -23,16 +23,16 @@ export const command: Command = {
         else {
             const playerList: Array<string> = [];
             players.forEach((player) => {
-                playerList.push(
-                    `- **${player.guild.name} (\`${player.guild.id}\`)**`,
-                );
-                player.channel.send({ embeds: [
-                    new EmbedBuilder()
-                        .setAuthor({ name: `@${context.author.username} - Announcement`, iconURL: context.author.displayAvatarURL({ size: 4096 }) })
-                        .setDescription(announcement)
-                        .setTimestamp()
-                        .setColor('#fab387')
-                ] });
+                playerList.push(`- **${player.guild.name} (\`${player.guild.id}\`)**`);
+                player.channel.send({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setAuthor({ name: `@${context.author.username} - Announcement`, iconURL: context.author.displayAvatarURL({ size: 4096 }) })
+                            .setDescription(announcement)
+                            .setTimestamp()
+                            .setColor('#fab387'),
+                    ],
+                });
             });
             await context.reply({ content: `## Announcement sent\n${playerList.join('\n')}`, allowedMentions: { repliedUser: false } });
         }

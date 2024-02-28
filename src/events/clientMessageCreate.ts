@@ -50,12 +50,15 @@ export const event: Event = {
         if (!command) return;
 
         if (client.maintenance.active === true && !client.config.owners.includes(message.author.id)) {
-            return message.reply({ embeds: [
-                new EmbedBuilder()
-                    .setDescription(`${client.config.emojis.error} | **Celerity is in maintenance mode. Please try again later.**${client.maintenance.message.length ? `\n${client.maintenance.message}` : ''}`)
-                    .setColor('#F38BA8')
-            ],
-            allowedMentions: { repliedUser: false }
+            return message.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setDescription(
+                            `${client.config.emojis.error} | **Celerity is in maintenance mode. Please try again later.**${client.maintenance.message.length ? `\n${client.maintenance.message}` : ''}`,
+                        )
+                        .setColor('#F38BA8'),
+                ],
+                allowedMentions: { repliedUser: false },
             });
         }
 

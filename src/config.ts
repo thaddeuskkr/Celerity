@@ -95,7 +95,7 @@ export class Config {
     // Maintenance status - base object
     baseMaintenance: Maintenance = {
         active: false,
-        message: ''
+        message: '',
     };
 
     // Emojis
