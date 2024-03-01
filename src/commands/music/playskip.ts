@@ -87,22 +87,36 @@ export const command: Command = {
                         .map((t) => new CelerityTrack(t, context.member!, isYouTubeMusicUrl(urls[i]!) ? 'ytmsearch' : undefined));
                     client.respond(
                         context,
-                        `${client.config.emojis.queued} | **Playing ${tracks.length} tracks from __${result.data.info.name}__.**`,
+                        `${client.config.emojis.queued} | **${i == 0 ? 'Playing' : 'Queued'} ${tracks.length} tracks from __${result.data.info.name}__.**`,
                         'success',
                     );
-                    player.handlePlaylist(tracks, false, true, shuffle);
+                    player.handlePlaylist(tracks, false, i > 0 ? false : true, shuffle);
                     continue;
                 }
                 const track = result.data as Track;
-                if (!settings.announceNowPlaying)
-                    client.respond(
+                if (!settings.announceNowPlaying) {
+                    if (i == 0) client.respond(
                         context,
                         `${client.config.emojis.queued} | **Playing [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
                             track.info.uri
                         }).**`,
                         'success',
                     );
-                player.handleTrack(new CelerityTrack(track, context.member!, isYouTubeMusicUrl(urls[i]!) ? 'ytmsearch' : undefined), false, true);
+                    else client.respond(
+                        context,
+                        `${client.config.emojis.queued} | **Queued [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
+                            track.info.uri
+                        }).**`,
+                        'success',
+                    );
+                } else if (i !== 0) client.respond(
+                    context,
+                    `${client.config.emojis.queued} | **Queued [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
+                        track.info.uri
+                    }).**`,
+                    'success',
+                );
+                player.handleTrack(new CelerityTrack(track, context.member!, isYouTubeMusicUrl(urls[i]!) ? 'ytmsearch' : undefined), false, i > 0 ? false : true);
             }
             return;
         }
