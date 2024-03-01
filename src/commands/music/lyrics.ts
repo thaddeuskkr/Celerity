@@ -100,7 +100,11 @@ export const command: Command = {
                 for (const page of lyr) {
                     const embed = new EmbedBuilder()
                         .setAuthor({ name: 'Lyrics' })
-                        .setTitle(args.length ? `${finalResult!.info.title} - ${finalResult!.info.author}` : `${player.current!.info.title} - ${player.current!.info.author}`)
+                        .setTitle(
+                            args.length
+                                ? `${finalResult!.info.title} - ${finalResult!.info.author}`
+                                : `${player.current!.info.title} - ${player.current!.info.author}`,
+                        )
                         .setURL(`https://open.spotify.com/track/${identifier}`)
                         .setThumbnail(albumArt ? albumArt : null)
                         .setDescription(page);
@@ -111,11 +115,19 @@ export const command: Command = {
             .catch((err) => {
                 if (err.toJSON().status == 404) {
                     client.logger.error('Lyrics fetching error (404): ' + String(err));
-                    client.respond(context, `${client.config.emojis.error} | **Lyrics are unavailable for [${finalResult!.info.title} by ${finalResult!.info.author}](${finalResult!.info.uri}).**`, 'error');
+                    client.respond(
+                        context,
+                        `${client.config.emojis.error} | **Lyrics are unavailable for [${finalResult!.info.title} by ${finalResult!.info.author}](${finalResult!.info.uri}).**`,
+                        'error',
+                    );
                     return;
                 }
                 client.logger.error('Lyrics fetching error: ' + String(err));
-                client.respond(context, `${client.config.emojis.error} | **An unknown error occurred while fetching lyrics for [${finalResult!.info.title} by ${finalResult!.info.author}](${finalResult!.info.uri}).**`, 'error');
+                client.respond(
+                    context,
+                    `${client.config.emojis.error} | **An unknown error occurred while fetching lyrics for [${finalResult!.info.title} by ${finalResult!.info.author}](${finalResult!.info.uri}).**`,
+                    'error',
+                );
                 return;
             });
         return;
