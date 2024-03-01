@@ -2,6 +2,7 @@ import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
 import type { Command } from '../../types';
 import axios from 'axios';
 import { CelerityPaginatedMessage } from '../../util/pagination.js';
+import type { Track } from 'shoukaku';
 
 const lyrics_url = 'https://spclient.wg.spotify.com/color-lyrics/v2/track';
 
@@ -25,6 +26,7 @@ export const command: Command = {
         let identifier: string;
         let customQuery: string;
         let albumArt: string | undefined;
+        let finalResult: Track | undefined;
         if (!args.length && player.current!.info.sourceName === 'spotify') {
             identifier = player.current!.info.identifier;
             albumArt = player.current!.info.artworkUrl;
@@ -38,7 +40,6 @@ export const command: Command = {
             const node = client.shoukaku.nodes.get(client.config.lavalink.name);
             if (!node) return client.respond(context, `${client.config.emojis.error} | **No audio node available - cannot resolve lyrics.**`, 'error');
             let result;
-            let finalResult;
             if (spotifyURL) result = await node.rest.resolve(`${query}`);
             else result = await node.rest.resolve(`spsearch:${query}`);
             if (result && result.loadType === 'track') {
@@ -99,7 +100,7 @@ export const command: Command = {
                 for (const page of lyr) {
                     const embed = new EmbedBuilder()
                         .setAuthor({ name: 'Lyrics' })
-                        .setTitle(customQuery || `${player.current!.info.title} - ${player.current!.info.author}`)
+                        .setTitle(args.length ? `${finalResult!.info.title} - ${finalResult!.info.author}` : `${player.current!.info.title} - ${player.current!.info.author}`)
                         .setURL(`https://open.spotify.com/track/${identifier}`)
                         .setThumbnail(albumArt ? albumArt : null)
                         .setDescription(page);
@@ -110,11 +111,11 @@ export const command: Command = {
             .catch((err) => {
                 if (err.toJSON().status == 404) {
                     client.logger.error('Lyrics fetching error (404): ' + String(err));
-                    client.respond(context, `${client.config.emojis.error} | **Lyrics are unavailable for this track.**`, 'error');
+                    client.respond(context, `${client.config.emojis.error} | **Lyrics are unavailable for [${finalResult!.info.title} by ${finalResult!.info.author}](${finalResult!.info.uri}).**`, 'error');
                     return;
                 }
                 client.logger.error('Lyrics fetching error: ' + String(err));
-                client.respond(context, `${client.config.emojis.error} | **An unknown error occurred while fetching lyrics.**`, 'error');
+                client.respond(context, `${client.config.emojis.error} | **An unknown error occurred while fetching lyrics for [${finalResult!.info.title} by ${finalResult!.info.author}](${finalResult!.info.uri}).**`, 'error');
                 return;
             });
         return;
