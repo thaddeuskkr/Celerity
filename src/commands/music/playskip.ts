@@ -95,28 +95,33 @@ export const command: Command = {
                 }
                 const track = result.data as Track;
                 if (!settings.announceNowPlaying) {
-                    if (i == 0) client.respond(
+                    if (i == 0)
+                        client.respond(
+                            context,
+                            `${client.config.emojis.queued} | **Playing [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
+                                track.info.uri
+                            }).**`,
+                            'success',
+                        );
+                    else
+                        client.respond(
+                            context,
+                            `${client.config.emojis.queued} | **Queued [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
+                                track.info.uri
+                            }).**`,
+                            'success',
+                        );
+                } else if (i !== 0)
+                    client.respond(
                         context,
-                        `${client.config.emojis.queued} | **Playing [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
-                            track.info.uri
-                        }).**`,
+                        `${client.config.emojis.queued} | **Queued [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${track.info.uri}).**`,
                         'success',
                     );
-                    else client.respond(
-                        context,
-                        `${client.config.emojis.queued} | **Queued [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
-                            track.info.uri
-                        }).**`,
-                        'success',
-                    );
-                } else if (i !== 0) client.respond(
-                    context,
-                    `${client.config.emojis.queued} | **Queued [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
-                        track.info.uri
-                    }).**`,
-                    'success',
+                player.handleTrack(
+                    new CelerityTrack(track, context.member!, isYouTubeMusicUrl(urls[i]!) ? 'ytmsearch' : undefined),
+                    false,
+                    i > 0 ? false : true,
                 );
-                player.handleTrack(new CelerityTrack(track, context.member!, isYouTubeMusicUrl(urls[i]!) ? 'ytmsearch' : undefined), false, i > 0 ? false : true);
             }
             return;
         }
