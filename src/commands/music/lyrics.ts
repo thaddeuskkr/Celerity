@@ -34,43 +34,49 @@ export const command: Command = {
                 : `${player
                       .current!.info.title.replace('(Lyrics)', '')
                       .replace(`(${player.current!.info.title.replace(/\(.*?\)/g, '').trim()})`, '')} - ${player.current!.info.author.replace(' - Topic', '')}`;
-            const spotifyURL = query.startsWith('https://open.spotify.com/track/');
+            const spotifyURL = /^(https|http):\/\/(.*)\.spotify\.com\/track\//g.test(query);
             const node = client.shoukaku.nodes.get(client.config.lavalink.name);
             if (!node) return client.respond(context, `${client.config.emojis.error} | **No audio node available - cannot resolve lyrics.**`, 'error');
             let result;
             let finalResult;
             if (spotifyURL) result = await node.rest.resolve(`${query}`);
             else result = await node.rest.resolve(`spsearch:${query}`);
-            if (!result || result.loadType !== 'search' || !result.data.length)
-                return client.respond(
-                    context,
-                    `${client.config.emojis.error} | **No results for \`${query}\`.**${args.length ? '' : '\nTry using a custom search query instead.'}`,
-                    'error',
-                );
-            const tracks = result.data;
-            for (let i = 0; i < tracks.length; i++) {
-                const track = tracks[i]!;
-                customQuery = `${track.info.title} - ${track.info.author}`;
-                if (
-                    client.util.stringMatchPercentage(track.info.title, spotifyURL ? customQuery : query) < 90 &&
-                    client.util.stringMatchPercentage(track.info.author, spotifyURL ? customQuery : query) < 75 &&
-                    client.util.stringMatchPercentage(`${track.info.title} - ${track.info.author}`, spotifyURL ? customQuery : query) < 75 &&
-                    client.util.stringMatchPercentage(`${track.info.author} - ${track.info.title}`, spotifyURL ? customQuery : query) < 75
-                )
-                    continue;
-                else {
-                    finalResult = track;
-                    break;
+            if (result && result.loadType === 'track') {
+                finalResult = result.data;
+                identifier = finalResult.info.identifier;
+                albumArt = finalResult.info.artworkUrl;
+            } else {
+                if (!result || result.loadType !== 'search' || !result.data.length)
+                    return client.respond(
+                        context,
+                        `${client.config.emojis.error} | **No results for \`${query}\`.**${args.length ? '' : '\nTry using a custom search query instead.'}`,
+                        'error',
+                    );
+                const tracks = result.data;
+                for (let i = 0; i < tracks.length; i++) {
+                    const track = tracks[i]!;
+                    customQuery = `${track.info.title} - ${track.info.author}`;
+                    if (
+                        client.util.stringMatchPercentage(track.info.title, spotifyURL ? customQuery : query) < 75 &&
+                        client.util.stringMatchPercentage(track.info.author, spotifyURL ? customQuery : query) < 75 &&
+                        client.util.stringMatchPercentage(`${track.info.title} - ${track.info.author}`, spotifyURL ? customQuery : query) < 75 &&
+                        client.util.stringMatchPercentage(`${track.info.author} - ${track.info.title}`, spotifyURL ? customQuery : query) < 75
+                    )
+                        continue;
+                    else {
+                        finalResult = track;
+                        break;
+                    }
                 }
+                if (!finalResult)
+                    return client.respond(
+                        context,
+                        `${client.config.emojis.error} | **No results for \`${query}\`.**${args.length ? '' : '\nTry using a custom search query instead.'}`,
+                        'error',
+                    );
+                identifier = finalResult.info.identifier;
+                albumArt = finalResult.info.artworkUrl;
             }
-            if (!finalResult)
-                return client.respond(
-                    context,
-                    `${client.config.emojis.error} | **No results for \`${query}\`.**${args.length ? '' : '\nTry using a custom search query instead.'}`,
-                    'error',
-                );
-            identifier = finalResult.info.identifier;
-            albumArt = finalResult.info.artworkUrl;
         }
         const spotify = client.spotify;
         axios
