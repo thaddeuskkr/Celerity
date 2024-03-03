@@ -7,39 +7,35 @@ export class Config {
         this.client = client;
     }
 
-    logLevel: string = String(process.env.LOG_LEVEL) || 'info';
+    logLevel: string = String(process.env.LOG_LEVEL);
 
     // Credentials
-    token: string = String(process.env.TOKEN) || '';
+    token: string = String(process.env.TOKEN);
     database = {
-        url: String(process.env.DATABASE_URL) || '',
-        namespace: String(process.env.DATABASE_NAMESPACE) || '',
+        url: String(process.env.DATABASE_URL),
+        namespace: String(process.env.DATABASE_NAMESPACE),
     };
 
     // Lavalink server
     lavalink: { name: string; host: string; port: number; auth: string; secure: string } = {
         name: 'main',
-        host: String(process.env.LAVALINK_HOST) || '',
-        port: Number(process.env.LAVALINK_PORT) || 2333,
-        auth: String(process.env.LAVALINK_AUTH) || '',
-        secure: String(process.env.LAVALINK_SECURE) || '',
+        host: String(process.env.LAVALINK_HOST),
+        port: Number(process.env.LAVALINK_PORT),
+        auth: String(process.env.LAVALINK_AUTH),
+        secure: String(process.env.LAVALINK_SECURE),
     };
 
     // Owners
-    owners: string[] = String(process.env.OWNERS).split(',') || [];
+    owners: string[] = String(process.env.OWNERS).split(',');
 
     // API tokens
-    sp_dc: string = String(process.env.SP_DC) || '';
-    topggToken: string = String(process.env.TOPGG) || '';
+    sp_dc: string = String(process.env.SP_DC);
+    topggToken: string = String(process.env.TOPGG);
 
     // Client presence
     activities: ActivityOptions[] = [
         {
             name: 'music for you ♡',
-            type: ActivityType.Playing,
-        },
-        {
-            name: '{version} • c!help',
             type: ActivityType.Playing,
         },
         {
@@ -51,8 +47,8 @@ export class Config {
             type: ActivityType.Watching,
         },
     ];
-    statuses: PresenceStatusData[] = ['idle', 'idle', 'idle', 'idle'];
-    presenceUpdateInterval = 25; // in seconds
+    statuses: PresenceStatusData[] = ['idle', 'idle', 'idle'];
+    presenceUpdateInterval = 20; // in seconds
 
     // Default per-server settings
     defaultSettings: GuildSettings = {
