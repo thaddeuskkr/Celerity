@@ -8,6 +8,7 @@ export class Config {
     }
 
     logLevel: string = String(process.env.LOG_LEVEL);
+    logLavalinkUpdates: string = String(process.env.LOG_LAVALINK_UPDATES);
 
     // Credentials
     token: string = String(process.env.TOKEN);
