@@ -4,6 +4,7 @@ import _ from 'lodash';
 import equal from 'fast-deep-equal';
 import { createRequire } from 'module';
 import topgg from '@top-gg/sdk';
+import { ActivityType } from 'discord.js';
 
 const require = createRequire(import.meta.url);
 
@@ -63,18 +64,25 @@ export const event: Event = {
         // Update client user presence
         setInterval(async () => {
             if (client.presenceUpdater.updateRequired) {
-                const activity = _.cloneDeep(client.config.activities[client.presenceUpdater.currentIndex])!;
+                let activity = _.cloneDeep(client.config.activities[client.presenceUpdater.currentIndex])!;
+                let status = _.cloneDeep(client.config.statuses[client.presenceUpdater.currentIndex]) || 'online';
                 let userCount = 0;
                 client.guilds.cache.forEach((guild) => (userCount += guild.memberCount));
                 activity.name = activity
                     .name!.replace('{version}', require('../../package.json').version)
                     .replace('{servercount}', String(client.guilds.cache.size))
                     .replace('{usercount}', String(userCount));
-                if (client.maintenance.active === true) activity.name = 'maintenance mode 🔧';
+                if (client.maintenance.active === true) {
+                    activity = {
+                        name: 'maintenance mode 🔧',
+                        type: ActivityType.Playing,
+                    };
+                    status = 'dnd';
+                }
                 if (client.user!.presence.activities[0]!.name !== activity.name)
                     client.user!.setPresence({
                         activities: [activity],
-                        status: client.config.statuses[client.presenceUpdater.currentIndex],
+                        status,
                     });
                 client.presenceUpdater.currentIndex =
                     client.presenceUpdater.currentIndex >= client.config.activities.length - 1 ? 0 : client.presenceUpdater.currentIndex + 1;
