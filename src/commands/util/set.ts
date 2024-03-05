@@ -61,6 +61,7 @@ export const command: Command = {
             { name: 'buttons', aliases: ['btns', 'button', 'btn'], default: client.config.defaultSettings.buttons },
             { name: 'cleanup', aliases: ['auto delete', 'delete'], default: client.config.defaultSettings.cleanup },
             { name: 'color', aliases: ['colour', 'embed color', 'embed colour'], default: client.config.defaultSettings.color },
+            { name: 'default volume', aliases: ['volume', 'def volume', 'def vol', 'vol', 'default vol'], default: client.config.defaultSettings.defaultVolume },
             { name: 'disabled channels', aliases: ['disabled', 'channels'], default: client.config.defaultSettings.disabledChannels },
             { name: 'disconnect timeout', aliases: ['timeout', 'dc timeout'], default: client.config.defaultSettings.disconnectTimeout },
             { name: 'dj only', aliases: ['dj'], default: client.config.defaultSettings.dj.enabled },
@@ -648,6 +649,69 @@ export const command: Command = {
                 collector.on('end', async (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
+            } else if (foundSetting.name === 'default volume') {
+                embed.setDescription(
+                    tags.stripIndents`*The default volume for Celerity's player.*
+                        **----------**
+                        **Default value:** ${foundSetting.default}
+                        **Current value:** ${settings.defaultVolume}`,
+                );
+                buttonRow.addComponents(new ButtonBuilder().setCustomId('set').setLabel('Set Default Volume').setStyle(ButtonStyle.Primary));
+                const message = await context.channel.send({ embeds: [embed], components: [buttonRow] });
+                const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
+                collector.on('collect', async () => {
+                    const messageCollector = context.channel!.createMessageCollector({
+                        time: 120000,
+                        filter: (message) => message.author.id === context.author.id,
+                        max: 1,
+                    });
+                    await message.edit({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setDescription(
+                                    `${client.config.emojis.loading} | **Type and send the default volume you would like here.**\nAccepts a number from 0 to 250.`,
+                                )
+                                .setColor('#F5C2E7'),
+                        ],
+                        components: [],
+                    });
+                    messageCollector.on('collect', async (msg: Message) => {
+                        if (isNaN(Number(msg.content))) {
+                            await msg.delete().catch(() => null);
+                            message.edit({
+                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)],
+                            });
+                            return;
+                        } else if (Number(msg.content) < 0 || Number(msg.content) > 250) {
+                            await msg.delete().catch(() => null);
+                            message.edit({
+                                embeds: [
+                                    successEmbed
+                                        .setColor('#F38BA8')
+                                        .setDescription(`${client.config.emojis.error} | **Invalid number.**\nAccepts: \`0 - 250\``),
+                                ],
+                            });
+                            return;
+                        }
+                        await msg.delete().catch(() => null);
+                        settings.defaultVolume = Number(msg.content);
+                        message.edit({
+                            embeds: [
+                                successEmbed.setDescription(
+                                    `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.defaultVolume}\`.`,
+                                ),
+                            ],
+                            components: [],
+                        });
+                        return;
+                    });
+                    messageCollector.on('end', async (collected) => {
+                        if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
+                    });
+                });
+                collector.on('end', async (collected) => {
+                    if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
+                });
             } else if (foundSetting.name === 'disconnect timeout') {
                 embed.setDescription(
                     tags.stripIndents`*The amount of time, in seconds, that Celerity should stay in a voice channel after the queue ends or after there are no users in the voice channel, before timing out and disconnecting.
@@ -977,6 +1041,10 @@ export const command: Command = {
                     {
                         name: 'color',
                         value: "Change the color of some of Celerity's embeds.",
+                    },
+                    {
+                        name: 'default volume',
+                        value: 'Set the default volume for Celerity in this server.',
                     },
                     {
                         name: 'disabled channels',
