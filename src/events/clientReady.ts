@@ -79,7 +79,7 @@ export const event: Event = {
                     };
                     status = 'dnd';
                 }
-                if (client.user!.presence.activities[0]!.name !== activity.name)
+                if (client.user!.presence.activities[0]!.name !== activity.name || client.user!.presence.status !== status)
                     client.user!.setPresence({
                         activities: [activity],
                         status,
