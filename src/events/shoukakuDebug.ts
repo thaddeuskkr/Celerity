@@ -6,7 +6,7 @@ export const event: Event = {
     emitter: 'shoukaku',
 
     async run(client, _, info: string) {
-        if (client.config.logLavalinkUpdates.toString() === 'false') return;
+        if (client.config.logLavalinkUpdates.toLowerCase() === 'false' && info.toLowerCase().includes('node status update')) return;
         else client.logger.debug(info);
     },
 };
