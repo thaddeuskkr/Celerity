@@ -19,7 +19,7 @@ export const command: Command = {
         if (!args.length)
             return client.respond(
                 context,
-                `${client.config.emojis.volume} | **Currently playing at ${(player.player.filters.volume || 1) * 100}% volume.**`,
+                `${client.config.emojis.volume} | **Currently playing at ${player.player.volume}% volume.**`,
                 'info',
             );
         else {
