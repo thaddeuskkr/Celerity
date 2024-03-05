@@ -16,12 +16,7 @@ export const command: Command = {
     ],
 
     async execute({ client, context, args, player }) {
-        if (!args.length)
-            return client.respond(
-                context,
-                `${client.config.emojis.volume} | **Currently playing at ${player.player.volume}% volume.**`,
-                'info',
-            );
+        if (!args.length) return client.respond(context, `${client.config.emojis.volume} | **Currently playing at ${player.player.volume}% volume.**`, 'info');
         else {
             const newVolume = Number(args[0]);
             if (isNaN(newVolume)) return client.respond(context, `${client.config.emojis.error} | **Invalid integer.**`, 'error');

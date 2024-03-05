@@ -162,12 +162,12 @@ export class CelerityPlayer {
         if (this.player.paused) this.player.setPaused(false);
         this.current = this.queue.shift()!;
         if (this.guild.members.me!.voice.channel?.type === ChannelType.GuildStageVoice) this.guild!.members.me!.voice.setSuppressed(false).catch(() => null);
-        const defaultVolume = (this.client.guildSettings.get(this.guild.id)?.defaultVolume || this.client.config.defaultSettings.defaultVolume);
-        return this.player.playTrack({ 
+        const defaultVolume = this.client.guildSettings.get(this.guild.id)?.defaultVolume || this.client.config.defaultSettings.defaultVolume;
+        return this.player.playTrack({
             track: this.current!.encoded,
             options: {
                 volume: this.previous.length === 0 ? defaultVolume : this.player.volume !== defaultVolume ? this.player.volume : defaultVolume,
-            }
+            },
         });
     }
 
@@ -181,12 +181,12 @@ export class CelerityPlayer {
             this.autoplay();
             return;
         }
-        const defaultVolume = (this.client.guildSettings.get(this.guild.id)?.defaultVolume || this.client.config.defaultSettings.defaultVolume);
-        return this.player.playTrack({ 
+        const defaultVolume = this.client.guildSettings.get(this.guild.id)?.defaultVolume || this.client.config.defaultSettings.defaultVolume;
+        return this.player.playTrack({
             track: this.current!.encoded,
             options: {
                 volume: this.previous.length === 0 ? defaultVolume : this.player.volume !== defaultVolume ? this.player.volume : defaultVolume,
-            }
+            },
         });
     }
 

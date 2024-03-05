@@ -61,7 +61,11 @@ export const command: Command = {
             { name: 'buttons', aliases: ['btns', 'button', 'btn'], default: client.config.defaultSettings.buttons },
             { name: 'cleanup', aliases: ['auto delete', 'delete'], default: client.config.defaultSettings.cleanup },
             { name: 'color', aliases: ['colour', 'embed color', 'embed colour'], default: client.config.defaultSettings.color },
-            { name: 'default volume', aliases: ['volume', 'def volume', 'def vol', 'vol', 'default vol'], default: client.config.defaultSettings.defaultVolume },
+            {
+                name: 'default volume',
+                aliases: ['volume', 'def volume', 'def vol', 'vol', 'default vol'],
+                default: client.config.defaultSettings.defaultVolume,
+            },
             { name: 'disabled channels', aliases: ['disabled', 'channels'], default: client.config.defaultSettings.disabledChannels },
             { name: 'disconnect timeout', aliases: ['timeout', 'dc timeout'], default: client.config.defaultSettings.disconnectTimeout },
             { name: 'dj only', aliases: ['dj'], default: client.config.defaultSettings.dj.enabled },
@@ -697,9 +701,7 @@ export const command: Command = {
                         settings.defaultVolume = Number(msg.content);
                         message.edit({
                             embeds: [
-                                successEmbed.setDescription(
-                                    `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.defaultVolume}\`.`,
-                                ),
+                                successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.defaultVolume}\`.`),
                             ],
                             components: [],
                         });
