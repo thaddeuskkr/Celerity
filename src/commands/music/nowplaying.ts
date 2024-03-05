@@ -78,7 +78,7 @@ export const command: Command = {
                         )}\`\n`,
                 )
                 .setFooter({
-                    text: `${player.player.paused ? '⏸️ | ' : ''}🔊 ${(player.player.filters.volume || 1) * 100}% | ${player.queue.length} track(s) in queue`,
+                    text: `${player.player.paused ? '⏸️ | ' : ''}🔊 ${player.player.volume}% | ${player.queue.length} track(s) in queue`,
                 });
         }
 
