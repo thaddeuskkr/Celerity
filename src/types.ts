@@ -23,6 +23,7 @@ export type GuildSettings = {
     buttons: 'off' | 'base' | 'extra';
     cleanup: boolean;
     color: ColorResolvable;
+    defaultVolume: number; // In percent
     disabledChannels: string[];
     disconnectTimeout: number; // (Set to 0 to disconnect immediately)
     dj: {

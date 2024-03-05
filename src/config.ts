@@ -66,6 +66,7 @@ export class Config {
         buttons: 'base',
         cleanup: true,
         color: '#CBA6F7',
+        defaultVolume: 75,
         disabledChannels: [],
         disconnectTimeout: 300, // In seconds
         dj: {
