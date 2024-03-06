@@ -1,0 +1,16 @@
+services:
+    celerity-dev:
+        container_name: celerity-dev
+        build: .
+        image: ghcr.io/thaddeuskkr/celerity:latest
+        restart: unless-stopped
+        networks:
+            - lavalink
+        env_file:
+            - .env
+        environment:
+            TZ: Asia/Singapore
+
+networks:
+    lavalink:
+        external: true
