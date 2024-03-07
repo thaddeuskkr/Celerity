@@ -59,9 +59,9 @@ export const command: Command = {
                     customQuery = `${track.info.title} - ${track.info.author}`;
                     if (
                         client.util.stringMatchPercentage(track.info.title, spotifyURL ? customQuery : query) < 75 &&
-                        client.util.stringMatchPercentage(track.info.author, spotifyURL ? customQuery : query) < 75 &&
-                        client.util.stringMatchPercentage(`${track.info.title} - ${track.info.author}`, spotifyURL ? customQuery : query) < 75 &&
-                        client.util.stringMatchPercentage(`${track.info.author} - ${track.info.title}`, spotifyURL ? customQuery : query) < 75
+                        client.util.stringMatchPercentage(track.info.author, spotifyURL ? customQuery : query) < 50 &&
+                        client.util.stringMatchPercentage(`${track.info.title} - ${track.info.author}`, spotifyURL ? customQuery : query) < 70 &&
+                        client.util.stringMatchPercentage(`${track.info.author} - ${track.info.title}`, spotifyURL ? customQuery : query) < 70
                     )
                         continue;
                     else {
