@@ -2,6 +2,7 @@ import { ApplicationCommandOptionType } from 'discord.js';
 import util from 'util';
 import tags from 'common-tags';
 import type { Command } from '../../types';
+import { createRequire } from 'module';
 
 const nl = '!!NL!!';
 const nlPattern = new RegExp(nl, 'g');
@@ -21,7 +22,17 @@ export const command: Command = {
         },
     ],
 
-    async execute({ client, context, args }) {
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    // @ts-expect-error The unused variables are helpers that are optionally used during runtime.
+    async execute({ client, context, args, settings, prefix, player, connection }) {
+        // @ts-expect-error This is a helper that is optionally used during runtime.
+        const require = createRequire(import.meta.url);
+        // @ts-expect-error This is a helper that is optionally used during runtime.
+        const lastEvalResult = client.util.eval.lastEvalResult;
+        // @ts-expect-error This is a helper that is optionally used during runtime.
+        const message = context;
+        /* eslint-enable @typescript-eslint/no-unused-vars */
+
         let code = args.join(' ');
 
         // Remove any surrounding code blocks before evaluation
