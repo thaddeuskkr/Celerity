@@ -18,6 +18,7 @@ export const command: Command = {
 
     async execute({ client, context, args }) {
         const players = client.players;
+        if (!args.length) return client.respond(context, `${client.config.emojis.error} | **No announcement provided.**`, 'error');
         const announcement = args.join(' ');
         if (!players.size) return client.respond(context, `${client.config.emojis.error} | **No active players.**`, 'error');
         else {
