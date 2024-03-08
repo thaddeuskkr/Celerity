@@ -196,9 +196,8 @@ export class CelerityPlayer {
             this.guild.members.me!.voice.channel?.type === ChannelType.GuildStageVoice &&
             this.guild.members.me!.voice.channel.stageInstance != null &&
             settings.setStageTopic
-        ) {
-            this.guild.members.me!.voice.channel.stageInstance.edit({ topic: 'Nothing playing' }).catch(() => null);
-        }
+        )
+            this.guild.members.me!.voice.channel.stageInstance.delete().catch(() => null);
         await this.client.shoukaku.leaveVoiceChannel(this.guild.id);
         if (this.nowPlayingMessage && settings.cleanup) this.nowPlayingMessage.delete().catch(() => null);
         clearInterval(this.nowPlayingInterval || undefined);
