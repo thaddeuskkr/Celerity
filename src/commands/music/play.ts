@@ -1,5 +1,5 @@
 import type { Command } from '../../types';
-import { ApplicationCommandOptionType, ChannelType } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord.js';
 import { CelerityPlayer } from '../../util/player.js';
 import { CelerityTrack } from '../../util/track.js';
 import type { Track } from 'shoukaku';
@@ -69,7 +69,6 @@ export const command: Command = {
                 client.logger.error(err);
                 return;
             }
-            if (context.guild!.members.me!.voice.channel?.type === ChannelType.GuildStageVoice) client.util.removeSuppress(context.channel);
         }
         let next = false;
         let shuffle = false;

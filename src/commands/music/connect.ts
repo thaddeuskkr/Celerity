@@ -32,7 +32,6 @@ export const command: Command = {
                 client.logger.error(err);
                 return;
             }
-            if (context.guild!.members.me!.voice.channel?.type === ChannelType.GuildStageVoice) client.util.removeSuppress(context.channel);
         } else {
             const voiceChannel = context.guild!.channels.cache.get(connection.channelId!)!;
             if (voiceChannel.type !== ChannelType.GuildVoice && voiceChannel.type !== ChannelType.GuildStageVoice) {
@@ -58,9 +57,13 @@ export const command: Command = {
                 );
             else {
                 if (context.member!.voice.channelId === context.guild!.members.me!.voice.channelId) {
-                    if (context.guild!.members.me!.voice.channel?.type === ChannelType.GuildStageVoice) client.util.removeSuppress(context.channel);
                     player.channel = context.channel;
                     return client.respond(context, `${client.config.emojis.connect} | **Bound to <#${context.channel.id}>.**`, 'success');
+                } else if (player.channel.id === context.channel.id) {
+                    connection.channelId = context.member!.voice.channel!.id;
+                    connection.state = State.DISCONNECTED;
+                    await connection.connect();
+                    return client.respond(context, `${client.config.emojis.connect} | **Moved to <#${context.member!.voice.channel!.id}>.**`, 'success');
                 } else {
                     connection.channelId = context.member!.voice.channel!.id;
                     connection.state = State.DISCONNECTED;
