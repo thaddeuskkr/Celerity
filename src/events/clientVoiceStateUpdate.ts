@@ -19,13 +19,22 @@ export const event: Event = {
                 if (player) player.destroy();
                 return;
             }
-            if (o.channelId !== n.channelId && o.channelId && n.channelId) {
-                // Client moved between voice channels
+            if (o.channelId !== n.channelId && n.channelId) {
+                // Client moved between voice channels or connected to a voice channel
+                if (o.channelId && o.channel?.type === ChannelType.GuildStageVoice && o.channel.stageInstance && settings.setStageTopic)
+                    o.channel.stageInstance.delete().catch(() => null);
                 if (n.channel?.type === ChannelType.GuildStageVoice && player) {
-                    client.util.removeSuppress(n.channel);
+                    if (player.current) client.util.removeSuppress(n.channel);
                     if (n.channel.stageInstance === null) {
                         if (!settings.setStageTopic) return;
-                        if (!player.current) return;
+                        if (!player.current) {
+                            n.channel.createStageInstance({
+                                topic: 'Nothing playing',
+                                sendStartNotification: false,
+                            });
+                            n.channel.guild.members.me!.voice.setSuppressed(true).catch(() => null);
+                            return;
+                        }
                         n.channel
                             .createStageInstance({
                                 topic: truncate(`${player.current.info.title} - ${player.current.info.author}`, 110),
@@ -34,7 +43,11 @@ export const event: Event = {
                             .catch(() => null);
                     } else {
                         if (!settings.setStageTopic) return;
-                        if (!player.current) return n.channel.stageInstance.edit({ topic: 'Nothing playing' }).catch(() => null);
+                        if (!player.current) {
+                            n.channel.stageInstance.edit({ topic: 'Nothing playing' }).catch(() => null);
+                            n.channel.guild.members.me!.voice.setSuppressed(true).catch(() => null);
+                            return;
+                        }
                         n.channel.stageInstance
                             .edit({ topic: truncate(`${player.current.info.title} - ${player.current.info.author}`, 110) })
                             .catch(() => null);
