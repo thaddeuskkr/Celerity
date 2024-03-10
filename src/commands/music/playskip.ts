@@ -95,22 +95,13 @@ export const command: Command = {
                 }
                 const track = result.data as Track;
                 if (!settings.announceNowPlaying) {
-                    if (i == 0)
-                        client.respond(
-                            context,
-                            `${client.config.emojis.queued} | **Playing [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
-                                track.info.uri
-                            }).**`,
-                            'success',
-                        );
-                    else
-                        client.respond(
-                            context,
-                            `${client.config.emojis.queued} | **Queued [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
-                                track.info.uri
-                            }).**`,
-                            'success',
-                        );
+                    client.respond(
+                        context,
+                        `${client.config.emojis.queued} | **${i == 0 ? 'Playing' : 'Queued'} [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
+                            track.info.uri
+                        }).**`,
+                        'success',
+                    );
                 } else if (i !== 0)
                     client.respond(
                         context,
