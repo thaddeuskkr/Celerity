@@ -11,7 +11,7 @@ services:
             TZ: Asia/Singapore
     lavalink:
         container_name: lavalink
-        image: ghcr.io/lavalink-devs/lavalink:latest
+        image: ghcr.io/lavalink-devs/lavalink:latest-alpine
         restart: unless-stopped
         networks:
             - default
