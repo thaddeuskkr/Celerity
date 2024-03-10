@@ -55,7 +55,7 @@ export const command: Command = {
             let index = -1;
             if (args.indexOf('--source') !== -1) index = args.indexOf('--source');
             if (args.indexOf('-s') !== -1) index = args.indexOf('-s');
-            source = args[index + 1];
+            source = args[index + 1]?.toLowerCase();
             if (!source)
                 return client.respond(context, `${client.config.emojis.error} | **Invalid usage.**\nUsage: \`--source <source>\` or \`-s <source>\`.`, 'error');
             if (!['ytm', 'yt', 'sp', 'dz', 'sc', 'am', 'ym'].includes(source))
