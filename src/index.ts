@@ -53,4 +53,10 @@ const client = new Celerity();
     });
 });
 
+process.on('SIGTERM', () => {
+    client.logger.info('SIGTERM received, shutting down...');
+    client.destroy();
+    process.exit(0);
+});
+
 await client.initialise(path.dirname(fileURLToPath(import.meta.url)));
