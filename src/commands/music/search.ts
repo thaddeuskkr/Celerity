@@ -6,7 +6,7 @@ import { CelerityTrack } from '../../util/track.js';
 export const command: Command = {
     name: 'search',
     description: 'Searches for music from one of multiple supported sources, and allows you to select a result.',
-    aliases: ['find'],
+    aliases: ['find', 'f'],
     checks: ['vc', 'samevc', 'joinable', 'speakable', 'dj'],
     options: [
         {
