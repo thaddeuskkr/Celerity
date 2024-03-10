@@ -50,7 +50,7 @@ export const command: Command = {
         },
     ],
 
-    async execute({ client, context, player, args, settings, prefix, connection }) {
+    async execute({ client, context, player, args, settings, prefix }) {
         if (!player) {
             try {
                 const newPlayer = await client.shoukaku.joinVoiceChannel({
@@ -158,9 +158,8 @@ export const command: Command = {
         };
         const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
         collector.on('collect', async (i) => {
-            if (!player || !connection) return;
             if (i.customId === 'tracksearch-cancel') {
-                message.edit({
+                await message.edit({
                     embeds: [new EmbedBuilder().setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Search cancelled.**`)],
                     components: [],
                 });
@@ -169,7 +168,7 @@ export const command: Command = {
             const selectedTrack = Number(i.customId.split('-')[1]);
             const track = unique[selectedTrack];
             if (!track) {
-                message.edit({
+                await message.edit({
                     embeds: [new EmbedBuilder().setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid selection.**`)],
                     components: [],
                 });
