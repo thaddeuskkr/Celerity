@@ -152,7 +152,7 @@ export const event: Event = {
         } catch (err) {
             client.logger.error(`Error executing command ${command.name}:`);
             client.logger.error(err);
-            client.respond(message, `${client.config.emojis.error} | **'An unknown error occurred while executing this command.**`, 'error');
+            client.respond(message, `${client.config.emojis.error} | **An unknown error occurred while executing this command.**`, 'error');
             client.statistics.commands.errored.push({ commandName: command.name, user: message.author.id, guild: message.guild.id });
         }
 
