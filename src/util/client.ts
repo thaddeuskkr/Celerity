@@ -79,14 +79,26 @@ export class Celerity extends Client {
             else if (color === 'warn') color = '#F9E2AF';
             else if (color === 'info') color = '#CBA6F7';
             const lastMessageContent = this.lastMessageContent[(context as Message | GuildTextBasedChannel).guild!.id];
-            const sendMessageContent =
-                lastMessageContent ?
-                DateTime.now().diff(lastMessageContent, 'milliseconds').toObject().milliseconds! > (1000 * 60 * 60) : true;
+            const sendMessageContent = lastMessageContent
+                ? DateTime.now().diff(lastMessageContent, 'milliseconds').toObject().milliseconds! > 1000 * 60 * 60
+                : true;
             if (sendMessageContent) this.lastMessageContent[(context as Message | GuildTextBasedChannel).guild!.id] = DateTime.now();
             if (text instanceof EmbedBuilder) {
                 if (color !== 'none') text.setColor(color);
-                if ('reply' in context) context.reply({ content: sendMessageContent ? this.messageContent : '', embeds: [text], allowedMentions: { repliedUser: false }, ...options });
-                else context.send({ content: sendMessageContent ? this.messageContent : '', embeds: [text], allowedMentions: { repliedUser: false }, ...options });
+                if ('reply' in context)
+                    context.reply({
+                        content: sendMessageContent ? this.messageContent : '',
+                        embeds: [text],
+                        allowedMentions: { repliedUser: false },
+                        ...options,
+                    });
+                else
+                    context.send({
+                        content: sendMessageContent ? this.messageContent : '',
+                        embeds: [text],
+                        allowedMentions: { repliedUser: false },
+                        ...options,
+                    });
                 return;
             } else {
                 if (color === 'none') color = '#11111B';
