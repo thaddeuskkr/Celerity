@@ -26,6 +26,7 @@ export const event: Event = {
         const guildSettingsInit = await client.db.get('server-settings');
         client.statistics = (await client.db.get('statistics')) || client.config.baseStatistics;
         client.maintenance = (await client.db.get('maintenance')) || client.config.baseMaintenance;
+        client.messageContent = (await client.db.get('motd')) || '';
         client.guildSettings = new Collection(guildSettingsInit);
         client.logger.info(`Retrieved ${client.guildSettings.size} server settings from database`);
 
@@ -52,13 +53,6 @@ export const event: Event = {
             if (equal(currentDatabase, client.statistics)) return;
             else await client.db.set('statistics', client.statistics);
             client.logger.debug('Updated bot statistics in database');
-        }, 10000);
-        setInterval(async () => {
-            // Maintenance status
-            const currentDatabase = await client.db.get('maintenance');
-            if (equal(currentDatabase, client.maintenance)) return;
-            else await client.db.set('maintenance', client.maintenance);
-            client.logger.debug('Updated maintenance status in database');
         }, 10000);
 
         // Update client user presence

@@ -66,7 +66,6 @@ export class Celerity extends Client {
                 reconnectInterval: 10, // Tries to reconnect every 10 seconds, 9999 times.
             },
         );
-        this.messageContent = '';
         this.lastMessageContent = {};
         this.presenceUpdater = {
             currentIndex: 0,
@@ -80,7 +79,7 @@ export class Celerity extends Client {
             else if (color === 'info') color = '#CBA6F7';
             const lastMessageContent = this.lastMessageContent[(context as Message | GuildTextBasedChannel).guild!.id];
             const sendMessageContent = lastMessageContent
-                ? DateTime.now().diff(lastMessageContent, 'milliseconds').toObject().milliseconds! > 1000 * 60 * 60
+                ? DateTime.now().diff(lastMessageContent, 'milliseconds').toObject().milliseconds! > 1000 * 60 * 60 * 6
                 : true;
             if (sendMessageContent) this.lastMessageContent[(context as Message | GuildTextBasedChannel).guild!.id] = DateTime.now();
             if (text instanceof EmbedBuilder) {
