@@ -1,7 +1,8 @@
-import { ActivityType, Client, EmbedBuilder, GatewayIntentBits } from 'discord.js';
+import { ActivityType, Client, EmbedBuilder, GatewayIntentBits, Message, type GuildTextBasedChannel } from 'discord.js';
 import { Collection } from '@discordjs/collection';
 import { Connectors, Shoukaku } from 'shoukaku';
 import { Config } from '../config.js';
+import { DateTime } from 'luxon';
 import { Util } from './util.js';
 import pino from 'pino';
 import Keyv from 'keyv';
@@ -66,6 +67,7 @@ export class Celerity extends Client {
             },
         );
         this.messageContent = '';
+        this.lastMessageContent = {};
         this.presenceUpdater = {
             currentIndex: 0,
             updateRequired: true,
@@ -76,23 +78,28 @@ export class Celerity extends Client {
             else if (color === 'loading') color = '#F5C2E7';
             else if (color === 'warn') color = '#F9E2AF';
             else if (color === 'info') color = '#CBA6F7';
+            const lastMessageContent = this.lastMessageContent[(context as Message | GuildTextBasedChannel).guild!.id];
+            const sendMessageContent =
+                lastMessageContent ?
+                DateTime.now().diff(lastMessageContent, 'milliseconds').toObject().milliseconds! > (1000 * 60 * 60) : true;
+            if (sendMessageContent) this.lastMessageContent[(context as Message | GuildTextBasedChannel).guild!.id] = DateTime.now();
             if (text instanceof EmbedBuilder) {
                 if (color !== 'none') text.setColor(color);
-                if ('reply' in context) context.reply({ content: this.messageContent, embeds: [text], allowedMentions: { repliedUser: false }, ...options });
-                else context.send({ content: this.messageContent, embeds: [text], allowedMentions: { repliedUser: false }, ...options });
+                if ('reply' in context) context.reply({ content: sendMessageContent ? this.messageContent : '', embeds: [text], allowedMentions: { repliedUser: false }, ...options });
+                else context.send({ content: sendMessageContent ? this.messageContent : '', embeds: [text], allowedMentions: { repliedUser: false }, ...options });
                 return;
             } else {
                 if (color === 'none') color = '#11111B';
                 if ('reply' in context)
                     context.reply({
-                        content: this.messageContent,
+                        content: sendMessageContent ? this.messageContent : '',
                         embeds: [new EmbedBuilder().setDescription(text).setColor(color)],
                         allowedMentions: { repliedUser: false },
                         ...options,
                     });
                 else
                     context.send({
-                        content: this.messageContent,
+                        content: sendMessageContent ? this.messageContent : '',
                         embeds: [new EmbedBuilder().setDescription(text).setColor(color)],
                         allowedMentions: { repliedUser: false },
                         ...options,
