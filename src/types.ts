@@ -8,7 +8,6 @@ import type Keyv from 'keyv';
 import type { Connection, Shoukaku } from 'shoukaku';
 import type { Celerity } from './util/client';
 import { ApplicationCommandOptionType } from 'discord.js';
-import type { DateTime } from 'luxon';
 
 export type GuildSettings = {
     announceConnect: boolean;
@@ -130,7 +129,6 @@ declare module 'discord.js' {
         logger: Logger;
         db: Keyv;
         shoukaku: Shoukaku;
-        messageContent: string;
         spotify: {
             clientId: string;
             accessToken: string;
@@ -143,7 +141,6 @@ declare module 'discord.js' {
             updateRequired: boolean;
         };
         respond: Respond;
-        lastMessageContent: Record<string, DateTime>;
     }
 }
 

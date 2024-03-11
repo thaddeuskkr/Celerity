@@ -4,7 +4,6 @@ import type { CelerityPlayer } from './player';
 import type { Celerity } from './client';
 import { CelerityTrack } from './track.js';
 import type { TrackExceptionEvent, TrackStuckEvent } from 'shoukaku';
-import { DateTime } from 'luxon';
 
 export const start = async (player: CelerityPlayer, client: Celerity) => {
     if (!player.current) return;
@@ -35,13 +34,7 @@ export const start = async (player: CelerityPlayer, client: Celerity) => {
             if (player._notifiedOnce) return;
             else player._notifiedOnce = true;
         } else player._notifiedOnce = false;
-        const lastMessageContent = player.client.lastMessageContent[player.guild.id];
-        const sendMessageContent = lastMessageContent
-            ? DateTime.now().diff(lastMessageContent, 'milliseconds').toObject().milliseconds! > 1000 * 60 * 60
-            : true;
-        if (sendMessageContent) player.client.lastMessageContent[player.guild.id] = DateTime.now();
         player.nowPlayingMessage = await player.channel.send({
-            content: sendMessageContent ? player.client.messageContent : '',
             embeds: [
                 new EmbedBuilder()
                     .setDescription(

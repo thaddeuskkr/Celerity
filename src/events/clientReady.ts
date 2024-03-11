@@ -26,7 +26,6 @@ export const event: Event = {
         const guildSettingsInit = await client.db.get('server-settings');
         client.statistics = (await client.db.get('statistics')) || client.config.baseStatistics;
         client.maintenance = (await client.db.get('maintenance')) || client.config.baseMaintenance;
-        client.messageContent = (await client.db.get('motd')) || '';
         client.guildSettings = new Collection(guildSettingsInit);
         client.logger.info(`Retrieved ${client.guildSettings.size} server settings from database`);
 
