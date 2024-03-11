@@ -190,9 +190,7 @@ export const stuck = async (player: CelerityPlayer, client: Celerity, err: Track
     if (!player.current) return;
     client.respond(
         player.channel,
-        `${client.config.emojis.error} | **Stuck while playing [${player.current.info.title} by ${player.current.info.author}](${
-            player.current.info.uri
-        }), skipping.**`,
+        `${client.config.emojis.error} | **Stuck while playing [${player.current.info.title} by ${player.current.info.author}](${player.current.info.uri}), skipping.**`,
         'warn',
     );
     if (!player.stopped) player.play();
@@ -204,9 +202,7 @@ export const exception = async (player: CelerityPlayer, client: Celerity, err: T
     if (!player.current) return;
     client.respond(
         player.channel,
-        `${client.config.emojis.error} | **An error occurred while playing [${player.current.info.title} by ${player.current.info.author}](${
-            player.current.info.uri
-        }), disconnecting to prevent further issues.**`,
+        `${client.config.emojis.error} | **An error occurred while playing [${player.current.info.title} by ${player.current.info.author}](${player.current.info.uri}), disconnecting to prevent further issues.**`,
         'error',
     );
     if (player.loop === 'track') player.setLoop('off');
