@@ -85,7 +85,7 @@ export const command: Command = {
         const paginatedMessage = new CelerityPaginatedMessage(client, {
             template: new EmbedBuilder()
                 .setAuthor({ name: 'Celerity', iconURL: client.user!.displayAvatarURL({ size: 4096 }) })
-                .setURL('https://go.tkkr.dev/c-inv')
+                .setURL('https://celerity.tkkr.dev')
                 .setColor(settings.color)
                 .setFooter({
                     text: `Made with ♡ by @${owner.username} • ${client.version}`,
