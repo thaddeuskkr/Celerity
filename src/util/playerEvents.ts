@@ -72,27 +72,28 @@ export const start = async (player: CelerityPlayer, client: Celerity) => {
 };
 
 export const end = async (player: CelerityPlayer, client: Celerity) => {
+    if (!player.current) return;
     const settings = client.guildSettings.get(player.guild.id) || _.cloneDeep(client.config.defaultSettings);
     if (!player.previousUsed && !player.playskipUsed) {
-        player.previous.unshift(player.current!);
+        player.previous.unshift(player.current);
         client.statistics.tracks.push({
-            skipped: player.current!.skipped,
-            encoded: player.current!.encoded,
-            identifier: player.current!.info.identifier,
-            author: player.current!.info.author,
-            length: player.current!.info.length,
-            isStream: player.current!.info.isStream,
-            title: player.current!.info.title,
-            uri: player.current!.info.uri,
-            sourceName: player.current!.info.sourceName,
-            artworkUrl: player.current!.info.artworkUrl,
-            isrc: player.current!.info.isrc,
-            requester: player.current!.info.requester.id,
+            skipped: player.current.skipped,
+            encoded: player.current.encoded,
+            identifier: player.current.info.identifier,
+            author: player.current.info.author,
+            length: player.current.info.length,
+            isStream: player.current.info.isStream,
+            title: player.current.info.title,
+            uri: player.current.info.uri,
+            sourceName: player.current.info.sourceName,
+            artworkUrl: player.current.info.artworkUrl,
+            isrc: player.current.info.isrc,
+            requester: player.current.info.requester.id,
             guild: player.guild.id,
         });
     }
-    if (player.loop === 'track') player.queue.unshift(player.current!);
-    if (player.loop === 'queue' && !player.previousUsed && player.current!.info.requester.id !== client.user!.id) player.queue.push(player.current!);
+    if (player.loop === 'track') player.queue.unshift(player.current);
+    if (player.loop === 'queue' && !player.previousUsed && player.current.info.requester.id !== client.user!.id) player.queue.push(player.current);
     player.previousUsed = false;
     player.playskipUsed = false;
     if (player.nowPlayingMessage && !player._notifiedOnce) {
@@ -186,10 +187,11 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
 export const stuck = async (player: CelerityPlayer, client: Celerity, err: TrackStuckEvent) => {
     client.logger.error(`Player in ${player.guild.name} (${player.guild.id}) encountered a playback error:`);
     client.logger.error(err);
+    if (!player.current) return;
     client.respond(
         player.channel,
-        `${client.config.emojis.error} | **Stuck while playing [${player.current!.info.title} by ${player.current!.info.author}](${
-            player.current!.info.uri
+        `${client.config.emojis.error} | **Stuck while playing [${player.current.info.title} by ${player.current.info.author}](${
+            player.current.info.uri
         }), skipping.**`,
         'warn',
     );
@@ -199,10 +201,11 @@ export const stuck = async (player: CelerityPlayer, client: Celerity, err: Track
 export const exception = async (player: CelerityPlayer, client: Celerity, err: TrackExceptionEvent) => {
     client.logger.error(`Player in ${player.guild.name} (${player.guild.id}) encountered a playback error:`);
     client.logger.error(err);
+    if (!player.current) return;
     client.respond(
         player.channel,
-        `${client.config.emojis.error} | **An error occurred while playing [${player.current!.info.title} by ${player.current!.info.author}](${
-            player.current!.info.uri
+        `${client.config.emojis.error} | **An error occurred while playing [${player.current.info.title} by ${player.current.info.author}](${
+            player.current.info.uri
         }), disconnecting to prevent further issues.**`,
         'error',
     );
