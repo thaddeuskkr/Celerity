@@ -5,6 +5,7 @@ export const command: Command = {
     name: 'disconnect',
     description: 'Stops the player and disconnects Celerity.',
     aliases: ['dc', 'fuckoff', 'leave'],
+    examples: ['{p}disconnect'],
     checks: ['vc', 'dj', 'player', 'connection'],
     options: [],
 

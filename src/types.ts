@@ -85,6 +85,7 @@ export type Command = {
     name: string;
     description: string;
     aliases?: string[];
+    examples?: string[];
     checks?: ('vc' | 'samevc' | 'joinable' | 'speakable' | 'player' | 'playing' | 'queue' | 'dj' | 'owner' | 'connection')[];
     userPermissions?: bigint[];
     clientPermissions?: bigint[];

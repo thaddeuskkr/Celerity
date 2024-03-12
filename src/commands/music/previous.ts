@@ -4,6 +4,7 @@ export const command: Command = {
     name: 'previous',
     description: 'Returns to the previous track.',
     aliases: ['prev', 'pv', 'pre'],
+    examples: ['{p}previous'],
     checks: ['vc', 'samevc', 'player', 'dj'],
     options: [],
 

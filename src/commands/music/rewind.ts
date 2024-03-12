@@ -4,6 +4,7 @@ export const command: Command = {
     name: 'rewind',
     description: 'Restarts the current track.',
     aliases: ['rw'],
+    examples: ['{p}rewind'],
     checks: ['vc', 'samevc', 'playing', 'dj'],
     options: [],
 

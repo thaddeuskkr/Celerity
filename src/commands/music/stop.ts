@@ -5,6 +5,7 @@ export const command: Command = {
     name: 'stop',
     description: 'Stops the player, but keeps Celerity connected.',
     aliases: ['st'],
+    examples: ['{p}stop'],
     checks: ['vc', 'samevc', 'playing', 'dj'],
     options: [],
 

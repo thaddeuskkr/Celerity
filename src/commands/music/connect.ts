@@ -6,6 +6,7 @@ export const command: Command = {
     name: 'connect',
     description: 'Creates a new player and has Celerity join your voice channel.',
     aliases: ['join', 'new', 'bind'],
+    examples: ['{p}connect'],
     checks: ['vc', 'joinable', 'speakable', 'dj'],
     options: [],
 

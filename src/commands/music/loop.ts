@@ -4,12 +4,13 @@ import type { Command } from '../../types';
 export const command: Command = {
     name: 'loop',
     description: 'Changes the loop mode. Toggles if no arguments are provided.',
-    aliases: [],
+    aliases: ['repeat', 'l'],
+    examples: ['{p}loop', '{p}loop track', '{p}loop q', '{p}loop off'],
     checks: ['vc', 'samevc', 'playing', 'dj'],
     options: [
         {
             name: 'mode',
-            description: 'Loop mode. Accepts: `off`, `track`, `queue`.',
+            description: 'Loop mode. Accepts: `off`, `track`, `queue`, or the first letter of each.',
             type: ApplicationCommandOptionType.String,
             choices: [
                 {

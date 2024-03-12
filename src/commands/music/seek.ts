@@ -5,6 +5,7 @@ export const command: Command = {
     name: 'seek',
     description: 'Seeks to a specific position in the current track.',
     aliases: [],
+    examples: ['{p}seek 30', '{p}seek 1:00', '{p}seek 1:07:27'],
     checks: ['vc', 'samevc', 'playing', 'dj'],
     options: [
         {

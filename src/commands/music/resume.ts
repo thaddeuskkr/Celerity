@@ -4,6 +4,7 @@ export const command: Command = {
     name: 'resume',
     description: 'Resumes the music.',
     aliases: ['res'],
+    examples: ['{p}resume'],
     checks: ['vc', 'samevc', 'playing', 'dj'],
     options: [],
 

@@ -25,6 +25,7 @@ export const command: Command = {
     name: 'set',
     description: 'Modification of server settings.',
     aliases: ['settings'],
+    examples: ['{p}set', '{p}set prefixes', '{p}set disconnect timeout'],
     checks: [],
     userPermissions: [PermissionFlagsBits.ManageGuild, PermissionFlagsBits.ManageChannels, PermissionFlagsBits.ManageMessages],
     options: [

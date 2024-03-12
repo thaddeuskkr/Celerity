@@ -7,6 +7,14 @@ export const command: Command = {
     name: 'search',
     description: 'Searches for music from one of multiple supported sources, and allows you to select a result.',
     aliases: ['find', 'f'],
+    examples: [
+        '{p}search capable of love',
+        '{p}search fireflies --source sp',
+        '{p}search fireflies --next',
+        '{p}search fireflies --playskip',
+        '{p}search fireflies -s sp -ps',
+        '{p}search fireflies -s sp -n',
+    ],
     checks: ['vc', 'samevc', 'joinable', 'speakable', 'dj'],
     options: [
         {
@@ -38,7 +46,7 @@ export const command: Command = {
         },
         {
             name: 'playskip',
-            description: 'If the track should be played immediately after result selection. | `--playskip` / `-ps`',
+            description: 'If the track should be played immediately after result selection. Cannot be used in combination with `next`. | `--playskip` / `-ps`',
             type: ApplicationCommandOptionType.Boolean,
             required: false,
         },
@@ -87,6 +95,7 @@ export const command: Command = {
             if (args.indexOf('--playskip') !== -1) args.splice(args.indexOf('--playskip'), 1);
             if (args.indexOf('-ps') !== -1) args.splice(args.indexOf('-ps'), 1);
             playskip = true;
+            next = false;
         }
         if (args.includes('--source') || args.includes('-s')) {
             let index = -1;

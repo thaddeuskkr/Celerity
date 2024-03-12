@@ -5,6 +5,7 @@ export const command: Command = {
     name: 'move',
     description: 'Move a track within the queue.',
     aliases: ['mv'],
+    examples: ['{p}move 2 1', '{p}move 1 3'],
     checks: ['vc', 'samevc', 'playing', 'queue', 'dj'],
     options: [
         {

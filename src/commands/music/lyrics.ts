@@ -10,6 +10,7 @@ export const command: Command = {
     name: 'lyrics',
     description: 'Shows lyrics for a query or the currently playing track.',
     aliases: ['ly'],
+    examples: ['{p}lyrics', '{p}lyrics capable of love', '{p}lyrics ophelia --search', '{p}lyrics ophelia -s'],
     checks: [],
     options: [
         {
@@ -20,7 +21,7 @@ export const command: Command = {
         },
         {
             name: 'search',
-            description: 'Allows selection from a search result, rather than picking the first track.',
+            description: 'Allows selection from a search result, rather than picking the first track. | `--search` / `-s`',
             type: ApplicationCommandOptionType.Boolean,
             required: false,
         },

@@ -7,6 +7,7 @@ export const command: Command = {
     name: 'help',
     description: "Returns information about Celerity's commands.",
     aliases: ['commands', 'h'],
+    examples: ['{p}help', '{p}help play'],
     checks: [],
     options: [
         {
@@ -22,7 +23,7 @@ export const command: Command = {
         const cmd = args.join(' ');
         if (cmd) {
             const command = client.commands.get(cmd) || client.commands.find((c) => c.aliases && c.aliases.includes(cmd));
-            if (!command)
+            if (!command || (command.checks?.includes('owner') && !client.config.owners.includes(context.author.id)))
                 return client.respond(
                     context,
                     `${client.config.emojis.error} | **Invalid command.**\nUse \`${client.util.escapeBackticks(
@@ -77,6 +78,10 @@ export const command: Command = {
                                   )
                                   .join('\n')
                             : 'None',
+                    },
+                    {
+                        name: 'Examples:',
+                        value: command.examples?.length ? command.examples.map((example) => `- \`${example.replace('{p}', prefix)}\``).join('\n') : 'None',
                     },
                 )
                 .setDescription('**Note:** `<>` denotes a required argument, while `[]` denotes an optional argument.');

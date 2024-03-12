@@ -5,6 +5,7 @@ export const command: Command = {
     name: 'ping',
     description: "Checks Celerity's latency.",
     aliases: ['pong'],
+    examples: ['{p}ping'],
     checks: [],
     options: [],
 

@@ -4,6 +4,7 @@ export const command: Command = {
     name: 'pause',
     description: 'Pauses the music.',
     aliases: [],
+    examples: ['{p}pause'],
     checks: ['vc', 'samevc', 'playing', 'dj'],
     options: [],
 

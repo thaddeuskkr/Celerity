@@ -8,6 +8,15 @@ export const command: Command = {
     name: 'play',
     description: 'Plays music from one of multiple supported sources.',
     aliases: ['p'],
+    examples: [
+        '{p}play capable of love',
+        '{p}play https://open.spotify.com/playlist/56Jzp2GTWJftcjyAnfQ0F4',
+        '{p}play fireflies --source sp',
+        '{p}play never gonna give you up --next',
+        '{p}play fireflies -s sp -n',
+        '{p}play https://open.spotify.com/playlist/56Jzp2GTWJftcjyAnfQ0F4 --shuffle',
+        '{p}play https://open.spotify.com/playlist/56Jzp2GTWJftcjyAnfQ0F4 -sh',
+    ],
     checks: ['vc', 'samevc', 'joinable', 'speakable', 'dj'],
     options: [
         {
@@ -18,7 +27,7 @@ export const command: Command = {
         },
         {
             name: 'source',
-            description: 'The search provider to use. | `--source` / `-s`',
+            description: 'The search provider to use. Set the default using the `set` command. | `--source` / `-s`',
             type: ApplicationCommandOptionType.String,
             required: false,
             choices: [

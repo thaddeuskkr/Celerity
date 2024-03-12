@@ -8,6 +8,7 @@ export const command: Command = {
     name: 'queue',
     description: 'Returns a list of tracks in the queue.',
     aliases: ['q', 'tracks', 'list', 'songs'],
+    examples: ['{p}queue'],
     checks: ['playing', 'queue'],
     options: [],
 

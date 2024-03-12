@@ -7,6 +7,14 @@ export const command: Command = {
     name: 'playskip',
     description: 'Queues music from one of multiple supported sources and immediately skips to it.',
     aliases: ['ps'],
+    examples: [
+        '{p}playskip capable of love',
+        '{p}playskip https://open.spotify.com/playlist/56Jzp2GTWJftcjyAnfQ0F4',
+        '{p}playskip fireflies --source sp',
+        '{p}playskip fireflies -s sp',
+        '{p}playskip https://open.spotify.com/playlist/56Jzp2GTWJftcjyAnfQ0F4 --shuffle',
+        '{p}playskip https://open.spotify.com/playlist/56Jzp2GTWJftcjyAnfQ0F4 -sh',
+    ],
     checks: ['vc', 'samevc', 'joinable', 'speakable', 'dj'],
     options: [
         {

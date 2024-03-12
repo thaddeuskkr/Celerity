@@ -5,6 +5,7 @@ export const command: Command = {
     name: 'avatar',
     description: 'Sends your avatar back. Specify another user to get their avatar instead.',
     aliases: ['av', 'pfp'],
+    examples: ['{p}avatar', '{p}avatar Celerity', '{p}avatar 1063698207793762406'],
     checks: [],
     options: [
         {

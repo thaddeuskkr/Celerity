@@ -1,13 +1,22 @@
 import type { Command } from '../../types';
-import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { ApplicationCommandOptionType, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 
 export const command: Command = {
     name: 'prefix',
     description: 'Sets the server prefix(es) that Celerity responds to.',
     aliases: ['pre', 'prefixes'],
+    examples: ['{p}prefix', '{p}prefix !', '{p}prefix ! ? $', '{p}prefix "please do this celerity " ! ?'],
     checks: [],
     userPermissions: [PermissionFlagsBits.ManageMessages],
-    options: [],
+    options: [
+        {
+            name: 'prefixes',
+            description:
+                'The new prefix(es) to set. Accepts a space-separated list of prefixes. Spaces in prefixes can be configured by enclosing the prefix in double quotes. Use `set prefixes` for more information.',
+            type: ApplicationCommandOptionType.String,
+            required: false,
+        },
+    ],
 
     async execute({ client, context, settings, args }) {
         if (!args.length) {

@@ -4,6 +4,7 @@ export const command: Command = {
     name: 'shuffle',
     description: 'Shuffles the queue.',
     aliases: ['sh'],
+    examples: ['{p}shuffle'],
     checks: ['vc', 'samevc', 'playing', 'queue', 'dj'],
     options: [],
 

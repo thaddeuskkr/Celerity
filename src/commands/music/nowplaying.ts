@@ -5,17 +5,19 @@ export const command: Command = {
     name: 'nowplaying',
     description: 'Returns details regarding the currently playing track.',
     aliases: ['np', 'now', 'playing', 'current'],
+    examples: ['{p}nowplaying', '{p}nowplaying --dynamic', '{p}nowplaying --timeout 5', '{p}nowplaying -d -t -1'],
     checks: ['playing'],
     options: [
         {
             name: 'dynamic',
-            description: 'If the now playing message should update every few seconds. (-d / --dynamic)',
+            description: 'If the now playing message should update every few seconds. | `-d` / `--dynamic`',
             type: ApplicationCommandOptionType.Boolean,
             required: false,
         },
         {
             name: 'timeout',
-            description: 'The amount of time, in minutes, for which the embed should be updated. By default, stops at the end of the track. (-t / --timeout)',
+            description:
+                'The amount of time, in minutes, for which the embed should be updated. By default, stops at the end of the track. Set to -1 for infinite. | `-t` / `--timeout`',
             type: ApplicationCommandOptionType.Integer,
             required: false,
         },

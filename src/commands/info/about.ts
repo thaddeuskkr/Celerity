@@ -10,6 +10,7 @@ export const command: Command = {
     name: 'about',
     description: 'Returns information about Celerity.',
     aliases: ['abt'],
+    examples: ['{p}about'],
     checks: [],
     options: [],
 

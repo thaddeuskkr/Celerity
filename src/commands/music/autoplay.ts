@@ -5,6 +5,7 @@ export const command: Command = {
     name: 'autoplay',
     description: 'Enables or disables autoplay. Toggles if no arguments are provided.',
     aliases: ['ap'],
+    examples: ['{p}autoplay', '{p}autoplay on', '{p}autoplay off'],
     checks: ['dj'],
     options: [
         {

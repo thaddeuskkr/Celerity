@@ -5,6 +5,7 @@ export const command: Command = {
     name: 'remove',
     description: 'Remove a track from the queue.',
     aliases: ['rm', 'rmv'],
+    examples: ['{p}remove 1', '{p}remove 6'],
     checks: ['vc', 'samevc', 'playing', 'queue', 'dj'],
     options: [
         {

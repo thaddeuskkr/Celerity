@@ -5,11 +5,12 @@ export const command: Command = {
     name: 'volume',
     description: 'Modifies the volume of the player.',
     aliases: ['vol'],
+    examples: ['{p}volume', '{p}volume 50'],
     checks: ['vc', 'samevc', 'playing', 'dj'],
     options: [
         {
             name: 'volume',
-            description: 'The new volume, in %.',
+            description: 'The new volume, in %. Accepts: `0 - 250`.',
             type: ApplicationCommandOptionType.Integer,
             required: false,
         },

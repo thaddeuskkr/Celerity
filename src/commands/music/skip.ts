@@ -4,6 +4,7 @@ export const command: Command = {
     name: 'skip',
     description: 'Skips the currently playing track.',
     aliases: ['s'],
+    examples: ['{p}skip'],
     checks: ['vc', 'samevc', 'playing', 'dj'],
     options: [],
 
