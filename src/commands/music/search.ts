@@ -104,7 +104,7 @@ export const command: Command = {
             source = args[index + 1]?.toLowerCase();
             if (!source)
                 return client.respond(context, `${client.config.emojis.error} | **Invalid usage.**\nUsage: \`--source <source>\` or \`-s <source>\`.`, 'error');
-            if (!['ytm', 'yt', 'sp', 'dz', 'sc', 'am', 'ym'].includes(source)) 
+            if (!['ytm', 'yt', 'sp', 'dz', 'sc', 'am', 'ym'].includes(source))
                 return client.respond(
                     context,
                     `${client.config.emojis.error} | **Invalid source.**\nAccepts: \`ytm\`, \`yt\`, \`sp\`, \`dz\`, \`sc\`, \`am\`, \`ym\`.`,
@@ -117,7 +117,7 @@ export const command: Command = {
         const urls = extractURL(query);
         if (urls.length > 0) return client.commands.get('play')!.execute({ client, context, args, settings, player, prefix });
         const result = await player.node.rest.resolve(`${source || settings.searchProvider}:${query}`);
-        if (!result || result.loadType !== 'search' || !result.data.length) 
+        if (!result || result.loadType !== 'search' || !result.data.length)
             return client.respond(context, `${client.config.emojis.error} | **No results found for \`${query}\`.**`, 'error');
         const uniqueIsrcs: Record<string, boolean> = {};
         const unique = result.data.filter((obj) => {
