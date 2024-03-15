@@ -82,6 +82,7 @@ export const command: Command = {
                 return;
             }
         }
+        client.util.timeout(player);
         let next = false;
         let playskip = false;
         let source: string | undefined;
@@ -101,18 +102,14 @@ export const command: Command = {
             if (args.indexOf('--source') !== -1) index = args.indexOf('--source');
             if (args.indexOf('-s') !== -1) index = args.indexOf('-s');
             source = args[index + 1]?.toLowerCase();
-            if (!source) {
-                client.util.timeout(player);
+            if (!source)
                 return client.respond(context, `${client.config.emojis.error} | **Invalid usage.**\nUsage: \`--source <source>\` or \`-s <source>\`.`, 'error');
-            }
-            if (!['ytm', 'yt', 'sp', 'dz', 'sc', 'am', 'ym'].includes(source)) {
-                client.util.timeout(player);
+            if (!['ytm', 'yt', 'sp', 'dz', 'sc', 'am', 'ym'].includes(source)) 
                 return client.respond(
                     context,
                     `${client.config.emojis.error} | **Invalid source.**\nAccepts: \`ytm\`, \`yt\`, \`sp\`, \`dz\`, \`sc\`, \`am\`, \`ym\`.`,
                     'error',
                 );
-            }
             args.splice(index, 2);
             source = `${source}search`;
         }
@@ -120,10 +117,8 @@ export const command: Command = {
         const urls = extractURL(query);
         if (urls.length > 0) return client.commands.get('play')!.execute({ client, context, args, settings, player, prefix });
         const result = await player.node.rest.resolve(`${source || settings.searchProvider}:${query}`);
-        if (!result || result.loadType !== 'search' || !result.data.length) {
-            client.util.timeout(player);
+        if (!result || result.loadType !== 'search' || !result.data.length) 
             return client.respond(context, `${client.config.emojis.error} | **No results found for \`${query}\`.**`, 'error');
-        }
         const uniqueIsrcs: Record<string, boolean> = {};
         const unique = result.data.filter((obj) => {
             if (!obj.info.isrc) return true;
