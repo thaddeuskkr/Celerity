@@ -75,7 +75,6 @@ export const command: Command = {
                 player = new CelerityPlayer(client, context.member!, context.channel!, newPlayer);
                 client.players.set(context.guild!.id, player);
                 player.stopped = true;
-                client.util.timeout(player);
             } catch (err) {
                 client.respond(context.channel, `${client.config.emojis.error} | **Failed to connect to <#${context.member!.voice.channel!.id}>.**`, 'error');
                 client.logger.error(`Failed to connect to voice channel ${context.member!.voice.channel!.id} in ${context.guild!.name} (${context.guild!.id})`);
@@ -102,14 +101,18 @@ export const command: Command = {
             if (args.indexOf('--source') !== -1) index = args.indexOf('--source');
             if (args.indexOf('-s') !== -1) index = args.indexOf('-s');
             source = args[index + 1]?.toLowerCase();
-            if (!source)
+            if (!source) {
+                client.util.timeout(player);
                 return client.respond(context, `${client.config.emojis.error} | **Invalid usage.**\nUsage: \`--source <source>\` or \`-s <source>\`.`, 'error');
-            if (!['ytm', 'yt', 'sp', 'dz', 'sc', 'am', 'ym'].includes(source))
+            }
+            if (!['ytm', 'yt', 'sp', 'dz', 'sc', 'am', 'ym'].includes(source)) {
+                client.util.timeout(player);
                 return client.respond(
                     context,
                     `${client.config.emojis.error} | **Invalid source.**\nAccepts: \`ytm\`, \`yt\`, \`sp\`, \`dz\`, \`sc\`, \`am\`, \`ym\`.`,
                     'error',
                 );
+            }
             args.splice(index, 2);
             source = `${source}search`;
         }
@@ -117,8 +120,10 @@ export const command: Command = {
         const urls = extractURL(query);
         if (urls.length > 0) return client.commands.get('play')!.execute({ client, context, args, settings, player, prefix });
         const result = await player.node.rest.resolve(`${source || settings.searchProvider}:${query}`);
-        if (!result || result.loadType !== 'search' || !result.data.length)
+        if (!result || result.loadType !== 'search' || !result.data.length) {
+            client.util.timeout(player);
             return client.respond(context, `${client.config.emojis.error} | **No results found for \`${query}\`.**`, 'error');
+        }
         const uniqueIsrcs: Record<string, boolean> = {};
         const unique = result.data.filter((obj) => {
             if (!obj.info.isrc) return true;
@@ -168,6 +173,7 @@ export const command: Command = {
         const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
         collector.on('collect', async (i) => {
             if (i.customId === 'tracksearch-cancel') {
+                client.util.timeout(player);
                 await message.edit({
                     embeds: [new EmbedBuilder().setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Search cancelled.**`)],
                     components: [],
@@ -177,6 +183,7 @@ export const command: Command = {
             const selectedTrack = Number(i.customId.split('-')[1]);
             const track = unique[selectedTrack];
             if (!track) {
+                client.util.timeout(player);
                 await message.edit({
                     embeds: [new EmbedBuilder().setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid selection.**`)],
                     components: [],
@@ -218,11 +225,13 @@ export const command: Command = {
             player.handleTrack(new CelerityTrack(track, context.member!, source || settings.searchProvider), next, playskip);
         });
         collector.on('end', async (collected) => {
-            if (!collected.size)
+            if (!collected.size) {
+                client.util.timeout(player);
                 message.edit({
                     embeds: [new EmbedBuilder().setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Search timed out.**`)],
                     components: [],
                 });
+            }
         });
         return;
 
