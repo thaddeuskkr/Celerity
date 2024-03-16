@@ -57,6 +57,11 @@ export const command: Command = {
             required: false,
         },
     ],
+    tips: [
+        'Use `{p}set provider` to change the default search provider.',
+        'The accepted providers are: YouTube, YouTube Music, Deezer, Spotify, SoundCloud, Apple Music, Yandex Music.',
+        'The shorthand for the above are: `yt`, `ytm`, `dz`, `sp`, `sc`, `am`, `ym` (respectively - to be used in the `--source` option).',
+    ],
 
     async execute({ client, context, player, args, settings, prefix }) {
         if (!player) {
