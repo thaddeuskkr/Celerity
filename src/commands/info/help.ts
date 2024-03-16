@@ -19,7 +19,6 @@ export const command: Command = {
     ],
 
     async execute({ client, context, settings, args, prefix }) {
-        const owner = await client.users.fetch(client.config.owners[0]!);
         const cmd = args.join(' ');
         if (cmd) {
             const command = client.commands.get(cmd) || client.commands.find((c) => c.aliases && c.aliases.includes(cmd));
@@ -39,8 +38,7 @@ export const command: Command = {
                     url: 'https://go.tkkr.dev/c-inv',
                 })
                 .setFooter({
-                    text: `Made with ♡ by @${owner.username} • ${client.version}`,
-                    iconURL: owner.displayAvatarURL({ size: 4096 }),
+                    text: `Use ${prefix}help for a list of all commands • ${client.version}`,
                 })
                 .addFields(
                     {
@@ -80,12 +78,18 @@ export const command: Command = {
                                   .join('\n')
                             : 'None',
                     },
-                    {
-                        name: 'Examples:',
-                        value: command.examples?.length ? command.examples.map((example) => `- \`${example.replace('{p}', prefix)}\``).join('\n') : 'None',
-                    },
                 )
                 .setDescription('**Note:** `<>` denotes a required argument, while `[]` denotes an optional argument.');
+            if (command.examples && command.examples.length > 0)
+                embed.addFields({
+                    name: 'Examples:',
+                    value: command.examples.map((example) => `- \`${example.replace('{p}', prefix)}\``).join('\n'),
+                });
+            if (command.tips && command.tips.length > 0)
+                embed.addFields({
+                    name: 'Tips:',
+                    value: command.tips.map((tip) => `- ${tip.replace('{p}', prefix)}`).join('\n'),
+                });
             return client.respond(context, embed, 'none');
         }
         const paginatedMessage = new CelerityPaginatedMessage(client, {
@@ -94,8 +98,7 @@ export const command: Command = {
                 .setURL('https://celerity.tkkr.dev')
                 .setColor(settings.color)
                 .setFooter({
-                    text: `Made with ♡ by @${owner.username} • ${client.version}`,
-                    iconURL: owner.displayAvatarURL({ size: 4096 }),
+                    text: `Use ${prefix}help [command] for more information about a specific command • ${client.version}`,
                 }),
         });
         const musicMap = client.commands.filter((c) => c.category === 'music').map((c) => `**${c.name}** - ${c.description}`);

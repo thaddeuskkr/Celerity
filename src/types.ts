@@ -97,6 +97,7 @@ export type Command = {
         choices?: { name: string; value: string }[];
     }[];
     category?: string;
+    tips?: string[];
 
     execute({
         client,
