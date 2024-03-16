@@ -34,7 +34,7 @@ export const command: Command = {
             const embed = new EmbedBuilder()
                 .setColor(settings.color)
                 .setAuthor({
-                    name: 'Command information',
+                    name: 'Command Information',
                     iconURL: client.user!.displayAvatarURL({ size: 4096 }),
                     url: 'https://go.tkkr.dev/c-inv',
                 })
@@ -51,6 +51,7 @@ export const command: Command = {
                     {
                         name: 'Aliases:',
                         value: '`' + (command.aliases?.length ? command.aliases.join('`, `') : 'None') + '`',
+                        inline: true,
                     },
                     {
                         name: 'Description:',
@@ -100,17 +101,17 @@ export const command: Command = {
         const musicMap = client.commands.filter((c) => c.category === 'music').map((c) => `**${c.name}** - ${c.description}`);
         const musicCommands = _.chunk(musicMap, Math.ceil(musicMap.length / 2));
         paginatedMessage.addPageEmbed(
-            new EmbedBuilder().setTitle('Informative Commands').setDescription(
+            new EmbedBuilder().setTitle('Informative').setDescription(
                 client.commands
                     .filter((c) => c.category === 'info')
                     .map((c) => `**${c.name}** - ${c.description}`)
                     .join('\n'),
             ),
         );
-        paginatedMessage.addPageEmbed(new EmbedBuilder().setTitle('Music Commands [1/2]').setDescription(musicCommands[0]!.join('\n')));
-        paginatedMessage.addPageEmbed(new EmbedBuilder().setTitle('Music Commands [2/2]').setDescription(musicCommands[1]!.join('\n')));
+        paginatedMessage.addPageEmbed(new EmbedBuilder().setTitle('Music [1/2]').setDescription(musicCommands[0]!.join('\n')));
+        paginatedMessage.addPageEmbed(new EmbedBuilder().setTitle('Music [2/2]').setDescription(musicCommands[1]!.join('\n')));
         paginatedMessage.addPageEmbed(
-            new EmbedBuilder().setTitle('Utility Commands').setDescription(
+            new EmbedBuilder().setTitle('Utility').setDescription(
                 client.commands
                     .filter((c) => c.category === 'util')
                     .map((c) => `**${c.name}** - ${c.description}`)
