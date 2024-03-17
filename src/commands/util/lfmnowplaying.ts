@@ -23,20 +23,30 @@ export const command: Command = {
             user = args.join(' ');
         }
         const image = `https://lfm.tkkr.dev/nowplaying?username=${user}&transparent=true&width=1000&show_username=false&${Date.now()}`;
-        axios.get(image)
+        axios
+            .get(image)
             .then(() => {
-                return context.reply({ embeds: [
-                    new EmbedBuilder()
-                        .setImage(image)
-                        .setColor(settings.color)
-                        .setTimestamp()
-                        .setAuthor({ name: `Now Playing • ${user}`, url: `https://www.last.fm/user/${user}` })
-                        .setFooter({ text: 'Powered by lfm.tkkr.dev' })
-                ], allowedMentions: { repliedUser: false } });
+                return context.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setImage(image)
+                            .setColor(settings.color)
+                            .setTimestamp()
+                            .setAuthor({ name: `Now Playing • ${user}`, url: `https://www.last.fm/user/${user}` })
+                            .setFooter({ text: 'Powered by lfm.tkkr.dev' }),
+                    ],
+                    allowedMentions: { repliedUser: false },
+                });
             })
-            .catch(err => {
-                if (err.response) return client.respond(context, `${client.config.emojis.error} | **Failed to get information for \`${user}\`.**\nDo ensure you typed the name correctly.`, 'error');
-                else if (err.request) return client.respond(context, `${client.config.emojis.error} | **No response from \`lfm.tkkr.dev\`.**\nPlease try again later.`, 'error');
+            .catch((err) => {
+                if (err.response)
+                    return client.respond(
+                        context,
+                        `${client.config.emojis.error} | **Failed to get information for \`${user}\`.**\nDo ensure you typed the name correctly.`,
+                        'error',
+                    );
+                else if (err.request)
+                    return client.respond(context, `${client.config.emojis.error} | **No response from \`lfm.tkkr.dev\`.**\nPlease try again later.`, 'error');
             });
     },
 };
