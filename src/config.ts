@@ -133,7 +133,7 @@ export class Config {
             youtube: '<:youtube:1104308197440888834>',
             youtubemusic: '<:youtubemusic:1110375196973604954>',
             spotify: '<:spotify:1104308093942251590>',
-            deezer: '<:deezer:1104308063780995082>',
+            deezer: '<:deezer:1219271122043011072>',
             soundcloud: '<:soundcloud:1104308078071001159>',
             applemusic: '<:applemusic:1104308042515877928>',
             yandexmusic: '<:yandexmusic:1104308117421948928>',
