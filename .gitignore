@@ -2,5 +2,8 @@ node_modules/**
 dist/**
 src/**/*.exclude.ts
 
+.idea
+.vscode
+
 .env
 application.yml
