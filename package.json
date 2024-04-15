@@ -1,6 +1,6 @@
 {
     "name": "celerity",
-    "version": "66144CB4",
+    "version": "661D32D2",
     "description": "A music Discord bot focused on performance, without sacrificing functionality, features and quality.",
     "main": "dist/index.js",
     "type": "module",
@@ -28,7 +28,7 @@
     "dependencies": {
         "@discordjs/collection": "^2.0.0",
         "@keyv/mongo": "^2.2.8",
-        "@sapphire/discord.js-utilities": "^7.1.6",
+        "@sapphire/discord.js-utilities": "^7.2.0",
         "@top-gg/sdk": "^3.1.6",
         "axios": "^1.6.8",
         "bufferutil": "^4.0.8",
