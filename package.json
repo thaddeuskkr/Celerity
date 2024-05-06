@@ -28,7 +28,7 @@
     "dependencies": {
         "@discordjs/collection": "^2.0.0",
         "@keyv/mongo": "^2.2.8",
-        "@sapphire/discord.js-utilities": "^7.2.0",
+        "@sapphire/discord.js-utilities": "^7.2.1",
         "@top-gg/sdk": "^3.1.6",
         "axios": "^1.6.8",
         "bufferutil": "^4.0.8",
@@ -50,9 +50,9 @@
     "devDependencies": {
         "@types/common-tags": "^1.8.4",
         "@types/express": "^4.17.21",
-        "@types/lodash": "^4.17.0",
-        "@types/node": "^20.12.7",
-        "@typescript-eslint/eslint-plugin": "^7.7.0",
+        "@types/lodash": "^4.17.1",
+        "@types/node": "^20.12.10",
+        "@typescript-eslint/eslint-plugin": "^7.8.0",
         "@typescript-eslint/parser": "^7.8.0",
         "eslint": "^8.57.0",
         "eslint-config-prettier": "^9.1.0",
