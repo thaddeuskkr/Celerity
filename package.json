@@ -44,7 +44,7 @@
         "pino-pretty": "^11.0.0",
         "pretty-ms": "^9.0.0",
         "shoukaku": "^4.0.1",
-        "utf-8-validate": "^6.0.3",
+        "utf-8-validate": "^6.0.4",
         "zlib-sync": "^0.1.9"
     },
     "devDependencies": {
