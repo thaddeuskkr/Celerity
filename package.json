@@ -1,15 +1,15 @@
 {
     "name": "celerity",
-    "version": "66407462",
+    "version": "665EA3CD",
     "description": "A music Discord bot focused on performance, without sacrificing functionality, features and quality.",
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
         "build": "tsc",
         "start": "node dist/index.js",
-        "prettier": "prettier --write .",
+        "biome": "biome format --write .",
         "cloc": "cloc --quiet --json --exclude-dir=node_modules,dist . > lines.json",
-        "version": "new_version=\"$(echo \"obase=16; $(date +%s)\" | bc)\" && jq --arg new_version \"$new_version\" '.version = $new_version' package.json > package_temp.json && mv package_temp.json package.json && npm install --silent && npm run cloc > /dev/null && prettier --write . > /dev/null && echo chore\\(ver\\): bump version to $new_version"
+        "version": "new_version=\"$(echo \"obase=16; $(date +%s)\" | bc)\" && jq --arg new_version \"$new_version\" '.version = $new_version' package.json > package_temp.json && mv package_temp.json package.json && npm install --silent && npm run cloc > /dev/null && biome format --write . > /dev/null && echo chore\\(ver\\): bump version to $new_version"
     },
     "repository": {
         "type": "git",
