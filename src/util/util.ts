@@ -24,6 +24,21 @@ export class Util {
         yandexmusic: 'Yandex Music'
     };
 
+    splitBySpacesWithQuotes(str: string): string[] {
+        const regex = /[^\s"]+|"([^"]*)"/gi;
+        const result = [];
+        let match: RegExpExecArray | null;
+
+        do {
+            match = regex.exec(str);
+            if (match !== null) {
+                result.push(match[1] ? match[1] : match[0]);
+            }
+        } while (match !== null);
+
+        return result;
+    }
+
     timeout(celerity: CelerityPlayer) {
         if (celerity.timeout !== null) {
             this.client.logger.debug(`Cleared timeout for ${celerity.guild.id}`);

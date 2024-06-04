@@ -1,5 +1,5 @@
-import type { Command } from '../../types';
 import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js';
+import type { Command } from '../../types';
 
 export const command: Command = {
     name: 'avatar',
@@ -12,8 +12,8 @@ export const command: Command = {
             name: 'user',
             description: 'The user to get the avatar for. Could be a mention, username, global name, nickname, or user ID.',
             type: ApplicationCommandOptionType.User,
-            required: false,
-        },
+            required: false
+        }
     ],
 
     async execute({ client, context, args, settings }) {
@@ -31,9 +31,7 @@ export const command: Command = {
         }
         const avatar = user.avatarURL({ size: 4096, forceStatic: false });
         if (!avatar) return client.respond(context, `${client.config.emojis.error} | **No avatar found.**`, 'error');
-        else {
-            const embed = new EmbedBuilder().setAuthor({ name: `@${user.username}` }).setImage(avatar);
-            return client.respond(context, embed, settings.color);
-        }
-    },
+        const embed = new EmbedBuilder().setAuthor({ name: `@${user.username}` }).setImage(avatar);
+        return client.respond(context, embed, settings.color);
+    }
 };

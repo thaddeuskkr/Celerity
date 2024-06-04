@@ -1,25 +1,25 @@
+import tags from 'common-tags';
 import {
     ActionRowBuilder,
     ApplicationCommandOptionType,
     ButtonBuilder,
     ButtonStyle,
+    ChannelSelectMenuBuilder,
+    type ChannelSelectMenuInteraction,
+    type ColorResolvable,
     EmbedBuilder,
     MentionableSelectMenuBuilder,
-    MessageComponentInteraction,
-    StringSelectMenuBuilder,
-    StringSelectMenuInteraction,
-    StringSelectMenuOptionBuilder,
-    UserSelectMenuInteraction,
-    Message,
-    type ColorResolvable,
-    ChannelSelectMenuBuilder,
-    ChannelSelectMenuInteraction,
-    RoleSelectMenuBuilder,
-    RoleSelectMenuInteraction,
+    type Message,
+    type MessageComponentInteraction,
     PermissionFlagsBits,
+    RoleSelectMenuBuilder,
+    type RoleSelectMenuInteraction,
+    StringSelectMenuBuilder,
+    type StringSelectMenuInteraction,
+    StringSelectMenuOptionBuilder,
+    type UserSelectMenuInteraction
 } from 'discord.js';
 import type { Command } from '../../types';
-import tags from 'common-tags';
 
 export const command: Command = {
     name: 'set',
@@ -33,8 +33,8 @@ export const command: Command = {
             name: 'setting',
             description: 'The setting to modify.',
             type: ApplicationCommandOptionType.String,
-            required: false,
-        },
+            required: false
+        }
     ],
 
     async execute({ client, context, settings, args, prefix }) {
@@ -46,17 +46,17 @@ export const command: Command = {
             {
                 name: 'autoplay target popularity',
                 aliases: ['autoplay popularity target', 'ap popularity', 'ap target', 'ap tp'],
-                default: client.config.defaultSettings.autoplay.targetPopularity,
+                default: client.config.defaultSettings.autoplay.targetPopularity
             },
             {
                 name: 'autoplay minimum popularity',
                 aliases: ['autoplay popularity minimum', 'ap min', 'ap minimum', 'ap mp'],
-                default: client.config.defaultSettings.autoplay.minimumPopularity,
+                default: client.config.defaultSettings.autoplay.minimumPopularity
             },
             {
                 name: 'autoplay maximum popularity',
                 aliases: ['autoplay popularity maximum', 'ap max', 'ap maximum', 'ap xp'],
-                default: client.config.defaultSettings.autoplay.maximumPopularity,
+                default: client.config.defaultSettings.autoplay.maximumPopularity
             },
             { name: 'banned users', aliases: ['banned'], default: client.config.defaultSettings.banned },
             { name: 'buttons', aliases: ['btns', 'button', 'btn'], default: client.config.defaultSettings.buttons },
@@ -65,7 +65,7 @@ export const command: Command = {
             {
                 name: 'default volume',
                 aliases: ['volume', 'def volume', 'def vol', 'vol', 'default vol'],
-                default: client.config.defaultSettings.defaultVolume,
+                default: client.config.defaultSettings.defaultVolume
             },
             { name: 'disabled channels', aliases: ['disabled', 'channels'], default: client.config.defaultSettings.disabledChannels },
             { name: 'disconnect timeout', aliases: ['timeout', 'dc timeout'], default: client.config.defaultSettings.disconnectTimeout },
@@ -73,7 +73,7 @@ export const command: Command = {
             { name: 'dj role', aliases: ['djr'], default: client.config.defaultSettings.dj.role },
             { name: 'prefixes', aliases: ['prefix'], default: client.config.defaultSettings.prefixes },
             { name: 'search provider', aliases: ['source', 'provider'], default: client.config.defaultSettings.searchProvider },
-            { name: 'set stage topic', aliases: ['topic'], default: client.config.defaultSettings.setStageTopic },
+            { name: 'set stage topic', aliases: ['topic'], default: client.config.defaultSettings.setStageTopic }
             // { name: 'statistics', default: client.config.defaultSettings.statistics },
             // { name: 'voteSkip', default: client.config.defaultSettings.voteSkip },
             // { name: 'voteSkipPercentage', default: client.config.defaultSettings.voteSkipPercentage }
@@ -86,15 +86,15 @@ export const command: Command = {
                     s.name.split(' ').join('') === setting ||
                     (s.aliases?.length
                         ? s.aliases.map((a) => a.toLowerCase()).includes(setting) || s.aliases.map((a) => a.toLowerCase().split(' ').join('')).includes(setting)
-                        : false),
+                        : false)
             );
             if (!foundSetting)
                 return client.respond(
                     context,
                     `**Invalid usage.** Use \`${client.util.escapeBackticks(
-                        prefix.replace(/<@!?\d+>/g, `@${client.user!.tag} `),
+                        prefix.replace(/<@!?\d+>/g, `@${client.user!.tag} `)
                     )}set\` to see all available settings.`,
-                    'error',
+                    'error'
                 );
             const stringRow = new ActionRowBuilder<StringSelectMenuBuilder>();
             const buttonRow = new ActionRowBuilder<ButtonBuilder>();
@@ -105,7 +105,7 @@ export const command: Command = {
                 .setColor(settings.color)
                 .setAuthor({
                     name: `Settings - ${foundSetting.name}`,
-                    iconURL: client.user!.displayAvatarURL({ size: 4096 }),
+                    iconURL: client.user!.displayAvatarURL({ size: 4096 })
                 })
                 .setFooter({ text: 'Use the action row below this embed to modify this setting.' });
             const successEmbed = new EmbedBuilder().setColor('#A6E3A1');
@@ -121,7 +121,7 @@ export const command: Command = {
                     tags.stripIndents`*If enabled, sends a notification in the bound text channel when Celerity connects to a voice channel via the \`play\` or \`connect\` command.*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.announceConnect}`,
+                        **Current value:** ${settings.announceConnect}`
                 );
                 stringRow.addComponents(
                     new StringSelectMenuBuilder()
@@ -129,8 +129,8 @@ export const command: Command = {
                         .setPlaceholder('Select an option...')
                         .addOptions(
                             new StringSelectMenuOptionBuilder().setLabel('true').setValue('true').setDescription('Enables connect notifications.'),
-                            new StringSelectMenuOptionBuilder().setLabel('false').setValue('false').setDescription('Disables connect notifications.'),
-                        ),
+                            new StringSelectMenuOptionBuilder().setLabel('false').setValue('false').setDescription('Disables connect notifications.')
+                        )
                 );
                 const message = await context.channel.send({ embeds: [embed], components: [stringRow] });
                 const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
@@ -138,12 +138,12 @@ export const command: Command = {
                     settings.announceConnect = i.values[0] === 'true';
                     message.edit({
                         embeds: [
-                            successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.announceConnect}\`.`),
+                            successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.announceConnect}\`.`)
                         ],
-                        components: [],
+                        components: []
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'announce disconnect') {
@@ -152,7 +152,7 @@ export const command: Command = {
                         Timeouts can occur due to the player being inactive for too long (when there is no current track and no tracks in queue) or the voice channel having no undeafened users for an extended period of time.*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.announceDisconnect}`,
+                        **Current value:** ${settings.announceDisconnect}`
                 );
                 stringRow.addComponents(
                     new StringSelectMenuBuilder()
@@ -160,8 +160,8 @@ export const command: Command = {
                         .setPlaceholder('Select an option...')
                         .addOptions(
                             new StringSelectMenuOptionBuilder().setLabel('true').setValue('true').setDescription('Enables disconnect notifications.'),
-                            new StringSelectMenuOptionBuilder().setLabel('false').setValue('false').setDescription('Disables disconnect notifications.'),
-                        ),
+                            new StringSelectMenuOptionBuilder().setLabel('false').setValue('false').setDescription('Disables disconnect notifications.')
+                        )
                 );
                 const message = await context.channel.send({ embeds: [embed], components: [stringRow] });
                 const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
@@ -169,14 +169,12 @@ export const command: Command = {
                     settings.announceDisconnect = i.values[0] === 'true';
                     message.edit({
                         embeds: [
-                            successEmbed.setDescription(
-                                `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.announceDisconnect}\`.`,
-                            ),
+                            successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.announceDisconnect}\`.`)
                         ],
-                        components: [],
+                        components: []
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'announce now playing') {
@@ -185,7 +183,7 @@ export const command: Command = {
                         This notification contains the title and artist of the track, along with the requester of the track.*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.announceNowPlaying}`,
+                        **Current value:** ${settings.announceNowPlaying}`
                 );
                 stringRow.addComponents(
                     new StringSelectMenuBuilder()
@@ -193,8 +191,8 @@ export const command: Command = {
                         .setPlaceholder('Select an option...')
                         .addOptions(
                             new StringSelectMenuOptionBuilder().setLabel('true').setValue('true').setDescription('Enables now playing messages.'),
-                            new StringSelectMenuOptionBuilder().setLabel('false').setValue('false').setDescription('Disables now playing messages.'),
-                        ),
+                            new StringSelectMenuOptionBuilder().setLabel('false').setValue('false').setDescription('Disables now playing messages.')
+                        )
                 );
                 const message = await context.channel.send({ embeds: [embed], components: [stringRow] });
                 const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
@@ -202,14 +200,12 @@ export const command: Command = {
                     settings.announceNowPlaying = i.values[0] === 'true';
                     message.edit({
                         embeds: [
-                            successEmbed.setDescription(
-                                `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.announceNowPlaying}\`.`,
-                            ),
+                            successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.announceNowPlaying}\`.`)
                         ],
-                        components: [],
+                        components: []
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'autoplay') {
@@ -218,7 +214,7 @@ export const command: Command = {
                         Tracks added using this feature will have their requester shown as <@${client.user!.id}>.*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.autoplay.enabled}`,
+                        **Current value:** ${settings.autoplay.enabled}`
                 );
                 stringRow.addComponents(
                     new StringSelectMenuBuilder()
@@ -226,8 +222,8 @@ export const command: Command = {
                         .setPlaceholder('Select an option...')
                         .addOptions(
                             new StringSelectMenuOptionBuilder().setLabel('true').setValue('true').setDescription('Enables autoplay.'),
-                            new StringSelectMenuOptionBuilder().setLabel('false').setValue('false').setDescription('Disables autoplay.'),
-                        ),
+                            new StringSelectMenuOptionBuilder().setLabel('false').setValue('false').setDescription('Disables autoplay.')
+                        )
                 );
                 const message = await context.channel.send({ embeds: [embed], components: [stringRow] });
                 const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
@@ -235,12 +231,12 @@ export const command: Command = {
                     settings.autoplay.enabled = i.values[0] === 'true';
                     message.edit({
                         embeds: [
-                            successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay.enabled}\`.`),
+                            successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay.enabled}\`.`)
                         ],
-                        components: [],
+                        components: []
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'autoplay target popularity') {
@@ -248,7 +244,7 @@ export const command: Command = {
                     tags.stripIndents`*If enabled, Celerity will select tracks closest to the set popularity as candidates for autoplay. For example, 100 would mean that tracks selected for autoplay would be the most popular, and 0 would mean that tracks selected for autoplay would not be popular at all. To disable, set to -1.*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.autoplay.targetPopularity}`,
+                        **Current value:** ${settings.autoplay.targetPopularity}`
                 );
                 buttonRow.addComponents(new ButtonBuilder().setCustomId('set').setLabel('Set Target Popularity').setStyle(ButtonStyle.Primary));
                 const message = await context.channel.send({ embeds: [embed], components: [buttonRow] });
@@ -257,33 +253,34 @@ export const command: Command = {
                     const messageCollector = context.channel!.createMessageCollector({
                         time: 120000,
                         filter: (message) => message.author.id === context.author.id,
-                        max: 1,
+                        max: 1
                     });
                     await message.edit({
                         embeds: [
                             new EmbedBuilder()
                                 .setDescription(
-                                    `${client.config.emojis.loading} | **Type and send the target popularity you would like here.**\nAccepts a number from -1 to 100.`,
+                                    `${client.config.emojis.loading} | **Type and send the target popularity you would like here.**\nAccepts a number from -1 to 100.`
                                 )
-                                .setColor('#F5C2E7'),
+                                .setColor('#F5C2E7')
                         ],
-                        components: [],
+                        components: []
                     });
                     messageCollector.on('collect', async (msg: Message) => {
-                        if (isNaN(Number(msg.content))) {
+                        if (Number.isNaN(Number(msg.content))) {
                             await msg.delete().catch(() => null);
                             message.edit({
-                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)],
+                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)]
                             });
                             return;
-                        } else if (Number(msg.content) < -1 || Number(msg.content) > 100) {
+                        }
+                        if (Number(msg.content) < -1 || Number(msg.content) > 100) {
                             await msg.delete().catch(() => null);
                             message.edit({
                                 embeds: [
                                     successEmbed
                                         .setColor('#F38BA8')
-                                        .setDescription(`${client.config.emojis.error} | **Invalid number.**\nAccepts: \`-1 - 100\``),
-                                ],
+                                        .setDescription(`${client.config.emojis.error} | **Invalid number.**\nAccepts: \`-1 - 100\``)
+                                ]
                             });
                             return;
                         }
@@ -292,18 +289,18 @@ export const command: Command = {
                         message.edit({
                             embeds: [
                                 successEmbed.setDescription(
-                                    `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay.targetPopularity}\`.`,
-                                ),
+                                    `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay.targetPopularity}\`.`
+                                )
                             ],
-                            components: [],
+                            components: []
                         });
                         return;
                     });
-                    messageCollector.on('end', async (collected) => {
+                    messageCollector.on('end', (collected) => {
                         if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'autoplay minimum popularity') {
@@ -311,7 +308,7 @@ export const command: Command = {
                     tags.stripIndents`*If enabled, Celerity will only select tracks above or equal to the set popularity as candidates for autoplay. For example, if set to 100, Celerity will only select the most popular tracks, and if set to 0 or -1, Celerity will select any track. To disable, set to -1.*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.autoplay.minimumPopularity}`,
+                        **Current value:** ${settings.autoplay.minimumPopularity}`
                 );
                 buttonRow.addComponents(new ButtonBuilder().setCustomId('set').setLabel('Set Minimum Popularity').setStyle(ButtonStyle.Primary));
                 const message = await context.channel.send({ embeds: [embed], components: [buttonRow] });
@@ -320,33 +317,34 @@ export const command: Command = {
                     const messageCollector = context.channel!.createMessageCollector({
                         time: 120000,
                         filter: (message) => message.author.id === context.author.id,
-                        max: 1,
+                        max: 1
                     });
                     await message.edit({
                         embeds: [
                             new EmbedBuilder()
                                 .setDescription(
-                                    `${client.config.emojis.loading} | **Type and send the minimum popularity you would like here.**\nAccepts a number from -1 to 100.`,
+                                    `${client.config.emojis.loading} | **Type and send the minimum popularity you would like here.**\nAccepts a number from -1 to 100.`
                                 )
-                                .setColor('#F5C2E7'),
+                                .setColor('#F5C2E7')
                         ],
-                        components: [],
+                        components: []
                     });
                     messageCollector.on('collect', async (msg: Message) => {
-                        if (isNaN(Number(msg.content))) {
+                        if (Number.isNaN(Number(msg.content))) {
                             await msg.delete().catch(() => null);
                             message.edit({
-                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)],
+                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)]
                             });
                             return;
-                        } else if (Number(msg.content) < -1 || Number(msg.content) > 100) {
+                        }
+                        if (Number(msg.content) < -1 || Number(msg.content) > 100) {
                             await msg.delete().catch(() => null);
                             message.edit({
                                 embeds: [
                                     successEmbed
                                         .setColor('#F38BA8')
-                                        .setDescription(`${client.config.emojis.error} | **Invalid number.**\nAccepts: \`-1 - 100\``),
-                                ],
+                                        .setDescription(`${client.config.emojis.error} | **Invalid number.**\nAccepts: \`-1 - 100\``)
+                                ]
                             });
                             return;
                         }
@@ -355,18 +353,18 @@ export const command: Command = {
                         message.edit({
                             embeds: [
                                 successEmbed.setDescription(
-                                    `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay.minimumPopularity}\`.`,
-                                ),
+                                    `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay.minimumPopularity}\`.`
+                                )
                             ],
-                            components: [],
+                            components: []
                         });
                         return;
                     });
-                    messageCollector.on('end', async (collected) => {
+                    messageCollector.on('end', (collected) => {
                         if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'autoplay maximum popularity') {
@@ -374,7 +372,7 @@ export const command: Command = {
                     tags.stripIndents`*If enabled, Celerity will only select tracks below or equal to the set popularity as candidates for autoplay. For example, if set to 100 or -1, Celerity will select any track, and if set to 0, Celerity will select the least popular tracks. To disable, set to -1.*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.autoplay.maximumPopularity}`,
+                        **Current value:** ${settings.autoplay.maximumPopularity}`
                 );
                 buttonRow.addComponents(new ButtonBuilder().setCustomId('set').setLabel('Set Maximum Popularity').setStyle(ButtonStyle.Primary));
                 const message = await context.channel.send({ embeds: [embed], components: [buttonRow] });
@@ -383,33 +381,34 @@ export const command: Command = {
                     const messageCollector = context.channel!.createMessageCollector({
                         time: 120000,
                         filter: (message) => message.author.id === context.author.id,
-                        max: 1,
+                        max: 1
                     });
                     await message.edit({
                         embeds: [
                             new EmbedBuilder()
                                 .setDescription(
-                                    `${client.config.emojis.loading} | **Type and send the maximum popularity you would like here.**\nAccepts a number from -1 to 100.`,
+                                    `${client.config.emojis.loading} | **Type and send the maximum popularity you would like here.**\nAccepts a number from -1 to 100.`
                                 )
-                                .setColor('#F5C2E7'),
+                                .setColor('#F5C2E7')
                         ],
-                        components: [],
+                        components: []
                     });
                     messageCollector.on('collect', async (msg: Message) => {
-                        if (isNaN(Number(msg.content))) {
+                        if (Number.isNaN(Number(msg.content))) {
                             await msg.delete().catch(() => null);
                             message.edit({
-                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)],
+                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)]
                             });
                             return;
-                        } else if (Number(msg.content) < -1 || Number(msg.content) > 100) {
+                        }
+                        if (Number(msg.content) < -1 || Number(msg.content) > 100) {
                             await msg.delete().catch(() => null);
                             message.edit({
                                 embeds: [
                                     successEmbed
                                         .setColor('#F38BA8')
-                                        .setDescription(`${client.config.emojis.error} | **Invalid number.**\nAccepts: \`-1 - 100\``),
-                                ],
+                                        .setDescription(`${client.config.emojis.error} | **Invalid number.**\nAccepts: \`-1 - 100\``)
+                                ]
                             });
                             return;
                         }
@@ -418,18 +417,18 @@ export const command: Command = {
                         message.edit({
                             embeds: [
                                 successEmbed.setDescription(
-                                    `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay.maximumPopularity}\`.`,
-                                ),
+                                    `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.autoplay.maximumPopularity}\`.`
+                                )
                             ],
-                            components: [],
+                            components: []
                         });
                         return;
                     });
-                    messageCollector.on('end', async (collected) => {
+                    messageCollector.on('end', (collected) => {
                         if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'banned users') {
@@ -446,28 +445,26 @@ export const command: Command = {
                         To unban **all** users / roles, select only Celerity in the drop-down menu and submit the interaction.*
                         **----------**
                         **Default value:** No default value
-                        **Current value:** ${settings.banned.length ? currentValue.join(', ') : 'No banned users / roles'}`,
+                        **Current value:** ${settings.banned.length ? currentValue.join(', ') : 'No banned users / roles'}`
                 );
                 mentionableRow.addComponents(
                     new MentionableSelectMenuBuilder()
                         .setCustomId('set')
                         .setPlaceholder('Select up to 25 users and/or roles...')
                         .setMinValues(1)
-                        .setMaxValues(25),
+                        .setMaxValues(25)
                 );
                 const message = await context.channel.send({ embeds: [embed], components: [mentionableRow] });
                 const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
                 collector.on('collect', (i: UserSelectMenuInteraction) => {
                     const response: string[] = [];
                     const newUsers = i.values;
-                    if (newUsers.includes(client.user!.id) && newUsers.length == 1) settings.banned = [];
+                    if (newUsers.includes(client.user!.id) && newUsers.length === 1) settings.banned = [];
                     else
                         for (let x = 0; x < newUsers.length; x++) {
                             if (newUsers[x]! === client.user!.id) continue;
-                            else {
-                                if (!settings.banned.includes(newUsers[x]!)) settings.banned.push(newUsers[x]!);
-                                else settings.banned.splice(settings.banned.indexOf(newUsers[x]!), 1);
-                            }
+                            if (!settings.banned.includes(newUsers[x]!)) settings.banned.push(newUsers[x]!);
+                            else settings.banned.splice(settings.banned.indexOf(newUsers[x]!), 1);
                         }
                     for (let x = 0; x < currentlyBanned.length; x++) {
                         const role = context.guild!.roles?.cache.has(currentlyBanned[x]!);
@@ -479,13 +476,13 @@ export const command: Command = {
                             successEmbed.setDescription(
                                 `${client.config.emojis.success} | **The following users / roles are banned from using Celerity in this server:**\n${
                                     settings.banned.length ? response.join(', ') : 'None'
-                                }`,
-                            ),
+                                }`
+                            )
                         ],
-                        components: [],
+                        components: []
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'buttons') {
@@ -497,7 +494,7 @@ export const command: Command = {
                         **\`extra\`:** previous, pause/resume, skip, stop, rewind, shuffle, loop, queue, autoplay*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.buttons}`,
+                        **Current value:** ${settings.buttons}`
                 );
                 stringRow.addComponents(
                     new StringSelectMenuBuilder()
@@ -512,8 +509,8 @@ export const command: Command = {
                             new StringSelectMenuOptionBuilder()
                                 .setLabel('extra')
                                 .setValue('extra')
-                                .setDescription('Enables all buttons (previous, pause/resume, skip, stop, rewind, shuffle, loop, queue, autoplay).'),
-                        ),
+                                .setDescription('Enables all buttons (previous, pause/resume, skip, stop, rewind, shuffle, loop, queue, autoplay).')
+                        )
                 );
                 const message = await context.channel.send({ embeds: [embed], components: [stringRow] });
                 const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
@@ -522,10 +519,10 @@ export const command: Command = {
                     settings.buttons = i.values[0];
                     message.edit({
                         embeds: [successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.buttons}\`.`)],
-                        components: [],
+                        components: []
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'cleanup') {
@@ -534,7 +531,7 @@ export const command: Command = {
                         This also applies if the track is skipped, or the bot is stopped / disconnected.*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.cleanup}`,
+                        **Current value:** ${settings.cleanup}`
                 );
                 stringRow.addComponents(
                     new StringSelectMenuBuilder()
@@ -548,8 +545,8 @@ export const command: Command = {
                             new StringSelectMenuOptionBuilder()
                                 .setLabel('false')
                                 .setValue('false')
-                                .setDescription('Disables automatic deletion of now playing messages.'),
-                        ),
+                                .setDescription('Disables automatic deletion of now playing messages.')
+                        )
                 );
                 const message = await context.channel.send({ embeds: [embed], components: [stringRow] });
                 const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
@@ -557,10 +554,10 @@ export const command: Command = {
                     settings.cleanup = i.values[0] === 'true';
                     message.edit({
                         embeds: [successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.cleanup}\`.`)],
-                        components: [],
+                        components: []
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'color') {
@@ -569,7 +566,7 @@ export const command: Command = {
                         [W3Schools Color Picker](https://www.w3schools.com/colors/colors_picker.asp)*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.color}`,
+                        **Current value:** ${settings.color}`
                 );
                 buttonRow.addComponents(new ButtonBuilder().setCustomId('set').setLabel('Set Color').setStyle(ButtonStyle.Primary));
                 const message = await context.channel.send({ embeds: [embed], components: [buttonRow] });
@@ -578,17 +575,17 @@ export const command: Command = {
                     const messageCollector = context.channel!.createMessageCollector({
                         time: 120000,
                         filter: (message) => message.author.id === context.author.id,
-                        max: 1,
+                        max: 1
                     });
                     await message.edit({
                         embeds: [
                             new EmbedBuilder()
                                 .setDescription(
-                                    `${client.config.emojis.loading} | **Type and send the color you want Celerity to use for embeds here.**\nAccepts a hex string, not case-sensitive. (e.g. #CBA6F7)`,
+                                    `${client.config.emojis.loading} | **Type and send the color you want Celerity to use for embeds here.**\nAccepts a hex string, not case-sensitive. (e.g. #CBA6F7)`
                                 )
-                                .setColor('#F5C2E7'),
+                                .setColor('#F5C2E7')
                         ],
-                        components: [],
+                        components: []
                     });
                     messageCollector.on('collect', async (msg: Message) => {
                         const color = msg.content.toUpperCase().replace('#', '');
@@ -597,23 +594,22 @@ export const command: Command = {
                             settings.color = `#${color}` as ColorResolvable;
                             message.edit({
                                 embeds: [
-                                    successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.color}\`.`),
+                                    successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.color}\`.`)
                                 ],
-                                components: [],
-                            });
-                            return;
-                        } else {
-                            message.edit({
-                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid HEX code.**`)],
+                                components: []
                             });
                             return;
                         }
+                        message.edit({
+                            embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid HEX code.**`)]
+                        });
+                        return;
                     });
-                    messageCollector.on('end', async (collected) => {
+                    messageCollector.on('end', (collected) => {
                         if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'disabled channels') {
@@ -624,10 +620,10 @@ export const command: Command = {
                         **Default value:** No default value
                         **Current value:** ${
                             settings.disabledChannels.length ? settings.disabledChannels.map((c) => `<#${c}>`).join(', ') : 'No disabled channels / categories'
-                        }`,
+                        }`
                 );
                 channelRow.addComponents(
-                    new ChannelSelectMenuBuilder().setCustomId('set').setPlaceholder('Select up to 25 channels...').setMinValues(1).setMaxValues(25),
+                    new ChannelSelectMenuBuilder().setCustomId('set').setPlaceholder('Select up to 25 channels...').setMinValues(1).setMaxValues(25)
                 );
                 const message = await context.channel.send({ embeds: [embed], components: [channelRow] });
                 const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
@@ -635,23 +631,21 @@ export const command: Command = {
                     const newChannels = i.values;
                     for (let x = 0; x < newChannels.length; x++) {
                         if (newChannels[x]! === client.user!.id) continue;
-                        else {
-                            if (!settings.disabledChannels.includes(newChannels[x]!)) settings.disabledChannels.push(newChannels[x]!);
-                            else settings.disabledChannels.splice(settings.disabledChannels.indexOf(newChannels[x]!), 1);
-                        }
+                        if (!settings.disabledChannels.includes(newChannels[x]!)) settings.disabledChannels.push(newChannels[x]!);
+                        else settings.disabledChannels.splice(settings.disabledChannels.indexOf(newChannels[x]!), 1);
                     }
                     message.edit({
                         embeds: [
                             successEmbed.setDescription(
                                 `${client.config.emojis.success} | **Celerity will no longer work in the following channels / categories:**\n${
                                     settings.disabledChannels.length ? settings.disabledChannels.map((c) => `<#${c}>`).join(', ') : 'None'
-                                }`,
-                            ),
+                                }`
+                            )
                         ],
-                        components: [],
+                        components: []
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'default volume') {
@@ -659,7 +653,7 @@ export const command: Command = {
                     tags.stripIndents`*The default volume for Celerity's player.*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.defaultVolume}`,
+                        **Current value:** ${settings.defaultVolume}`
                 );
                 buttonRow.addComponents(new ButtonBuilder().setCustomId('set').setLabel('Set Default Volume').setStyle(ButtonStyle.Primary));
                 const message = await context.channel.send({ embeds: [embed], components: [buttonRow] });
@@ -668,33 +662,32 @@ export const command: Command = {
                     const messageCollector = context.channel!.createMessageCollector({
                         time: 120000,
                         filter: (message) => message.author.id === context.author.id,
-                        max: 1,
+                        max: 1
                     });
                     await message.edit({
                         embeds: [
                             new EmbedBuilder()
                                 .setDescription(
-                                    `${client.config.emojis.loading} | **Type and send the default volume you would like here.**\nAccepts a number from 0 to 250.`,
+                                    `${client.config.emojis.loading} | **Type and send the default volume you would like here.**\nAccepts a number from 0 to 250.`
                                 )
-                                .setColor('#F5C2E7'),
+                                .setColor('#F5C2E7')
                         ],
-                        components: [],
+                        components: []
                     });
                     messageCollector.on('collect', async (msg: Message) => {
-                        if (isNaN(Number(msg.content))) {
+                        if (Number.isNaN(Number(msg.content))) {
                             await msg.delete().catch(() => null);
                             message.edit({
-                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)],
+                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)]
                             });
                             return;
-                        } else if (Number(msg.content) < 0 || Number(msg.content) > 250) {
+                        }
+                        if (Number(msg.content) < 0 || Number(msg.content) > 250) {
                             await msg.delete().catch(() => null);
                             message.edit({
                                 embeds: [
-                                    successEmbed
-                                        .setColor('#F38BA8')
-                                        .setDescription(`${client.config.emojis.error} | **Invalid number.**\nAccepts: \`0 - 250\``),
-                                ],
+                                    successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**\nAccepts: \`0 - 250\``)
+                                ]
                             });
                             return;
                         }
@@ -702,17 +695,17 @@ export const command: Command = {
                         settings.defaultVolume = Number(msg.content);
                         message.edit({
                             embeds: [
-                                successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.defaultVolume}\`.`),
+                                successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.defaultVolume}\`.`)
                             ],
-                            components: [],
+                            components: []
                         });
                         return;
                     });
-                    messageCollector.on('end', async (collected) => {
+                    messageCollector.on('end', (collected) => {
                         if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'disconnect timeout') {
@@ -721,7 +714,7 @@ export const command: Command = {
                         Set to 0 to immediately disconnect. Must be between 0 and 3600 (max. 1 hour).*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.disconnectTimeout}`,
+                        **Current value:** ${settings.disconnectTimeout}`
                 );
                 buttonRow.addComponents(new ButtonBuilder().setCustomId('set').setLabel('Set Timeout').setStyle(ButtonStyle.Primary));
                 const message = await context.channel.send({ embeds: [embed], components: [buttonRow] });
@@ -730,33 +723,34 @@ export const command: Command = {
                     const messageCollector = context.channel!.createMessageCollector({
                         time: 120000,
                         filter: (message) => message.author.id === context.author.id,
-                        max: 1,
+                        max: 1
                     });
                     await message.edit({
                         embeds: [
                             new EmbedBuilder()
                                 .setDescription(
-                                    `${client.config.emojis.loading} | **Type and send the timeout you would like here.**\nAccepts a number from 0 to 3600.`,
+                                    `${client.config.emojis.loading} | **Type and send the timeout you would like here.**\nAccepts a number from 0 to 3600.`
                                 )
-                                .setColor('#F5C2E7'),
+                                .setColor('#F5C2E7')
                         ],
-                        components: [],
+                        components: []
                     });
                     messageCollector.on('collect', async (msg: Message) => {
-                        if (isNaN(Number(msg.content))) {
+                        if (Number.isNaN(Number(msg.content))) {
                             await msg.delete().catch(() => null);
                             message.edit({
-                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)],
+                                embeds: [successEmbed.setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid number.**`)]
                             });
                             return;
-                        } else if (Number(msg.content) < 0 || Number(msg.content) > 3600) {
+                        }
+                        if (Number(msg.content) < 0 || Number(msg.content) > 3600) {
                             await msg.delete().catch(() => null);
                             message.edit({
                                 embeds: [
                                     successEmbed
                                         .setColor('#F38BA8')
-                                        .setDescription(`${client.config.emojis.error} | **Invalid number.**\nAccepts: \`0 - 3600\``),
-                                ],
+                                        .setDescription(`${client.config.emojis.error} | **Invalid number.**\nAccepts: \`0 - 3600\``)
+                                ]
                             });
                             return;
                         }
@@ -765,18 +759,18 @@ export const command: Command = {
                         message.edit({
                             embeds: [
                                 successEmbed.setDescription(
-                                    `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.disconnectTimeout}\`.`,
-                                ),
+                                    `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.disconnectTimeout}\`.`
+                                )
                             ],
-                            components: [],
+                            components: []
                         });
                         return;
                     });
-                    messageCollector.on('end', async (collected) => {
+                    messageCollector.on('end', (collected) => {
                         if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'dj only') {
@@ -785,7 +779,7 @@ export const command: Command = {
                         Don't enable this if a DJ role is not configured.*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.dj.enabled}`,
+                        **Current value:** ${settings.dj.enabled}`
                 );
                 stringRow.addComponents(
                     new StringSelectMenuBuilder()
@@ -793,8 +787,8 @@ export const command: Command = {
                         .setPlaceholder('Select an option...')
                         .addOptions(
                             new StringSelectMenuOptionBuilder().setLabel('true').setValue('true').setDescription('Enables DJ only mode.'),
-                            new StringSelectMenuOptionBuilder().setLabel('false').setValue('false').setDescription('Disables DJ only mode.'),
-                        ),
+                            new StringSelectMenuOptionBuilder().setLabel('false').setValue('false').setDescription('Disables DJ only mode.')
+                        )
                 );
                 const message = await context.channel.send({ embeds: [embed], components: [stringRow] });
                 const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
@@ -802,10 +796,10 @@ export const command: Command = {
                     settings.dj.enabled = i.values[0] === 'true';
                     message.edit({
                         embeds: [successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.dj.enabled}\`.`)],
-                        components: [],
+                        components: []
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'dj role') {
@@ -814,7 +808,7 @@ export const command: Command = {
                         When DJ only mode is enabled, if a DJ role is configured and Celerity is playing music in a voice channel while a user with the DJ role is present, only users who have the DJ role will be allowed to use all music commands.*
                         **----------**
                         **Default value:** No default value
-                        **Current value:** ${settings.dj.role.length > 0 ? `<@&${settings.dj.role}>` : 'No DJ role'}`,
+                        **Current value:** ${settings.dj.role.length > 0 ? `<@&${settings.dj.role}>` : 'No DJ role'}`
                 );
                 roleRow.addComponents(new RoleSelectMenuBuilder().setCustomId('set').setPlaceholder('Select a role...'));
                 const message = await context.channel.send({ embeds: [embed], components: [roleRow] });
@@ -830,13 +824,13 @@ export const command: Command = {
                             successEmbed.setDescription(
                                 `${client.config.emojis.success} | Set **${foundSetting.name}** to ${
                                     settings.dj.role.length > 0 ? `<@&${settings.dj.role}>` : '`none`'
-                                }.`,
-                            ),
+                                }.`
+                            )
                         ],
-                        components: [],
+                        components: []
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'prefixes') {
@@ -844,11 +838,11 @@ export const command: Command = {
                     tags.stripIndents`*Configures the server prefixes. Celerity's mention will always be a prefix, and this cannot be removed.
                         Accepts a space-separated list of prefixes. Spaces in prefixes can be configured by enclosing the prefix in double quotes. For example, in \`a b c\`, your prefixes would be \`a\`, \`b\` and \`c\`. However, in \`a "b c"\`, your prefixes would be \`a\` and \`b c\`.
                         If you didn't already know, prefixes are what command messages start with, that Celerity will recognise. For example, in your invocation message, \`${client.util.escapeBackticks(
-                            prefix.replace(/<@!?\d+>/g, `@${client.user!.tag} `),
+                            prefix.replace(/<@!?\d+>/g, `@${client.user!.tag} `)
                         )}\` was your prefix.*
                         **----------**
                         **Default value:** \`${client.config.defaultSettings.prefixes.join('`, `')}\`
-                        **Current value:** \`${settings.prefixes.join('`, `')}\``,
+                        **Current value:** \`${settings.prefixes.join('`, `')}\``
                 );
                 buttonRow.addComponents(new ButtonBuilder().setCustomId('set').setLabel('Set Prefixes').setStyle(ButtonStyle.Primary));
                 const message = await context.channel.send({ embeds: [embed], components: [buttonRow] });
@@ -857,58 +851,58 @@ export const command: Command = {
                     const messageCollector = context.channel!.createMessageCollector({
                         time: 120000,
                         filter: (message) => message.author.id === context.author.id,
-                        max: 1,
+                        max: 1
                     });
                     await message.edit({
                         embeds: [
                             new EmbedBuilder()
                                 .setDescription(
-                                    `${client.config.emojis.loading} | **Type and send the prefixes you would like to use here.**\nAccepts a space separated list of prefixes. Prefixes with spaces can be quoted in order to still count as a single prefix.`,
+                                    `${client.config.emojis.loading} | **Type and send the prefixes you would like to use here.**\nAccepts a space separated list of prefixes. Prefixes with spaces can be quoted in order to still count as a single prefix.`
                                 )
-                                .setColor('#F5C2E7'),
+                                .setColor('#F5C2E7')
                         ],
-                        components: [],
+                        components: []
                     });
                     messageCollector.on('collect', async (msg: Message) => {
                         await msg.delete().catch(() => null);
-                        const prefixes = splitBySpacesWithQuotes(msg.content);
+                        const prefixes = client.util.splitBySpacesWithQuotes(msg.content);
                         settings.prefixes = prefixes;
                         message.edit({
                             embeds: [
                                 successEmbed.setDescription(
                                     `${client.config.emojis.success} | **Celerity will now respond to commands prefixed by the following:**\n${prefixes
                                         .map((prefix) => `- \`${client.util.escapeBackticks(prefix)}\``)
-                                        .join('\n')}\n- \`@${client.user?.username}\``,
-                                ),
+                                        .join('\n')}\n- \`@${client.user?.username}\``
+                                )
                             ],
-                            components: [],
+                            components: []
                         });
                         return;
                     });
-                    messageCollector.on('end', async (collected) => {
+                    messageCollector.on('end', (collected) => {
                         if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'search provider') {
                 const resolveProviderToString = (provider: string) => {
                     if (provider === 'ytsearch') return 'YouTube';
-                    else if (provider === 'ytmsearch') return 'YouTube Music';
-                    else if (provider === 'dzsearch') return 'Deezer';
-                    else if (provider === 'spsearch') return 'Spotify';
-                    else if (provider === 'scsearch') return 'SoundCloud';
-                    else if (provider === 'amsearch') return 'Apple Music';
-                    else if (provider === 'ymsearch') return 'Yandex Music';
-                    else return;
+                    if (provider === 'ytmsearch') return 'YouTube Music';
+                    if (provider === 'dzsearch') return 'Deezer';
+                    if (provider === 'spsearch') return 'Spotify';
+                    if (provider === 'scsearch') return 'SoundCloud';
+                    if (provider === 'amsearch') return 'Apple Music';
+                    if (provider === 'ymsearch') return 'Yandex Music';
+                    return;
                 };
                 embed.setDescription(
                     tags.stripIndents`*The default search provider in this server. Overridden by the \`--source\` / \`-s\` argument per search command.
                         This setting is only be used for track searching. Track resolving and streaming is still done separately. (excluding Deezer)*
                         **----------**
                         **Default value:** ${resolveProviderToString(client.config.defaultSettings.searchProvider)}
-                        **Current value:** ${resolveProviderToString(settings.searchProvider)}`,
+                        **Current value:** ${resolveProviderToString(settings.searchProvider)}`
                 );
                 stringRow.addComponents(
                     new StringSelectMenuBuilder()
@@ -933,8 +927,8 @@ export const command: Command = {
                             new StringSelectMenuOptionBuilder()
                                 .setLabel('Yandex Music')
                                 .setValue('ymsearch')
-                                .setDescription('Uses Yandex Music as the search provider.'),
-                        ),
+                                .setDescription('Uses Yandex Music as the search provider.')
+                        )
                 );
                 const message = await context.channel.send({ embeds: [embed], components: [stringRow] });
                 const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
@@ -943,13 +937,13 @@ export const command: Command = {
                     message.edit({
                         embeds: [
                             successEmbed.setDescription(
-                                `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${resolveProviderToString(settings.searchProvider)}\`.`,
-                            ),
+                                `${client.config.emojis.success} | Set **${foundSetting.name}** to \`${resolveProviderToString(settings.searchProvider)}\`.`
+                            )
                         ],
-                        components: [],
+                        components: []
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             } else if (foundSetting.name === 'set stage topic') {
@@ -958,7 +952,7 @@ export const command: Command = {
                         Make sure that Celerity has adequate permissions before using this setting.*
                         **----------**
                         **Default value:** ${foundSetting.default}
-                        **Current value:** ${settings.setStageTopic}`,
+                        **Current value:** ${settings.setStageTopic}`
                 );
                 stringRow.addComponents(
                     new StringSelectMenuBuilder()
@@ -969,8 +963,8 @@ export const command: Command = {
                             new StringSelectMenuOptionBuilder()
                                 .setLabel('false')
                                 .setValue('false')
-                                .setDescription('Disables automatic setting of stage topics.'),
-                        ),
+                                .setDescription('Disables automatic setting of stage topics.')
+                        )
                 );
                 const message = await context.channel.send({ embeds: [embed], components: [stringRow] });
                 const collector = message.createMessageComponentCollector({ filter, time: 120000, max: 1 });
@@ -978,12 +972,12 @@ export const command: Command = {
                     settings.setStageTopic = i.values[0] === 'true';
                     message.edit({
                         embeds: [
-                            successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.setStageTopic}\`.`),
+                            successEmbed.setDescription(`${client.config.emojis.success} | Set **${foundSetting.name}** to \`${settings.setStageTopic}\`.`)
                         ],
-                        components: [],
+                        components: []
                     });
                 });
-                collector.on('end', async (collected) => {
+                collector.on('end', (collected) => {
                     if (!collected.size) message.edit({ embeds: [timeoutEmbed], components: [] });
                 });
             }
@@ -992,108 +986,92 @@ export const command: Command = {
                 .setColor(settings.color)
                 .setAuthor({
                     name: `Settings for ${context.guild!.name}`,
-                    iconURL: context.guild!.iconURL({ size: 4096 }) || undefined,
+                    iconURL: context.guild!.iconURL({ size: 4096 }) || undefined
                 })
                 .setDescription(
-                    'These are the settings that are currently available.\n' +
-                        `To modify a setting or view more information about it, use \`${client.util.escapeBackticks(
-                            prefix.replace(/<@!?\d+>/g, `@${client.user!.tag} `),
-                        )}set <setting>\`, where \`<setting>\` is the name of the setting you want to change, found below.\n`,
+                    `These are the settings that are currently available.\nTo modify a setting or view more information about it, use \`${client.util.escapeBackticks(
+                        prefix.replace(/<@!?\d+>/g, `@${client.user!.tag} `)
+                    )}set <setting>\`, where \`<setting>\` is the name of the setting you want to change, found below.\n`
                 )
                 .setFields(
                     {
                         name: 'announce connect',
-                        value: 'Notifications when Celerity joins a voice channel.',
+                        value: 'Notifications when Celerity joins a voice channel.'
                     },
                     {
                         name: 'announce disconnect',
-                        value: 'Notifications when Celerity leaves a voice channel.',
+                        value: 'Notifications when Celerity leaves a voice channel.'
                     },
                     {
                         name: 'announce now playing',
-                        value: 'Notifications when a track starts playing.',
+                        value: 'Notifications when a track starts playing.'
                     },
                     {
                         name: 'autoplay',
-                        value: 'Automatically queue related tracks when a track ends.',
+                        value: 'Automatically queue related tracks when a track ends.'
                     },
                     {
                         name: 'autoplay target popularity',
-                        value: 'Consider tracks for autoplay based on their closeness to the target popularity.',
+                        value: 'Consider tracks for autoplay based on their closeness to the target popularity.'
                     },
                     {
                         name: 'autoplay minimum popularity',
-                        value: 'The minimum popularity a track must have to be considered for autoplay.',
+                        value: 'The minimum popularity a track must have to be considered for autoplay.'
                     },
                     {
                         name: 'autoplay maximum popularity',
-                        value: 'The maximum popularity a track could have to be considered for autoplay.',
+                        value: 'The maximum popularity a track could have to be considered for autoplay.'
                     },
                     {
                         name: 'banned users',
-                        value: "Ban certain users/roles from using Celerity's commands.",
+                        value: "Ban certain users/roles from using Celerity's commands."
                     },
                     {
                         name: 'buttons',
-                        value: 'Configure the buttons on now playing messages.',
+                        value: 'Configure the buttons on now playing messages.'
                     },
                     {
                         name: 'cleanup',
-                        value: 'Automatically delete now playing messages when tracks end.',
+                        value: 'Automatically delete now playing messages when tracks end.'
                     },
                     {
                         name: 'color',
-                        value: "Change the color of some of Celerity's embeds.",
+                        value: "Change the color of some of Celerity's embeds."
                     },
                     {
                         name: 'default volume',
-                        value: 'Set the default volume for Celerity in this server.',
+                        value: 'Set the default volume for Celerity in this server.'
                     },
                     {
                         name: 'disabled channels',
-                        value: "Disable the use of Celerity's commands in certain channels/categories.",
+                        value: "Disable the use of Celerity's commands in certain channels/categories."
                     },
                     {
                         name: 'disconnect timeout',
-                        value: 'Configure inactivity timeouts before Celerity disconnects.',
+                        value: 'Configure inactivity timeouts before Celerity disconnects.'
                     },
                     {
                         name: 'dj only',
-                        value: 'Restrict certain commands to users with the DJ role.',
+                        value: 'Restrict certain commands to users with the DJ role.'
                     },
                     {
                         name: 'dj role',
-                        value: 'Set the role for **dj only**.',
+                        value: 'Set the role for **dj only**.'
                     },
                     {
                         name: 'prefixes',
-                        value: 'Set the prefixes that Celerity responds to.',
+                        value: 'Set the prefixes that Celerity responds to.'
                     },
                     {
                         name: 'search provider',
-                        value: 'Set the search provider that Celerity uses in this server.',
+                        value: 'Set the search provider that Celerity uses in this server.'
                     },
                     {
                         name: 'set stage topic',
-                        value: 'Set the stage topic to the name and artist of the currently playing track.',
-                    },
+                        value: 'Set the stage topic to the name and artist of the currently playing track.'
+                    }
                 );
             return context.channel.send({ embeds: [embed] });
         }
-    },
+    }
 };
-
-function splitBySpacesWithQuotes(str: string): string[] {
-    const regex = /[^\s"]+|"([^"]*)"/gi;
-    const result = [];
-    let match;
-
-    do {
-        match = regex.exec(str);
-        if (match !== null) {
-            result.push(match[1] ? match[1] : match[0]);
-        }
-    } while (match !== null);
-
-    return result;
-}
