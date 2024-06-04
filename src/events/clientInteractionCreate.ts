@@ -1,7 +1,7 @@
-import type { Event } from '../types';
 import type { Interaction } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
 import _ from 'lodash';
-import { ActionRowBuilder, ButtonStyle, EmbedBuilder, ButtonBuilder } from 'discord.js';
+import type { Event } from '../types';
 import { CelerityPaginatedMessage } from '../util/pagination.js';
 import type { CelerityTrack } from '../util/track';
 
@@ -35,7 +35,7 @@ export const event: Event = {
             const errorResponse = (text: string) => {
                 interaction.reply({
                     embeds: [new EmbedBuilder().setDescription(`${client.config.emojis.error} | **${text}**`).setColor('#F38BA8')],
-                    ephemeral: true,
+                    ephemeral: true
                 });
             };
             const successResponse = (text: string) => {
@@ -45,10 +45,10 @@ export const event: Event = {
                             .setDescription(text)
                             .setFooter({
                                 text: `Requested by ${interaction.user.username}`,
-                                iconURL: interaction.user.displayAvatarURL({ size: 4096 }),
+                                iconURL: interaction.user.displayAvatarURL({ size: 4096 })
                             })
-                            .setColor('#A6E3A1'),
-                    ],
+                            .setColor('#A6E3A1')
+                    ]
                 });
             };
             if (!connection) return errorResponse("There isn't a voice connection in this server.");
@@ -95,7 +95,7 @@ export const event: Event = {
                     successResponse(
                         `${client.config.emojis.skip} | **Skipped [${player.current!.info.title} by ${player.current!.info.author}](${
                             player.current!.info.uri
-                        }).**`,
+                        }).**`
                     );
                     player.current.skipped = true;
                     await player.player.stopTrack();
@@ -112,7 +112,7 @@ export const event: Event = {
                             .setCustomId('disconnect')
                             .setLabel('Disconnect')
                             .setStyle(ButtonStyle.Danger)
-                            .setEmoji(client.config.emojis.disconnect),
+                            .setEmoji(client.config.emojis.disconnect)
                     );
                     interaction.reply({
                         embeds: [
@@ -120,11 +120,11 @@ export const event: Event = {
                                 .setDescription(`${client.config.emojis.stop} | **Stopped the player.**`)
                                 .setFooter({
                                     text: `Requested by ${interaction.user.username}`,
-                                    iconURL: interaction.user.displayAvatarURL({ size: 4096 }),
+                                    iconURL: interaction.user.displayAvatarURL({ size: 4096 })
                                 })
-                                .setColor('#A6E3A1'),
+                                .setColor('#A6E3A1')
                         ],
-                        components: [row],
+                        components: [row]
                     });
                     break;
                 }
@@ -151,7 +151,7 @@ export const event: Event = {
                                 : player.loop === 'queue'
                                   ? client.config.emojis.loopQueue
                                   : client.config.emojis.loopTrack
-                        } | **${player.loop === 'off' ? 'Loop disabled' : player.loop === 'queue' ? 'Queue loop enabled' : 'Track loop enabled'}.**`,
+                        } | **${player.loop === 'off' ? 'Loop disabled' : player.loop === 'queue' ? 'Queue loop enabled' : 'Track loop enabled'}.**`
                     );
                     break;
                 }
@@ -164,10 +164,8 @@ export const event: Event = {
                     else if (player.loop === 'track') loopText = '\n🔂 Looping the current track';
                     const paginatedMessage = new CelerityPaginatedMessage(client, {
                         template: new EmbedBuilder().setColor(settings.color).setFooter({
-                            text: `${queue.length} track(s) in queue • ${player.ms(queue.totalDuration)} • Requested by ${
-                                interaction.user.username
-                            }${loopText}`,
-                        }),
+                            text: `${queue.length} track(s) in queue • ${player.ms(queue.totalDuration)} • Requested by ${interaction.user.username}${loopText}`
+                        })
                     });
                     for (let x = 0; x < chunkedQueue.length; x++) {
                         const descriptionLines = [];
@@ -176,13 +174,13 @@ export const event: Event = {
                             descriptionLines.push(
                                 `**${i + 1 + x * 15}:** ${track.info.title} - ${track.info.author} \`${
                                     track.info.isStream ? '∞' : player.ms(track.info.length)
-                                }\` (${track.info.requester.toString()})`,
+                                }\` (${track.info.requester.toString()})`
                             );
                         }
                         const embed = new EmbedBuilder()
                             .setAuthor({
                                 name: 'Queue',
-                                iconURL: interaction.guild!.iconURL({ size: 4096 }) || undefined,
+                                iconURL: interaction.guild!.iconURL({ size: 4096 }) || undefined
                             })
                             .setDescription(descriptionLines.join('\n'));
                         paginatedMessage.addPageEmbed(embed);
@@ -196,6 +194,7 @@ export const event: Event = {
                 }
             }
             return;
-        } else return;
-    },
+        }
+        return;
+    }
 };

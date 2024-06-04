@@ -1,12 +1,12 @@
-import type { Client, TextBasedChannel, GuildMember, Guild, Message } from 'discord.js';
-import type { Player, Node } from 'shoukaku';
-import type { CelerityTrack } from './track';
-import type { Celerity } from './client';
+import type { Client, Guild, GuildMember, Message, TextBasedChannel } from 'discord.js';
 import { ChannelType } from 'discord.js';
-import { start, end, stuck, exception } from './playerEvents.js';
-import { Queue } from './queue.js';
-import pms from 'pretty-ms';
 import _ from 'lodash';
+import pms from 'pretty-ms';
+import type { Node, Player } from 'shoukaku';
+import type { Celerity } from './client';
+import { end, exception, start, stuck } from './playerEvents.js';
+import { Queue } from './queue.js';
+import type { CelerityTrack } from './track';
 
 export class CelerityPlayer {
     constructor(client: Celerity, member: GuildMember, channel: TextBasedChannel, player: Player) {
@@ -52,7 +52,7 @@ export class CelerityPlayer {
     handleTrack(track: CelerityTrack, next: boolean, playskip = false) {
         if (playskip) {
             if (this.loop === 'track') this.loop = 'off';
-            this.queue.forEach((t) => (t.skipped = true));
+            for (const t of this.queue) t.skipped = true;
             if (this.current) {
                 this.current.skipped = true;
                 this.previous.unshift(this.current);
@@ -69,7 +69,7 @@ export class CelerityPlayer {
                     artworkUrl: this.current.info.artworkUrl,
                     isrc: this.current.info.isrc,
                     requester: this.current.info.requester.id,
-                    guild: this.guild.id,
+                    guild: this.guild.id
                 });
             }
             const cleared = this.queue.clear();
@@ -87,7 +87,7 @@ export class CelerityPlayer {
                     artworkUrl: t.info.artworkUrl,
                     isrc: t.info.isrc,
                     requester: t.info.requester.id,
-                    guild: this.guild.id,
+                    guild: this.guild.id
                 });
             this.previous.unshift(...cleared.reverse());
             this.queue.push(track);
@@ -103,10 +103,11 @@ export class CelerityPlayer {
     }
 
     handlePlaylist(tracks: CelerityTrack[], next: boolean, playskip = false, shuffle = false) {
-        if (shuffle) tracks = this.queue.shuffle(tracks);
+        let finalTracks: CelerityTrack[] = tracks;
+        if (shuffle) finalTracks = this.queue.shuffle(finalTracks);
         if (playskip) {
             if (this.loop === 'track') this.loop = 'off';
-            this.queue.forEach((t) => (t.skipped = true));
+            for (const t of this.queue) t.skipped = true;
             if (this.current) {
                 this.current.skipped = true;
                 this.previous.unshift(this.current);
@@ -123,7 +124,7 @@ export class CelerityPlayer {
                     artworkUrl: this.current.info.artworkUrl,
                     isrc: this.current.info.isrc,
                     requester: this.current.info.requester.id,
-                    guild: this.guild.id,
+                    guild: this.guild.id
                 });
             }
             const cleared = this.queue.clear();
@@ -141,16 +142,16 @@ export class CelerityPlayer {
                     artworkUrl: t.info.artworkUrl,
                     isrc: t.info.isrc,
                     requester: t.info.requester.id,
-                    guild: this.guild.id,
+                    guild: this.guild.id
                 });
             this.previous.unshift(...cleared.reverse());
-            this.queue.push(...tracks);
+            this.queue.push(...finalTracks);
             this.playskipUsed = true;
             this.player.stopTrack().then();
             return;
         }
-        if (next) this.queue.unshift(...tracks);
-        else this.queue.push(...tracks);
+        if (next) this.queue.unshift(...finalTracks);
+        else this.queue.push(...finalTracks);
         if (!this.current) this.play();
         if (this.autoplayQueue.length) this.autoplayQueue.clear();
         return;
@@ -166,14 +167,14 @@ export class CelerityPlayer {
         return this.player.playTrack({
             track: this.current!.encoded,
             options: {
-                volume: this.previous.length === 0 ? defaultVolume : this.player.volume !== defaultVolume ? this.player.volume : defaultVolume,
-            },
+                volume: this.previous.length === 0 ? defaultVolume : this.player.volume !== defaultVolume ? this.player.volume : defaultVolume
+            }
         });
     }
 
     autoplay() {
         if (!this.autoplayQueue.length && this.queue.length) return this.play();
-        else if (!this.autoplayQueue.length && !this.queue.length) return;
+        if (!this.autoplayQueue.length && !this.queue.length) return;
         if (this.stopped) this.stopped = false;
         this.current = this.autoplayQueue.shift()!;
         if (this.guild.members.me!.voice.channel?.type === ChannelType.GuildStageVoice) this.guild!.members.me!.voice.setSuppressed(false).catch(() => null);
@@ -185,8 +186,8 @@ export class CelerityPlayer {
         return this.player.playTrack({
             track: this.current!.encoded,
             options: {
-                volume: this.previous.length === 0 ? defaultVolume : this.player.volume !== defaultVolume ? this.player.volume : defaultVolume,
-            },
+                volume: this.previous.length === 0 ? defaultVolume : this.player.volume !== defaultVolume ? this.player.volume : defaultVolume
+            }
         });
     }
 

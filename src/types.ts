@@ -1,13 +1,13 @@
-import type { Logger } from 'pino';
-import type { Config } from './config';
-import type { Util } from './util/util';
-import type { ColorResolvable, EmbedBuilder, Message, MessageCreateOptions, TextBasedChannel } from 'discord.js';
 import type { Collection } from '@discordjs/collection';
-import type { CelerityPlayer } from './util/player';
+import type { ColorResolvable, EmbedBuilder, Message, MessageCreateOptions, TextBasedChannel } from 'discord.js';
+import type { ApplicationCommandOptionType } from 'discord.js';
 import type Keyv from 'keyv';
+import type { Logger } from 'pino';
 import type { Connection, Shoukaku } from 'shoukaku';
+import type { Config } from './config';
 import type { Celerity } from './util/client';
-import { ApplicationCommandOptionType } from 'discord.js';
+import type { CelerityPlayer } from './util/player';
+import type { Util } from './util/util';
 
 export type GuildSettings = {
     announceConnect: boolean;
@@ -78,7 +78,7 @@ export type Respond = (
     context: Message | TextBasedChannel,
     text: string | EmbedBuilder,
     color: ColorResolvable | 'success' | 'error' | 'loading' | 'warn' | 'info' | 'none',
-    options?: MessageCreateOptions,
+    options?: MessageCreateOptions
 ) => void;
 
 export type Command = {
@@ -106,7 +106,7 @@ export type Command = {
         settings,
         prefix,
         player,
-        connection,
+        connection
     }: {
         client: Celerity;
         context: Message;

@@ -5,7 +5,7 @@ export const event: Event = {
     once: false,
     emitter: 'shoukaku',
 
-    async run(client, _, error: Error) {
+    run(client, _, error: Error) {
         client.logger.error(error);
-    },
+    }
 };

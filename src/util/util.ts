@@ -1,8 +1,8 @@
 import axios from 'axios';
-import type { Celerity } from './client';
 import type { TextBasedChannel } from 'discord.js';
 import _ from 'lodash';
-import { CelerityPlayer } from './player.js';
+import type { Celerity } from './client';
+import type { CelerityPlayer } from './player.js';
 
 export class Util {
     constructor(client: Celerity) {
@@ -10,7 +10,7 @@ export class Util {
         this.eval = {
             lastEvalResult: '',
             hrStart: [0, 0],
-            _sensitivePattern: null,
+            _sensitivePattern: null
         };
     }
 
@@ -21,7 +21,7 @@ export class Util {
         deezer: 'Deezer',
         soundcloud: 'SoundCloud',
         applemusic: 'Apple Music',
-        yandexmusic: 'Yandex Music',
+        yandexmusic: 'Yandex Music'
     };
 
     timeout(celerity: CelerityPlayer) {
@@ -44,7 +44,7 @@ export class Util {
                 }
                 return;
             },
-            (this.client.guildSettings.get(celerity.guild.id)?.disconnectTimeout || _.cloneDeep(this.client.config.defaultSettings).disconnectTimeout) * 1000,
+            (this.client.guildSettings.get(celerity.guild.id)?.disconnectTimeout || _.cloneDeep(this.client.config.defaultSettings).disconnectTimeout) * 1000
         );
     }
 
@@ -55,28 +55,29 @@ export class Util {
             this.client.logger.warn(err);
             this.client.respond(
                 channel,
-                this.client.config.emojis.error +
-                    ' | **Failed to speak on stage.**\nCelerity needs to be a `Stage Moderator` or have the `Administrator` permission to automatically move itself to the stage.\nAlternatively, invite Celerity to speak (`Invite to Speak`).',
-                'warn',
+                `${this.client.config.emojis.error} | **Failed to speak on stage.**\nCelerity needs to be a \`Stage Moderator\` or have the \`Administrator\` permission to automatically move itself to the stage.\nAlternatively, invite Celerity to speak (\`Invite to Speak\`).`,
+                'warn'
             );
         });
     }
 
     escapeBackticks(text: string | undefined) {
         if (!text) return text;
-        else return text.replaceAll('`', '\\`');
+        return text.replaceAll('`', '\\`');
     }
 
     stringMatchPercentage(str1: string, str2: string) {
+        let string1 = str1;
+        let string2 = str2;
         // Convert both strings to lowercase to ensure a case-insensitive comparison & remove special characters
         const regex = /[-[\]{}()*+?.,\\^$|#\s]/g;
-        str1 = str1.toLowerCase().replace(regex, '');
-        str2 = str2.toLowerCase().replace(regex, '');
+        string1 = string1.toLowerCase().replace(regex, '');
+        string2 = string2.toLowerCase().replace(regex, '');
 
         // Calculate the edit distance between the two strings using the Levenshtein distance algorithm
         const matrix = [];
-        const len1 = str1.length,
-            len2 = str2.length;
+        const len1 = string1.length;
+        const len2 = string2.length;
         for (let i = 0; i <= len1; i++) {
             matrix[i] = [i];
             for (let j = 1; j <= len2; j++) {
@@ -84,8 +85,8 @@ export class Util {
                     i === 0
                         ? j
                         : Math.min(
-                              matrix[i - 1]![j - 1]! + (str1.charAt(i - 1) === str2.charAt(j - 1) ? 0 : 1),
-                              Math.min(matrix[i]![j - 1]! + 1, matrix[i - 1]![j]! + 1),
+                              matrix[i - 1]![j - 1]! + (string1.charAt(i - 1) === string2.charAt(j - 1) ? 0 : 1),
+                              Math.min(matrix[i]![j - 1]! + 1, matrix[i - 1]![j]! + 1)
                           );
             }
         }
@@ -104,9 +105,9 @@ export class Util {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
                 'App-platform': 'WebPlayer',
                 'Content-Type': 'text/html; charset=utf-8',
-                cookie: `sp_dc=${this.client.config.sp_dc}`,
+                cookie: `sp_dc=${this.client.config.sp_dc}`
             },
-            timeout: 5000,
+            timeout: 5000
         })
             .then((res) => {
                 if (typeof res.data !== 'object' || Array.isArray(res.data) || res.data === null || res.data.isAnonymous)

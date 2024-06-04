@@ -14,7 +14,7 @@ export class CelerityPaginatedMessage extends PaginatedMessage {
                 run: ({ handler }) => {
                     if (handler.index === 0) handler.index = handler.pages.length - 1;
                     else --handler.index;
-                },
+                }
             },
             {
                 customId: 'nextPage',
@@ -24,17 +24,17 @@ export class CelerityPaginatedMessage extends PaginatedMessage {
                 run: ({ handler }) => {
                     if (handler.index === handler.pages.length - 1) handler.index = 0;
                     else ++handler.index;
-                },
-            },
+                }
+            }
         ]);
         this.wrongUserInteractionReply = () => ({
             embeds: [
                 new EmbedBuilder()
                     .setColor('#F38BA8')
-                    .setDescription(`${client.config.emojis.error} | **You are not allowed to interact with the buttons on this message.**`),
+                    .setDescription(`${client.config.emojis.error} | **You are not allowed to interact with the buttons on this message.**`)
             ],
             ephemeral: true,
-            allowedMentions: { users: [], roles: [] },
+            allowedMentions: { users: [], roles: [] }
         });
     }
 

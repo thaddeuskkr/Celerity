@@ -1,5 +1,5 @@
+import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle, EmbedBuilder, type MessageComponentInteraction } from 'discord.js';
 import type { Command } from '../../types';
-import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle, EmbedBuilder, MessageComponentInteraction } from 'discord.js';
 import { CelerityPlayer } from '../../util/player.js';
 import { CelerityTrack } from '../../util/track.js';
 
@@ -13,7 +13,7 @@ export const command: Command = {
         '{p}search fireflies --next',
         '{p}search fireflies --playskip',
         '{p}search fireflies -s sp -ps',
-        '{p}search fireflies -s sp -n',
+        '{p}search fireflies -s sp -n'
     ],
     checks: ['vc', 'samevc', 'joinable', 'speakable', 'dj'],
     options: [
@@ -21,7 +21,7 @@ export const command: Command = {
             name: 'query',
             description: 'Your search query, supports URLs from multiple sources or a string.',
             type: ApplicationCommandOptionType.String,
-            required: true,
+            required: true
         },
         {
             name: 'source',
@@ -35,32 +35,32 @@ export const command: Command = {
                 { name: 'Spotify', value: 'sp' },
                 { name: 'SoundCloud', value: 'sc' },
                 { name: 'Apple Music', value: 'am' },
-                { name: 'Yandex Music', value: 'ym' },
-            ],
+                { name: 'Yandex Music', value: 'ym' }
+            ]
         },
         {
             name: 'next',
             description: 'If the track should be added to the top of the queue. | `--next` / `-n`',
             type: ApplicationCommandOptionType.Boolean,
-            required: false,
+            required: false
         },
         {
             name: 'playskip',
             description: 'If the track should be played immediately after result selection. Cannot be used in combination with `next`. | `--playskip` / `-ps`',
             type: ApplicationCommandOptionType.Boolean,
-            required: false,
+            required: false
         },
         {
             name: 'shuffle',
             description: 'If the playlist should be shuffled before being added to the queue. | `--shuffle` / `-sh`',
             type: ApplicationCommandOptionType.Boolean,
-            required: false,
-        },
+            required: false
+        }
     ],
     tips: [
         'Use `{p}set provider` to change the default search provider.',
         'The accepted providers are: YouTube, YouTube Music, Deezer, Spotify, SoundCloud, Apple Music, Yandex Music.',
-        'The shorthand for the above are: `yt`, `ytm`, `dz`, `sp`, `sc`, `am`, `ym` (respectively - to be used in the `--source` option).',
+        'The shorthand for the above are: `yt`, `ytm`, `dz`, `sp`, `sc`, `am`, `ym` (respectively - to be used in the `--source` option).'
     ],
 
     async execute({ client, context, player, args, settings, prefix }) {
@@ -69,13 +69,13 @@ export const command: Command = {
                 const newPlayer = await client.shoukaku.joinVoiceChannel({
                     guildId: context.guild!.id,
                     channelId: context.member!.voice.channel!.id,
-                    shardId: context.guild!.shardId,
+                    shardId: context.guild!.shardId
                 });
                 if (settings.announceConnect)
                     client.respond(
                         context.channel,
                         `${client.config.emojis.connect} | **Joined <#${context.member!.voice.channel!.id}> and bound to <#${context.channel.id}>.**`,
-                        'success',
+                        'success'
                     );
                 player = new CelerityPlayer(client, context.member!, context.channel!, newPlayer);
                 client.players.set(context.guild!.id, player);
@@ -113,7 +113,7 @@ export const command: Command = {
                 return client.respond(
                     context,
                     `${client.config.emojis.error} | **Invalid source.**\nAccepts: \`ytm\`, \`yt\`, \`sp\`, \`dz\`, \`sc\`, \`am\`, \`ym\`.`,
-                    'error',
+                    'error'
                 );
             args.splice(index, 2);
             source = `${source}search`;
@@ -143,8 +143,8 @@ export const command: Command = {
                         unique
                             .slice(0, 9)
                             .map((t, i) => `**${i + 1}.** [${t.info.title} by ${t.info.author.replace(' - Topic', '')}](${t.info.uri})`)
-                            .join('\n'),
-                    ),
+                            .join('\n')
+                    )
             ],
             components: [
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -152,17 +152,17 @@ export const command: Command = {
                     new ButtonBuilder().setStyle(ButtonStyle.Primary).setCustomId('tracksearch-1').setEmoji('2️⃣').setDisabled(!result.data[1]),
                     new ButtonBuilder().setStyle(ButtonStyle.Primary).setCustomId('tracksearch-2').setEmoji('3️⃣').setDisabled(!result.data[2]),
                     new ButtonBuilder().setStyle(ButtonStyle.Primary).setCustomId('tracksearch-3').setEmoji('4️⃣').setDisabled(!result.data[3]),
-                    new ButtonBuilder().setStyle(ButtonStyle.Primary).setCustomId('tracksearch-4').setEmoji('5️⃣').setDisabled(!result.data[4]),
+                    new ButtonBuilder().setStyle(ButtonStyle.Primary).setCustomId('tracksearch-4').setEmoji('5️⃣').setDisabled(!result.data[4])
                 ),
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder().setStyle(ButtonStyle.Primary).setCustomId('tracksearch-5').setEmoji('6️⃣').setDisabled(!result.data[5]),
                     new ButtonBuilder().setStyle(ButtonStyle.Primary).setCustomId('tracksearch-6').setEmoji('7️⃣').setDisabled(!result.data[6]),
                     new ButtonBuilder().setStyle(ButtonStyle.Primary).setCustomId('tracksearch-7').setEmoji('8️⃣').setDisabled(!result.data[7]),
                     new ButtonBuilder().setStyle(ButtonStyle.Primary).setCustomId('tracksearch-8').setEmoji('9️⃣').setDisabled(!result.data[8]),
-                    new ButtonBuilder().setStyle(ButtonStyle.Danger).setCustomId('tracksearch-cancel').setEmoji('🗑️'),
-                ),
+                    new ButtonBuilder().setStyle(ButtonStyle.Danger).setCustomId('tracksearch-cancel').setEmoji('🗑️')
+                )
             ],
-            allowedMentions: { repliedUser: false },
+            allowedMentions: { repliedUser: false }
         });
         const filter = (interaction: MessageComponentInteraction) => {
             interaction.deferUpdate();
@@ -176,7 +176,7 @@ export const command: Command = {
                 client.util.timeout(player);
                 await message.edit({
                     embeds: [new EmbedBuilder().setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Search cancelled.**`)],
-                    components: [],
+                    components: []
                 });
                 return;
             }
@@ -186,7 +186,7 @@ export const command: Command = {
                 client.util.timeout(player);
                 await message.edit({
                     embeds: [new EmbedBuilder().setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Invalid selection.**`)],
-                    components: [],
+                    components: []
                 });
                 return;
             }
@@ -200,10 +200,10 @@ export const command: Command = {
                                 .setDescription(
                                     `${client.config.emojis.queued} | **Playing [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
                                         track.info.uri
-                                    })**`,
-                                ),
+                                    })**`
+                                )
                         ],
-                        components: [],
+                        components: []
                     });
                 } else message.delete();
             } else {
@@ -215,21 +215,21 @@ export const command: Command = {
                                 .setDescription(
                                     `${client.config.emojis.queued} | **Queued [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
                                         track.info.uri
-                                    }).**${next ? '\nInserted at the top of the queue.' : ''}`,
-                                ),
+                                    }).**${next ? '\nInserted at the top of the queue.' : ''}`
+                                )
                         ],
-                        components: [],
+                        components: []
                     });
                 else message.delete();
             }
             player.handleTrack(new CelerityTrack(track, context.member!, source || settings.searchProvider), next, playskip);
         });
-        collector.on('end', async (collected) => {
+        collector.on('end', (collected) => {
             if (!collected.size) {
                 client.util.timeout(player);
                 message.edit({
                     embeds: [new EmbedBuilder().setColor('#F38BA8').setDescription(`${client.config.emojis.error} | **Search timed out.**`)],
-                    components: [],
+                    components: []
                 });
             }
         });
@@ -241,12 +241,10 @@ export const command: Command = {
                 const urls = str.match(regexp);
                 if (urls) {
                     return lower ? urls.map((item) => item.toLowerCase()) : urls;
-                } else {
-                    return [];
                 }
-            } else {
                 return [];
             }
+            return [];
         }
-    },
+    }
 };

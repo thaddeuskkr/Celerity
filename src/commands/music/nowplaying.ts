@@ -12,15 +12,15 @@ export const command: Command = {
             name: 'dynamic',
             description: 'If the now playing message should update every few seconds. | `-d` / `--dynamic`',
             type: ApplicationCommandOptionType.Boolean,
-            required: false,
+            required: false
         },
         {
             name: 'timeout',
             description:
                 'The amount of time, in minutes, for which the embed should be updated. By default, stops at the end of the track. Set to -1 for infinite. | `-t` / `--timeout`',
             type: ApplicationCommandOptionType.Integer,
-            required: false,
-        },
+            required: false
+        }
     ],
 
     async execute({ client, context, player, settings, args }) {
@@ -31,9 +31,9 @@ export const command: Command = {
             let index = -1;
             if (args.indexOf('--timeout') !== -1) index = args.indexOf('--timeout');
             if (args.indexOf('-t') !== -1) index = args.indexOf('-t');
-            if (isNaN(Number(args[index + 1])))
+            if (Number.isNaN(Number(args[index + 1])))
                 return client.respond(context, `${client.config.emojis.error} | **Invalid integer.**\nAccepts: \`-1 - ∞\`.`, 'error');
-            else timeout = Number(args[index + 1]);
+            timeout = Number(args[index + 1]);
         }
         const embed = getEmbed();
         if (player.nowPlayingInterval) {
@@ -41,24 +41,22 @@ export const command: Command = {
             player.nowPlayingInterval = null;
         }
         if (!dynamic) return client.respond(context, embed, 'none');
-        else {
-            const message = await context.reply({ embeds: [getEmbed()], allowedMentions: { repliedUser: false } });
-            player.nowPlayingInterval = setInterval(async () => {
-                if (!player.current) return;
-                try {
-                    await message.edit({ embeds: [getEmbed()] });
-                } catch {
-                    clearInterval(player.nowPlayingInterval || undefined);
-                }
-            }, 5000);
-            if (timeout === 0) {
-                player.player.once('end', async () => {
-                    clearInterval(player.nowPlayingInterval || undefined);
-                });
-            } else if (timeout === -1) {
-                return;
-            } else setTimeout(() => clearInterval(player.nowPlayingInterval || undefined), timeout * 60 * 1000);
-        }
+        const message = await context.reply({ embeds: [getEmbed()], allowedMentions: { repliedUser: false } });
+        player.nowPlayingInterval = setInterval(async () => {
+            if (!player.current) return;
+            try {
+                await message.edit({ embeds: [getEmbed()] });
+            } catch {
+                clearInterval(player.nowPlayingInterval || undefined);
+            }
+        }, 5000);
+        if (timeout === 0) {
+            player.player.once('end', () => {
+                clearInterval(player.nowPlayingInterval || undefined);
+            });
+        } else if (timeout === -1) {
+            return;
+        } else setTimeout(() => clearInterval(player.nowPlayingInterval || undefined), timeout * 60 * 1000);
 
         function getEmbed() {
             const current = player.current!;
@@ -76,11 +74,11 @@ export const command: Command = {
                         `on ${sourceEmoji} **${sourceFullName}**\n` +
                         `**Requested by:** ${current.info.requester.user.toString()}\n\n` +
                         `\`${player.ms(player.player.position)}\` ${createNowPlayingBar(player.position, current.info.length, 22)} \`${player.ms(
-                            current.info.length,
-                        )}\`\n`,
+                            current.info.length
+                        )}\`\n`
                 )
                 .setFooter({
-                    text: `${player.player.paused ? '⏸️ | ' : ''}🔊 ${player.player.volume}% | ${player.queue.length} track(s) in queue`,
+                    text: `${player.player.paused ? '⏸️ | ' : ''}🔊 ${player.player.volume}% | ${player.queue.length} track(s) in queue`
                 });
         }
 
@@ -103,5 +101,5 @@ export const command: Command = {
             const emptyProgressText = '═'.repeat(emptyProgress);
             return `\`╞${progressText}▰${emptyProgressText}╡\``;
         }
-    },
+    }
 };

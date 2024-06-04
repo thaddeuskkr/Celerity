@@ -8,8 +8,8 @@ export const command: Command = {
     checks: ['vc', 'samevc', 'playing', 'queue', 'dj'],
     options: [],
 
-    async execute({ client, context, player }) {
+    execute({ client, context, player }) {
         client.respond(context, `${client.config.emojis.clear} | **Cleared the queue of ${player.queue.length} track(s).**`, 'success');
         player.queue.clear();
-    },
+    }
 };

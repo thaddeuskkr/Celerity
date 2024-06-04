@@ -15,22 +15,22 @@ export const command: Command = {
             choices: [
                 {
                     name: 'off',
-                    value: 'off',
+                    value: 'off'
                 },
                 {
                     name: 'track',
-                    value: 'track',
+                    value: 'track'
                 },
                 {
                     name: 'queue',
-                    value: 'queue',
-                },
+                    value: 'queue'
+                }
             ],
-            required: false,
-        },
+            required: false
+        }
     ],
 
-    async execute({ client, context, args, player }) {
+    execute({ client, context, args, player }) {
         if (!args.length) {
             if (player.loop === 'off') player.setLoop('track');
             else if (player.loop === 'track') player.setLoop('queue');
@@ -46,7 +46,7 @@ export const command: Command = {
             `${
                 player.loop === 'off' ? client.config.emojis.loopOff : player.loop === 'queue' ? client.config.emojis.loopQueue : client.config.emojis.loopTrack
             } | **${player.loop === 'off' ? 'Loop disabled' : player.loop === 'queue' ? 'Queue loop enabled' : 'Track loop enabled'}.**`,
-            'success',
+            'success'
         );
-    },
+    }
 };

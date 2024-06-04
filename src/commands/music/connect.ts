@@ -1,6 +1,6 @@
+import { ChannelType, type GuildMember, PermissionFlagsBits } from 'discord.js';
 import type { Command } from '../../types';
 import { CelerityPlayer } from '../../util/player.js';
-import { ChannelType, GuildMember, PermissionFlagsBits } from 'discord.js';
 
 export const command: Command = {
     name: 'connect',
@@ -16,12 +16,12 @@ export const command: Command = {
                 const newPlayer = await client.shoukaku.joinVoiceChannel({
                     guildId: context.guild!.id,
                     channelId: context.member!.voice.channel!.id,
-                    shardId: context.guild!.shardId,
+                    shardId: context.guild!.shardId
                 });
                 client.respond(
                     context,
                     `${client.config.emojis.connect} | **Joined <#${context.member!.voice.channel!.id}> and bound to <#${context.channel.id}>.**`,
-                    'success',
+                    'success'
                 );
                 player = new CelerityPlayer(client, context.member!, context.channel!, newPlayer);
                 client.players.set(context.guild!.id, player);
@@ -39,7 +39,7 @@ export const command: Command = {
                 client.logger.error(
                     `Disconnected from ${voiceChannel.name} (${voiceChannel.id}) in ${context.guild!.name} (${
                         context.guild!.id
-                    }) due to an unknown channel type: ${voiceChannel.type}`,
+                    }) due to an unknown channel type: ${voiceChannel.type}`
                 );
                 return client.respond(context, `${client.config.emojis.error} | **Disconnected due to an internal error.**`, 'error');
             }
@@ -54,38 +54,37 @@ export const command: Command = {
                 return client.respond(
                     context,
                     `${client.config.emojis.error} | **You don't have permission to do that.**\nCelerity is playing music in another channel with users connected and undeafened. You will need the 'Moderate Members' permission to forcefully move Celerity to your channel.`,
-                    'error',
+                    'error'
                 );
-            else {
-                if (context.member!.voice.channelId === context.guild!.members.me!.voice.channelId) {
-                    player.channel = context.channel;
-                    return client.respond(context, `${client.config.emojis.connect} | **Bound to <#${context.channel.id}>.**`, 'success');
-                } else if (player.channel.id === context.channel.id) {
-                    connection.channelId = context.member!.voice.channel!.id;
-                    connection.state = State.DISCONNECTED;
-                    await connection.connect();
-                    return client.respond(context, `${client.config.emojis.connect} | **Moved to <#${context.member!.voice.channel!.id}>.**`, 'success');
-                } else {
-                    connection.channelId = context.member!.voice.channel!.id;
-                    connection.state = State.DISCONNECTED;
-                    await connection.connect();
-                    player.channel = context.channel;
-                    return client.respond(
-                        context,
-                        `${client.config.emojis.connect} | **Moved to <#${context.member!.voice.channel!.id}> and bound to <#${context.channel.id}>.**`,
-                        'success',
-                    );
-                }
+
+            if (context.member!.voice.channelId === context.guild!.members.me!.voice.channelId) {
+                player.channel = context.channel;
+                return client.respond(context, `${client.config.emojis.connect} | **Bound to <#${context.channel.id}>.**`, 'success');
             }
+            if (player.channel.id === context.channel.id) {
+                connection.channelId = context.member!.voice.channel!.id;
+                connection.state = State.DISCONNECTED;
+                await connection.connect();
+                return client.respond(context, `${client.config.emojis.connect} | **Moved to <#${context.member!.voice.channel!.id}>.**`, 'success');
+            }
+            connection.channelId = context.member!.voice.channel!.id;
+            connection.state = State.DISCONNECTED;
+            await connection.connect();
+            player.channel = context.channel;
+            return client.respond(
+                context,
+                `${client.config.emojis.connect} | **Moved to <#${context.member!.voice.channel!.id}> and bound to <#${context.channel.id}>.**`,
+                'success'
+            );
         }
-    },
+    }
 };
 
 enum State {
-    CONNECTING,
-    NEARLY,
-    CONNECTED,
-    RECONNECTING,
-    DISCONNECTING,
-    DISCONNECTED,
+    CONNECTING = 0,
+    NEARLY = 1,
+    CONNECTED = 2,
+    RECONNECTING = 3,
+    DISCONNECTING = 4,
+    DISCONNECTED = 5
 }

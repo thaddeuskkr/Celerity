@@ -1,6 +1,6 @@
-import type { Event } from '../types';
 import { ChannelType, EmbedBuilder, type Message, PermissionsBitField } from 'discord.js';
 import _ from 'lodash';
+import type { Event } from '../types';
 
 export const event: Event = {
     name: 'messageCreate',
@@ -17,7 +17,7 @@ export const event: Event = {
             client.guildSettings.set(message.guild.id, settings);
         }
         const { prefixes } = settings;
-        let prefix;
+        let prefix: string | undefined = undefined;
         for (let i = 0; i < prefixes.length; i++) {
             if (message.content.toLowerCase().startsWith(prefixes[i]!)) {
                 prefix = prefixes[i];
@@ -35,9 +35,9 @@ export const event: Event = {
                     .setDescription(
                         `**Here is a list of prefixes I respond to:**\n${prefixes.map((prefix) => `- \`${prefix}\``).join('\n')}\n- \`@${
                             client.user?.username
-                        }\``,
+                        }\``
                     ),
-                'none',
+                'none'
             );
             return;
         }
@@ -46,7 +46,7 @@ export const event: Event = {
         if (!args.length) return;
         const commandName = args.shift()!.toLowerCase();
         if (!commandName) return;
-        const command = client.commands.get(commandName) || client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
+        const command = client.commands.get(commandName) || client.commands.find((cmd) => cmd.aliases?.includes(commandName));
         if (!command) return;
 
         if (client.maintenance.active === true && !client.config.owners.includes(message.author.id)) {
@@ -54,11 +54,13 @@ export const event: Event = {
                 embeds: [
                     new EmbedBuilder()
                         .setDescription(
-                            `${client.config.emojis.error} | **Celerity is in maintenance mode. Please try again later.**${client.maintenance.message.length ? `\n${client.maintenance.message}` : ''}`,
+                            `${client.config.emojis.error} | **Celerity is in maintenance mode. Please try again later.**${
+                                client.maintenance.message.length ? `\n${client.maintenance.message}` : ''
+                            }`
                         )
-                        .setColor('#F38BA8'),
+                        .setColor('#F38BA8')
                 ],
-                allowedMentions: { repliedUser: false },
+                allowedMentions: { repliedUser: false }
             });
         }
 
@@ -75,30 +77,30 @@ export const event: Event = {
         const clientPermissions = command.clientPermissions;
         const player = client.players.get(message.guild.id)!;
         const connection = client.shoukaku.connections.get(message.guild.id);
-        if (checks && checks.length) {
+        if (checks?.length) {
             for (let i = 0; i < checks.length; i++) {
                 if (checks[i] === 'vc' && !message.member.voice.channel) return errorResponse("You're not in a voice channel.");
-                else if (
+                if (
                     checks[i] === 'samevc' &&
                     message.member.voice.channel &&
                     message.guild.members.me.voice.channel &&
                     message.member.voice.channel.id !== message.guild.members.me.voice.channel.id
                 )
                     return errorResponse(`You're not in <#${message.guild.members.me!.voice.channel.id}>.`);
-                else if (checks[i] === 'joinable' && message.member.voice.channel && !message.member.voice.channel.joinable)
+                if (checks[i] === 'joinable' && message.member.voice.channel && !message.member.voice.channel.joinable)
                     return errorResponse(`I don't have permission to join <#${message.member.voice.channel.id}>.`);
-                else if (
+                if (
                     checks[i] === 'speakable' &&
                     message.member.voice.channel &&
                     message.member.voice.channel.type !== ChannelType.GuildStageVoice &&
                     !message.member.voice.channel.speakable
                 )
                     return errorResponse(`I don't have permission to speak in <#${message.member.voice.channel.id}>.`);
-                else if (checks[i] === 'player' && !player) return errorResponse("There isn't a player for this server.");
-                else if (checks[i] === 'connection' && !connection) return errorResponse("There isn't a voice connection in this server.");
-                else if (checks[i] === 'playing' && (!player || !player.current)) return errorResponse('There is nothing playing.');
-                else if (checks[i] === 'queue' && (!player || !player.queue.length)) return errorResponse('There are no tracks in the queue.');
-                else if (
+                if (checks[i] === 'player' && !player) return errorResponse("There isn't a player for this server.");
+                if (checks[i] === 'connection' && !connection) return errorResponse("There isn't a voice connection in this server.");
+                if (checks[i] === 'playing' && (!player || !player.current)) return errorResponse('There is nothing playing.');
+                if (checks[i] === 'queue' && (!player || !player.queue.length)) return errorResponse('There are no tracks in the queue.');
+                if (
                     checks[i] === 'dj' &&
                     settings.dj.enabled &&
                     settings.dj.role.length > 0 &&
@@ -108,11 +110,11 @@ export const event: Event = {
                     !client.config.owners.includes(message.author.id)
                 )
                     return errorResponse(`You need the <@&${settings.dj.role}> role to use this command while DJ only mode is enabled.`);
-                else if (checks[i] === 'owner' && !client.config.owners.includes(message.author.id))
+                if (checks[i] === 'owner' && !client.config.owners.includes(message.author.id))
                     return errorResponse("This command is restricted to Celerity's developers.");
             }
         }
-        if (clientPermissions && clientPermissions.length) {
+        if (clientPermissions?.length) {
             const permissions = new PermissionsBitField(clientPermissions);
             if (!message.guild.members.me!.permissions.has(permissions))
                 return client.respond(
@@ -121,10 +123,10 @@ export const event: Event = {
                         .toArray()
                         .map((p) => `- \`${p.replace(/([A-Z])/g, ' $1').trim()}\``)
                         .join('\n')}`,
-                    'error',
+                    'error'
                 );
         }
-        if (userPermissions && userPermissions.length) {
+        if (userPermissions?.length) {
             const permissions = new PermissionsBitField(userPermissions);
             if (!message.member.permissions.has(permissions) && !client.config.owners.includes(message.author.id))
                 return client.respond(
@@ -133,18 +135,18 @@ export const event: Event = {
                         .toArray()
                         .map((p) => `- \`${p.replace(/([A-Z])/g, ' $1').trim()}\``)
                         .join('\n')}`,
-                    'error',
+                    'error'
                 );
         }
-        if (command.options && command.options.filter((o) => o.required).length && !args.length)
+        if (command.options?.filter((o) => o.required).length && !args.length)
             return client.respond(
                 message,
                 `${client.config.emojis.error} | **Invalid usage.** Use \`${prefix}help ${command.name}\` for more information.`,
-                'error',
+                'error'
             );
 
         try {
-            await command.execute({ client, context: message, args, settings, prefix, player, connection });
+            command.execute({ client, context: message, args, settings, prefix, player, connection });
             const endTime = performance.now();
             const executionTime = endTime - startTime;
             client.logger.debug(`${message.author.username} (${message.author.id}) used command ${command.name}, executed in ${executionTime}ms`);
@@ -159,5 +161,5 @@ export const event: Event = {
         function errorResponse(text: string) {
             client.respond(message, `${client.config.emojis.error} | **${text}**`, 'error');
         }
-    },
+    }
 };

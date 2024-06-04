@@ -1,5 +1,5 @@
-import type { Track } from 'shoukaku';
 import type { GuildMember } from 'discord.js';
+import type { Track } from 'shoukaku';
 
 export class CelerityTrack {
     constructor(track: Track, requester: GuildMember, source?: string) {

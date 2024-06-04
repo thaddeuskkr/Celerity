@@ -12,8 +12,8 @@ export const command: Command = {
             name: 'text',
             description: 'The text to send to each server.',
             type: ApplicationCommandOptionType.String,
-            required: true,
-        },
+            required: true
+        }
     ],
 
     async execute({ client, context, args }) {
@@ -21,21 +21,20 @@ export const command: Command = {
         if (!args.length) return client.respond(context, `${client.config.emojis.error} | **No announcement provided.**`, 'error');
         const announcement = args.join(' ');
         if (!players.size) return client.respond(context, `${client.config.emojis.error} | **No active players.**`, 'error');
-        else {
-            const playerList: Array<string> = [];
-            players.forEach((player) => {
-                playerList.push(`- **${player.guild.name} (\`${player.guild.id}\`)**`);
-                player.channel.send({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setAuthor({ name: `@${context.author.username} - Announcement`, iconURL: context.author.displayAvatarURL({ size: 4096 }) })
-                            .setDescription(announcement)
-                            .setTimestamp()
-                            .setColor('#fab387'),
-                    ],
-                });
+
+        const playerList: Array<string> = [];
+        for (const player of players.values()) {
+            playerList.push(`- **${player.guild.name} (\`${player.guild.id}\`)**`);
+            player.channel.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setAuthor({ name: `@${context.author.username} - Announcement`, iconURL: context.author.displayAvatarURL({ size: 4096 }) })
+                        .setDescription(announcement)
+                        .setTimestamp()
+                        .setColor('#fab387')
+                ]
             });
-            await context.reply({ content: `## Announcement sent\n${playerList.join('\n')}`, allowedMentions: { repliedUser: false } });
         }
-    },
+        await context.reply({ content: `## Announcement sent\n${playerList.join('\n')}`, allowedMentions: { repliedUser: false } });
+    }
 };

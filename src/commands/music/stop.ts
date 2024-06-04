@@ -1,5 +1,5 @@
-import type { Command } from '../../types';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import type { Command } from '../../types';
 
 export const command: Command = {
     name: 'stop',
@@ -16,8 +16,8 @@ export const command: Command = {
         player.stopped = true;
         await player.player.stopTrack();
         const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-            new ButtonBuilder().setCustomId('disconnect').setLabel('Disconnect').setStyle(ButtonStyle.Danger).setEmoji(client.config.emojis.disconnect),
+            new ButtonBuilder().setCustomId('disconnect').setLabel('Disconnect').setStyle(ButtonStyle.Danger).setEmoji(client.config.emojis.disconnect)
         );
         client.respond(context, `${client.config.emojis.stop} | **Stopped the player.**`, 'success', { components: [row] });
-    },
+    }
 };

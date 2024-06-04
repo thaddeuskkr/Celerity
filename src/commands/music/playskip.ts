@@ -1,7 +1,7 @@
-import type { Command } from '../../types';
 import { ApplicationCommandOptionType } from 'discord.js';
-import { CelerityTrack } from '../../util/track.js';
 import type { Track } from 'shoukaku';
+import type { Command } from '../../types';
+import { CelerityTrack } from '../../util/track.js';
 
 export const command: Command = {
     name: 'playskip',
@@ -13,7 +13,7 @@ export const command: Command = {
         '{p}playskip fireflies --source sp',
         '{p}playskip fireflies -s sp',
         '{p}playskip https://open.spotify.com/playlist/56Jzp2GTWJftcjyAnfQ0F4 --shuffle',
-        '{p}playskip https://open.spotify.com/playlist/56Jzp2GTWJftcjyAnfQ0F4 -sh',
+        '{p}playskip https://open.spotify.com/playlist/56Jzp2GTWJftcjyAnfQ0F4 -sh'
     ],
     checks: ['vc', 'samevc', 'joinable', 'speakable', 'dj'],
     options: [
@@ -21,7 +21,7 @@ export const command: Command = {
             name: 'query',
             description: 'Your search query, supports URLs from multiple sources or a string.',
             type: ApplicationCommandOptionType.String,
-            required: true,
+            required: true
         },
         {
             name: 'source',
@@ -35,20 +35,20 @@ export const command: Command = {
                 { name: 'Spotify', value: 'sp' },
                 { name: 'SoundCloud', value: 'sc' },
                 { name: 'Apple Music', value: 'am' },
-                { name: 'Yandex Music', value: 'ym' },
-            ],
+                { name: 'Yandex Music', value: 'ym' }
+            ]
         },
         {
             name: 'shuffle',
             description: 'If the playlist should be shuffled before being added to the queue. | `--shuffle` / `-sh`',
             type: ApplicationCommandOptionType.Boolean,
-            required: false,
-        },
+            required: false
+        }
     ],
     tips: [
         'Use `{p}set provider` to change the default search provider.',
         'The accepted providers are: YouTube, YouTube Music, Deezer, Spotify, SoundCloud, Apple Music, Yandex Music.',
-        'The shorthand for the above are: `yt`, `ytm`, `dz`, `sp`, `sc`, `am`, `ym` (respectively - to be used in the `--source` option).',
+        'The shorthand for the above are: `yt`, `ytm`, `dz`, `sp`, `sc`, `am`, `ym` (respectively - to be used in the `--source` option).'
     ],
 
     async execute({ client, context, player, args, settings, prefix }) {
@@ -58,7 +58,7 @@ export const command: Command = {
             return;
         }
         let shuffle = false;
-        let source;
+        let source: string | undefined = undefined;
         if (args.includes('--shuffle') || args.includes('-sh')) {
             if (args.indexOf('--shuffle') !== -1) args.splice(args.indexOf('--shuffle'), 1);
             if (args.indexOf('-sh') !== -1) args.splice(args.indexOf('-sh'), 1);
@@ -75,7 +75,7 @@ export const command: Command = {
                 return client.respond(
                     context,
                     `${client.config.emojis.error} | **Invalid source.**\nAccepts: \`ytm\`, \`yt\`, \`sp\`, \`dz\`, \`sc\`, \`am\`, \`ym\`.`,
-                    'error',
+                    'error'
                 );
             args.splice(index, 2);
             source = `${source}search`;
@@ -91,7 +91,7 @@ export const command: Command = {
                     return client.respond(
                         context,
                         `${client.config.emojis.error} | **Streams are currently unsupported, but will be in the future.**`,
-                        'error',
+                        'error'
                     );
                 const playlist = result.loadType === 'playlist';
                 if (playlist) {
@@ -100,32 +100,29 @@ export const command: Command = {
                         .map((t) => new CelerityTrack(t, context.member!, isYouTubeMusicUrl(urls[i]!) ? 'ytmsearch' : undefined));
                     client.respond(
                         context,
-                        `${client.config.emojis.queued} | **${i == 0 ? 'Playing' : 'Queued'} ${tracks.length} tracks from __${result.data.info.name}__.**`,
-                        'success',
+                        `${client.config.emojis.queued} | **${i === 0 ? 'Playing' : 'Queued'} ${tracks.length} tracks from __${result.data.info.name}__.**`,
+                        'success'
                     );
-                    player.handlePlaylist(tracks, false, i > 0 ? false : true, shuffle);
+                    player.handlePlaylist(tracks, false, !(i > 0), shuffle);
                     continue;
                 }
                 const track = result.data as Track;
                 if (!settings.announceNowPlaying) {
                     client.respond(
                         context,
-                        `${client.config.emojis.queued} | **${i == 0 ? 'Playing' : 'Queued'} [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${
-                            track.info.uri
-                        }).**`,
-                        'success',
+                        `${client.config.emojis.queued} | **${i === 0 ? 'Playing' : 'Queued'} [${track.info.title} by ${track.info.author.replace(
+                            ' - Topic',
+                            ''
+                        )}](${track.info.uri}).**`,
+                        'success'
                     );
                 } else if (i !== 0)
                     client.respond(
                         context,
                         `${client.config.emojis.queued} | **Queued [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${track.info.uri}).**`,
-                        'success',
+                        'success'
                     );
-                player.handleTrack(
-                    new CelerityTrack(track, context.member!, isYouTubeMusicUrl(urls[i]!) ? 'ytmsearch' : undefined),
-                    false,
-                    i > 0 ? false : true,
-                );
+                player.handleTrack(new CelerityTrack(track, context.member!, isYouTubeMusicUrl(urls[i]!) ? 'ytmsearch' : undefined), false, !(i > 0));
             }
             return;
         }
@@ -137,7 +134,7 @@ export const command: Command = {
             client.respond(
                 context,
                 `${client.config.emojis.queued} | **Playing [${track.info.title} by ${track.info.author.replace(' - Topic', '')}](${track.info.uri}).**`,
-                'success',
+                'success'
             );
         player.handleTrack(new CelerityTrack(track, context.member!, source || settings.searchProvider), false, true);
         return;
@@ -148,17 +145,15 @@ export const command: Command = {
                 const urls = str.match(regexp);
                 if (urls) {
                     return lower ? urls.map((item) => item.toLowerCase()) : urls;
-                } else {
-                    return [];
                 }
-            } else {
                 return [];
             }
+            return [];
         }
 
         function isYouTubeMusicUrl(url: string) {
             const youtubeMusicRegex = /^(https?:\/\/)?(www\.)?(music\.youtube\.com\/watch\?v=|music\.youtube\.com\/playlist\?list=)([a-zA-Z0-9_-]+)/;
             return youtubeMusicRegex.test(url);
         }
-    },
+    }
 };

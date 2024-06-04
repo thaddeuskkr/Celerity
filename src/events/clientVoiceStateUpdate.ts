@@ -1,7 +1,7 @@
-import type { Event } from '../types';
 import { ChannelType, type VoiceState } from 'discord.js';
-import type { CelerityPlayer } from '../util/player';
 import _ from 'lodash';
+import type { Event } from '../types';
+import type { CelerityPlayer } from '../util/player';
 
 export const event: Event = {
     name: 'voiceStateUpdate',
@@ -30,7 +30,7 @@ export const event: Event = {
                         if (!player.current) {
                             n.channel.createStageInstance({
                                 topic: 'Nothing playing',
-                                sendStartNotification: false,
+                                sendStartNotification: false
                             });
                             n.channel.guild.members.me!.voice.setSuppressed(true).catch(() => null);
                             return;
@@ -38,7 +38,7 @@ export const event: Event = {
                         n.channel
                             .createStageInstance({
                                 topic: truncate(`${player.current.info.title} - ${player.current.info.author}`, 110),
-                                sendStartNotification: false,
+                                sendStartNotification: false
                             })
                             .catch(() => null);
                     } else {
@@ -74,8 +74,8 @@ export const event: Event = {
                     if (settings.announceDisconnect)
                         client.respond(
                             player.channel,
-                            client.config.emojis.timeout + ' | **Disconnected due to inactivity.**\nNo users in voice channel.',
-                            'warn',
+                            `${client.config.emojis.timeout} | **Disconnected due to inactivity.**\nNo users in voice channel.`,
+                            'warn'
                         );
                     clearTimeout(player.noUserTimeout!);
                     player.destroy();
@@ -92,7 +92,7 @@ export const event: Event = {
         return;
 
         function truncate(str: string, n: number) {
-            return str.length > n ? str.slice(0, n - 1) + '...' : str;
+            return str.length > n ? `${str.slice(0, n - 1)}...` : str;
         }
-    },
+    }
 };

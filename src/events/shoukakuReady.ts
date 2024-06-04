@@ -5,11 +5,11 @@ export const event: Event = {
     once: false,
     emitter: 'shoukaku',
 
-    async run(client) {
+    run(client) {
         client.logger.info(
             `Connected to Lavalink - ${client.config.lavalink.secure === 'true' ? 'wss://' : 'ws://'}${client.config.lavalink.host}:${
                 client.config.lavalink.port
-            }`,
+            }`
         );
-    },
+    }
 };

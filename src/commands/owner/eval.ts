@@ -1,8 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord.js';
-import util from 'util';
+import { createRequire } from 'node:module';
+import util from 'node:util';
 import tags from 'common-tags';
+import { ApplicationCommandOptionType } from 'discord.js';
 import type { Command } from '../../types';
-import { createRequire } from 'module';
 
 const nl = '!!NL!!';
 const nlPattern = new RegExp(nl, 'g');
@@ -18,8 +18,8 @@ export const command: Command = {
             name: 'code',
             description: 'The code to be evaluated.',
             type: ApplicationCommandOptionType.String,
-            required: true,
-        },
+            required: true
+        }
     ],
 
     /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -41,9 +41,10 @@ export const command: Command = {
         }
 
         // Run the code and measure its execution time
-        let hrDiff;
+        let hrDiff: [number, number] | null = null;
         try {
             const hrStart = process.hrtime();
+            // biome-ignore lint/security/noGlobalEval: This eval is secured.
             client.util.eval.lastEvalResult = eval(code);
             hrDiff = process.hrtime(hrStart);
         } catch (err) {
@@ -55,9 +56,8 @@ export const command: Command = {
         const result = makeResultMessages(client.util.eval.lastEvalResult, hrDiff, code);
         if (Array.isArray(result)) {
             return result.map((item) => context.channel.send(item));
-        } else {
-            return context.channel.send(result);
         }
+        return context.channel.send(result);
 
         function makeResultMessages(result: string | null, hrDiff: [number, number], input: string | null = null): string[] {
             const inspected = util.inspect(result, { depth: 0 }).replace(nlPattern, '\n').replace(client.util.sensitivePattern, '--snip--');
@@ -75,25 +75,24 @@ export const command: Command = {
                     ${inspected}
                     \`\`\`
                 `,
-                    { maxLength: 1900, prepend, append },
+                    { maxLength: 1900, prepend, append }
                 );
-            } else {
-                return splitMessage(
-                    tags.stripIndents`
+            }
+            return splitMessage(
+                tags.stripIndents`
                     ***Callback executed after ${hrDiff[0] > 0 ? `${hrDiff[0]}s ` : ''}${hrDiff[1] / 1000000}ms.***
                     \`\`\`javascript
                     ${inspected}
                     \`\`\`
                 `,
-                    { maxLength: 1900, prepend, append },
-                );
-            }
+                { maxLength: 1900, prepend, append }
+            );
         }
 
         function splitMessage(text: string, { maxLength = 2000, char = '\n', prepend = '', append = '' } = {}) {
-            text = resolveString(text);
-            if (text.length <= maxLength) return [text];
-            const splitText = text.split(char);
+            const finalText = resolveString(text);
+            if (finalText.length <= maxLength) return [finalText];
+            const splitText = finalText.split(char);
             if (splitText.some((chunk) => chunk.length > maxLength)) throw new RangeError('SPLIT_MAX_LEN');
             const messages = [];
             let msg = '';
@@ -112,5 +111,5 @@ export const command: Command = {
             if (Array.isArray(data)) return data.join('\n');
             return String(data);
         }
-    },
+    }
 };

@@ -16,12 +16,12 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Celerity } from './util/client.js';
-import { createRequire } from 'module';
-import { fileURLToPath } from 'url';
+import { createRequire } from 'node:module';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import chalk from 'chalk';
 import dotenv from 'dotenv';
-import path from 'path';
+import { Celerity } from './util/client.js';
 
 dotenv.config();
 
@@ -40,18 +40,18 @@ console.log(
         .bold.italic(
             `> ${chalk.hex('#f5c2e7').italic('Celerity • by thaddeuskkr')} | ${chalk.hex('#a6e3a1').italic(`Node.js ${process.version}`)} | ${chalk
                 .hex('#89b4fa')
-                .italic(`discord.js v${require('discord.js').version}`)}`,
-        ),
+                .italic(`discord.js v${require('discord.js').version}`)}`
+        )
 );
 
 const client = new Celerity();
 
-['unhandledRejection', 'uncaughtException'].forEach((event) => {
+for (const event of ['unhandledRejection', 'uncaughtException']) {
     process.on(event, (err) => {
         client.logger.error(`${err}`);
         console.error(err);
     });
-});
+}
 
 process.on('SIGTERM', () => {
     client.logger.info('SIGTERM received, shutting down...');

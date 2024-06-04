@@ -12,11 +12,11 @@ export const command: Command = {
             name: 'enabled',
             description: 'Whether autoplay is enabled.',
             type: ApplicationCommandOptionType.Boolean,
-            required: false,
-        },
+            required: false
+        }
     ],
 
-    async execute({ client, context, args, settings }) {
+    execute({ client, context, args, settings }) {
         if (args.length && args[0]) {
             if (['true', 'on', 'enable'].includes(args[0].toLowerCase())) {
                 settings.autoplay.enabled = true;
@@ -29,7 +29,7 @@ export const command: Command = {
         return client.respond(
             context,
             `${client.config.emojis.autoplay} | **Autoplay is now ${settings.autoplay.enabled ? 'enabled' : 'disabled'}.**`,
-            'success',
+            'success'
         );
-    },
+    }
 };

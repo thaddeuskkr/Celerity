@@ -8,8 +8,8 @@ export const command: Command = {
     checks: ['vc', 'samevc', 'playing', 'queue', 'dj'],
     options: [],
 
-    async execute({ client, context, player }) {
+    execute({ client, context, player }) {
         player.queue.shuffle();
         client.respond(context, `${client.config.emojis.shuffle} | **Shuffled ${player.queue.length} tracks.**`, 'success');
-    },
+    }
 };

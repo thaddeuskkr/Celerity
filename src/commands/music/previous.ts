@@ -28,7 +28,7 @@ export const command: Command = {
             client.respond(
                 context,
                 `${client.config.emojis.previous} | **Returned to [${prev!.info.title} by ${prev!.info.author}](${prev!.info.uri}).**`,
-                'success',
+                'success'
             );
-    },
+    }
 };

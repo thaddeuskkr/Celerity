@@ -12,20 +12,22 @@ export const command: Command = {
             name: 'text',
             description: 'The maintenance message.',
             type: ApplicationCommandOptionType.String,
-            required: false,
-        },
+            required: false
+        }
     ],
 
     async execute({ client, context, args }) {
         client.maintenance.active = !client.maintenance.active;
         client.maintenance.message = args.length ? args.join(' ') : '';
-        if (client.maintenance.active == false) client.maintenance.message = '';
+        if (client.maintenance.active === false) client.maintenance.message = '';
         await client.db.set('maintenance', client.maintenance);
         client.logger.debug('Updated maintenance status in database');
         client.respond(
             context,
-            `${client.config.emojis.success} | **Maintenance mode is now ${client.maintenance.active ? 'enabled' : 'disabled'}${client.maintenance.message.length ? `, with the following message:**\n${client.maintenance.message}` : '.**'}`,
-            'success',
+            `${client.config.emojis.success} | **Maintenance mode is now ${client.maintenance.active ? 'enabled' : 'disabled'}${
+                client.maintenance.message.length ? `, with the following message:**\n${client.maintenance.message}` : '.**'
+            }`,
+            'success'
         );
-    },
+    }
 };

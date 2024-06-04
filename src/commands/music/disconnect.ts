@@ -1,5 +1,5 @@
+import { ChannelType, type GuildMember } from 'discord.js';
 import type { Command } from '../../types';
-import { ChannelType, GuildMember } from 'discord.js';
 
 export const command: Command = {
     name: 'disconnect',
@@ -13,9 +13,9 @@ export const command: Command = {
         const voiceChannel = context.guild!.channels.cache.get(connection!.channelId!)!;
         if (voiceChannel.type !== ChannelType.GuildVoice && voiceChannel.type !== ChannelType.GuildStageVoice) {
             client.logger.error(
-                `Disconnected from ${voiceChannel.name} (${voiceChannel.id}) in ${context.guild!.name} (${
-                    context.guild!.id
-                }) due to an unknown channel type: ${voiceChannel.type}`,
+                `Disconnected from ${voiceChannel.name} (${voiceChannel.id}) in ${context.guild!.name} (${context.guild!.id}) due to an unknown channel type: ${
+                    voiceChannel.type
+                }`
             );
             return client.respond(context, `${client.config.emojis.error} | **Disconnected due to an internal error.**`, 'error');
         }
@@ -24,12 +24,12 @@ export const command: Command = {
             return client.respond(
                 context.channel,
                 `${client.config.emojis.error} | **You're not in <#${context.guild!.members.me!.voice.channel!.id}>.**`,
-                'error',
+                'error'
             );
         client.respond(context, `${client.config.emojis.disconnect} | **Disconnected from <#${connection!.channelId}>.**`, 'success');
         player.stopped = true;
         connection!.disconnect();
         player.destroy();
         return;
-    },
+    }
 };

@@ -12,20 +12,18 @@ export const command: Command = {
     async execute({ client, context, player, settings }) {
         const msg = await context.reply({
             embeds: [new EmbedBuilder().setDescription(`${client.config.emojis.loading} | **Pinging...**`).setColor('#F5C2E7')],
-            allowedMentions: { repliedUser: false },
+            allowedMentions: { repliedUser: false }
         });
         msg.edit({
             embeds: [
                 new EmbedBuilder()
                     .setDescription(
-                        `${client.config.emojis.ping} | **Pong!**\n**API latency:** \`${Math.round(
-                            client.ws.ping,
-                        )}ms\`\n**Message round-trip time:** \`${msg.createdTimestamp - context.createdTimestamp}ms\`${
-                            player ? `\n**Player latency:** \`${player.player.ping}ms\`` : ''
-                        }`,
+                        `${client.config.emojis.ping} | **Pong!**\n**API latency:** \`${Math.round(client.ws.ping)}ms\`\n**Message round-trip time:** \`${
+                            msg.createdTimestamp - context.createdTimestamp
+                        }ms\`${player ? `\n**Player latency:** \`${player.player.ping}ms\`` : ''}`
                     )
-                    .setColor(settings.color),
-            ],
+                    .setColor(settings.color)
+            ]
         });
-    },
+    }
 };

@@ -1,14 +1,14 @@
-import { ActivityType, Client, EmbedBuilder, GatewayIntentBits } from 'discord.js';
+import type EventEmitter from 'node:events';
+import fs from 'node:fs';
+import path from 'node:path';
 import { Collection } from '@discordjs/collection';
+import { ActivityType, Client, type ColorResolvable, EmbedBuilder, GatewayIntentBits } from 'discord.js';
+import Keyv from 'keyv';
+import pino from 'pino';
 import { Connectors, Shoukaku } from 'shoukaku';
 import { Config } from '../config.js';
-import { Util } from './util.js';
-import pino from 'pino';
-import Keyv from 'keyv';
-import fs from 'fs';
-import path from 'path';
-import EventEmitter from 'events';
 import type { Command, Event } from '../types';
+import { Util } from './util.js';
 
 export class Celerity extends Client {
     constructor() {
@@ -20,18 +20,18 @@ export class Celerity extends Client {
                 /* ============== Privileged intents ============== */
                 // GatewayIntentBits.GuildPresences,
                 GatewayIntentBits.GuildMembers,
-                GatewayIntentBits.MessageContent,
+                GatewayIntentBits.MessageContent
             ],
             shards: 'auto',
             presence: {
                 activities: [
                     {
                         name: 'starting...',
-                        type: ActivityType.Playing,
-                    },
+                        type: ActivityType.Playing
+                    }
                 ],
-                status: 'online',
-            },
+                status: 'online'
+            }
         });
         this.ready = false;
         this.config = new Config(this);
@@ -45,8 +45,8 @@ export class Celerity extends Client {
                     ? undefined
                     : {
                           target: 'pino-pretty',
-                          options: { colorize: true },
-                      },
+                          options: { colorize: true }
+                      }
         });
         this.db = new Keyv(this.config.database.url, { namespace: this.config.database.namespace });
         this.shoukaku = new Shoukaku(
@@ -56,55 +56,55 @@ export class Celerity extends Client {
                     name: this.config.lavalink.name,
                     url: `${this.config.lavalink.host}:${this.config.lavalink.port}`,
                     auth: this.config.lavalink.auth,
-                    secure: this.config.lavalink.secure === 'true',
-                },
+                    secure: this.config.lavalink.secure === 'true'
+                }
             ],
             {
                 userAgent: 'Celerity',
                 reconnectTries: 9999,
-                reconnectInterval: 10, // Tries to reconnect every 10 seconds, 9999 times.
-            },
+                reconnectInterval: 10 // Tries to reconnect every 10 seconds, 9999 times.
+            }
         );
         this.presenceUpdater = {
             currentIndex: 0,
-            updateRequired: true,
+            updateRequired: true
         };
         this.respond = (context, text, color, options) => {
-            if (color === 'success') color = '#A6E3A1';
-            else if (color === 'error') color = '#F38BA8';
-            else if (color === 'loading') color = '#F5C2E7';
-            else if (color === 'warn') color = '#F9E2AF';
-            else if (color === 'info') color = '#CBA6F7';
+            let hex: ColorResolvable = '#11111B';
+            if (color === 'success') hex = '#A6E3A1';
+            else if (color === 'error') hex = '#F38BA8';
+            else if (color === 'loading') hex = '#F5C2E7';
+            else if (color === 'warn') hex = '#F9E2AF';
+            else if (color === 'info') hex = '#CBA6F7';
             if (text instanceof EmbedBuilder) {
-                if (color !== 'none') text.setColor(color);
+                if (color !== 'none') text.setColor(hex);
                 if ('reply' in context)
                     context.reply({
                         embeds: [text],
                         allowedMentions: { repliedUser: false },
-                        ...options,
+                        ...options
                     });
                 else
                     context.send({
                         embeds: [text],
                         allowedMentions: { repliedUser: false },
-                        ...options,
+                        ...options
                     });
                 return;
-            } else {
-                if (color === 'none') color = '#11111B';
-                if ('reply' in context)
-                    context.reply({
-                        embeds: [new EmbedBuilder().setDescription(text).setColor(color)],
-                        allowedMentions: { repliedUser: false },
-                        ...options,
-                    });
-                else
-                    context.send({
-                        embeds: [new EmbedBuilder().setDescription(text).setColor(color)],
-                        allowedMentions: { repliedUser: false },
-                        ...options,
-                    });
             }
+            if (color === 'none') hex = '#11111B';
+            if ('reply' in context)
+                context.reply({
+                    embeds: [new EmbedBuilder().setDescription(text).setColor(hex)],
+                    allowedMentions: { repliedUser: false },
+                    ...options
+                });
+            else
+                context.send({
+                    embeds: [new EmbedBuilder().setDescription(text).setColor(hex)],
+                    allowedMentions: { repliedUser: false },
+                    ...options
+                });
         };
     }
 
@@ -112,7 +112,7 @@ export class Celerity extends Client {
         const events = fs.readdirSync(path.join(dirname, 'events')).filter((file) => file.endsWith('.js'));
 
         for (const file of events) {
-            const { event }: { event: Event } = await import('file:///' + path.join(dirname, 'events', file));
+            const { event }: { event: Event } = await import(`file:///${path.join(dirname, 'events', file)}`);
             const { name, emitter, once = false, run } = event;
             let eventEmitter: EventEmitter;
             switch (emitter) {
@@ -143,10 +143,10 @@ export class Celerity extends Client {
             const commands = fs.readdirSync(path.join(dirname, 'commands', category)).filter((file) => file.endsWith('.js'));
             for (const file of commands) {
                 const {
-                    command,
+                    command
                 }: {
                     command: Command;
-                } = await import('file:///' + path.join(dirname, 'commands', category, file));
+                } = await import(`file:///${path.join(dirname, 'commands', category, file)}`);
                 if (!command || !command.name || !command.execute) {
                     this.logger.warn(`Not loading ${category}/${file} due to missing fields`);
                     continue;

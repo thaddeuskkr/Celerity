@@ -14,7 +14,7 @@ export class Config {
     token: string = String(process.env.TOKEN);
     database = {
         url: String(process.env.DATABASE_URL),
-        namespace: String(process.env.DATABASE_NAMESPACE),
+        namespace: String(process.env.DATABASE_NAMESPACE)
     };
 
     // Lavalink server
@@ -23,7 +23,7 @@ export class Config {
         host: String(process.env.LAVALINK_HOST),
         port: Number(process.env.LAVALINK_PORT),
         auth: String(process.env.LAVALINK_AUTH),
-        secure: String(process.env.LAVALINK_SECURE),
+        secure: String(process.env.LAVALINK_SECURE)
     };
 
     // Owners
@@ -37,16 +37,16 @@ export class Config {
     activities: ActivityOptions[] = [
         {
             name: 'music for you ♡',
-            type: ActivityType.Playing,
+            type: ActivityType.Playing
         },
         {
             name: '{servercount} servers • c!help',
-            type: ActivityType.Watching,
+            type: ActivityType.Watching
         },
         {
             name: '{usercount} users • c!help',
-            type: ActivityType.Watching,
-        },
+            type: ActivityType.Watching
+        }
     ];
     statuses: PresenceStatusData[] = ['idle', 'idle', 'idle'];
     presenceUpdateInterval = 20; // in seconds
@@ -60,7 +60,7 @@ export class Config {
             enabled: false,
             targetPopularity: -1,
             minimumPopularity: -1,
-            maximumPopularity: -1,
+            maximumPopularity: -1
         },
         banned: [],
         buttons: 'base',
@@ -71,29 +71,29 @@ export class Config {
         disconnectTimeout: 300, // In seconds
         dj: {
             enabled: false,
-            role: '',
+            role: ''
         },
         prefixes: ['c!'],
         searchProvider: 'ytmsearch',
         setStageTopic: true,
         statistics: true,
         voteSkip: false,
-        voteSkipPercentage: 50,
+        voteSkipPercentage: 50
     };
 
     // Statistics - base object
     baseStatistics: Statistics = {
         commands: {
             executed: [],
-            errored: [],
+            errored: []
         },
-        tracks: [],
+        tracks: []
     };
 
     // Maintenance status - base object
     baseMaintenance: Maintenance = {
         active: false,
-        message: '',
+        message: ''
     };
 
     // Emojis
@@ -136,12 +136,12 @@ export class Config {
             deezer: '<:deezer:1219271122043011072>',
             soundcloud: '<:soundcloud:1104308078071001159>',
             applemusic: '<:applemusic:1104308042515877928>',
-            yandexmusic: '<:yandexmusic:1104308117421948928>',
+            yandexmusic: '<:yandexmusic:1104308117421948928>'
         },
 
         // Pagination
         nextPage: '<a:right_arrow:1106061122823524473>',
-        prevPage: '<a:left_arrow:1106061156889677976>',
+        prevPage: '<a:left_arrow:1106061156889677976>'
     };
 }
 

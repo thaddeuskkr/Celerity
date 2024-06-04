@@ -15,14 +15,14 @@ export const command: Command = {
             return client.respond(
                 context,
                 `${client.config.emojis.pause} | **Paused [${current.info.title} by ${current.info.author}](${current.info.uri}).**`,
-                'success',
+                'success'
             );
         }
         await player.player.setPaused(false);
         return client.respond(
             context,
             `${client.config.emojis.resume} | **Resumed [${current.info.title} by ${current.info.author}](${current.info.uri}).**`,
-            'success',
+            'success'
         );
-    },
+    }
 };

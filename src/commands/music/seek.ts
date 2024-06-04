@@ -12,8 +12,8 @@ export const command: Command = {
             name: 'position',
             description: 'The new position to seek to. (format: hh:mm:ss • e.g. 1:00:00, 30, 7:47)',
             type: ApplicationCommandOptionType.String,
-            required: true,
-        },
+            required: true
+        }
     ],
 
     async execute({ client, context, args, player }) {
@@ -25,14 +25,14 @@ export const command: Command = {
             return client.respond(
                 context,
                 `${client.config.emojis.error} | **Invalid position.**\nAccepts: \`0:00 - ${player.ms(player.current!.info.length)}\`.`,
-                'error',
+                'error'
             );
         client.respond(
             context,
             `${client.config.emojis.seek} | **Seeked to \`${player.ms(ms)}\` in [${player.current!.info.title} by ${player.current!.info.author}](${
                 player.current!.info.uri
             }).**`,
-            'success',
+            'success'
         );
         return await player.player.seekTo(ms);
 
@@ -40,10 +40,10 @@ export const command: Command = {
             const parts = position.split(':').reverse();
             let ms = 0;
             for (let i = 0; i < parts.length; i++) {
-                if (isNaN(parseInt(parts[i]!))) return null;
-                ms += parseInt(parts[i]!) * 60 ** i;
+                if (Number.isNaN(Number.parseInt(parts[i]!))) return null;
+                ms += Number.parseInt(parts[i]!) * 60 ** i;
             }
             return ms * 1000;
         }
-    },
+    }
 };

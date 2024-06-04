@@ -1,9 +1,9 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, EmbedBuilder } from 'discord.js';
 import _ from 'lodash';
-import type { CelerityPlayer } from './player';
+import type { Track, TrackExceptionEvent, TrackStuckEvent } from 'shoukaku';
 import type { Celerity } from './client';
+import type { CelerityPlayer } from './player';
 import { CelerityTrack } from './track.js';
-import type { TrackExceptionEvent, TrackStuckEvent } from 'shoukaku';
 
 export const start = async (player: CelerityPlayer, client: Celerity) => {
     if (!player.current) return;
@@ -17,14 +17,14 @@ export const start = async (player: CelerityPlayer, client: Celerity) => {
         new ButtonBuilder().setCustomId('previous').setLabel('Previous').setStyle(ButtonStyle.Primary).setEmoji('⏮️'),
         new ButtonBuilder().setCustomId('playback').setLabel('Pause / Resume').setStyle(ButtonStyle.Success).setEmoji('⏯️'),
         new ButtonBuilder().setCustomId('skip').setLabel('Skip').setStyle(ButtonStyle.Primary).setEmoji('⏭️'),
-        new ButtonBuilder().setCustomId('stop').setLabel('Stop').setStyle(ButtonStyle.Danger).setEmoji('⏹️'),
+        new ButtonBuilder().setCustomId('stop').setLabel('Stop').setStyle(ButtonStyle.Danger).setEmoji('⏹️')
     );
     const row2 = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder().setCustomId('rewind').setLabel('Rewind').setStyle(ButtonStyle.Secondary).setEmoji('⏪'),
         new ButtonBuilder().setCustomId('shuffle').setLabel('Shuffle').setStyle(ButtonStyle.Secondary).setEmoji('🔀'),
         new ButtonBuilder().setCustomId('loop').setLabel('Loop').setStyle(ButtonStyle.Secondary).setEmoji('🔁'),
         new ButtonBuilder().setCustomId('queue').setLabel('Queue').setStyle(ButtonStyle.Secondary).setEmoji('📜'),
-        new ButtonBuilder().setCustomId('autoplay').setLabel('Autoplay').setStyle(ButtonStyle.Secondary).setEmoji(client.config.emojis.autoplay),
+        new ButtonBuilder().setCustomId('autoplay').setLabel('Autoplay').setStyle(ButtonStyle.Secondary).setEmoji(client.config.emojis.autoplay)
     );
     let sourceEmoji: string;
     if (!hasSourceEmoji(player.current.info.sourceName)) sourceEmoji = client.config.emojis.playing;
@@ -32,7 +32,7 @@ export const start = async (player: CelerityPlayer, client: Celerity) => {
     if (settings.announceNowPlaying) {
         if (player.loop === 'track') {
             if (player._notifiedOnce) return;
-            else player._notifiedOnce = true;
+            player._notifiedOnce = true;
         } else player._notifiedOnce = false;
         player.nowPlayingMessage = await player.channel.send({
             embeds: [
@@ -40,11 +40,11 @@ export const start = async (player: CelerityPlayer, client: Celerity) => {
                     .setDescription(
                         `${sourceEmoji} | **Now playing [${player.current.info.title} by ${player.current.info.author}](${
                             player.current.info.uri
-                        })** (${player.current.info.requester.toString()})`,
+                        })** (${player.current.info.requester.toString()})`
                     )
-                    .setColor(settings.color),
+                    .setColor(settings.color)
             ],
-            components: settings.buttons !== 'off' ? (settings.buttons === 'extra' ? [row1, row2] : [row1]) : undefined,
+            components: settings.buttons !== 'off' ? (settings.buttons === 'extra' ? [row1, row2] : [row1]) : undefined
         });
     }
     if (player.guild.members.me!.voice.channel?.type === ChannelType.GuildStageVoice && settings.setStageTopic) {
@@ -52,7 +52,7 @@ export const start = async (player: CelerityPlayer, client: Celerity) => {
             player.guild.members
                 .me!.voice.channel.createStageInstance({
                     topic: truncate(`${player.current.info.title} - ${player.current.info.author}`, 110),
-                    sendStartNotification: false,
+                    sendStartNotification: false
                 })
                 .catch(() => null);
         } else {
@@ -67,7 +67,7 @@ export const start = async (player: CelerityPlayer, client: Celerity) => {
     }
 
     function truncate(str: string, n: number) {
-        return str.length > n ? str.slice(0, n - 1) + '...' : str;
+        return str.length > n ? `${str.slice(0, n - 1)}...` : str;
     }
 };
 
@@ -89,7 +89,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
             artworkUrl: player.current.info.artworkUrl,
             isrc: player.current.info.isrc,
             requester: player.current.info.requester.id,
-            guild: player.guild.id,
+            guild: player.guild.id
         });
     }
     if (player.loop === 'track') player.queue.unshift(player.current);
@@ -103,14 +103,14 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
     }
     if (!player.queue.length) {
         if (settings.disconnectTimeout === 0) return player.destroy();
-        else if (settings.autoplay.enabled && !player.autoplayQueue.length && !player.stopped) {
+        if (settings.autoplay.enabled && !player.autoplayQueue.length && !player.stopped) {
             const trackIdentifiers: Array<string> = [];
             const usableTracks = player.previous.filter((t) =>
                 t.info.title === 'Unknown title' && t.info.author === 'Unknown artist'
                     ? false
-                    : t.skipped && t.info.requester.id === client.user!.id // TODO: Can be changed to separate these conditions - might be better.
-                      ? false
-                      : true,
+                    : !(
+                          (t.skipped && t.info.requester.id === client.user!.id) // TODO: Can be changed to separate these conditions - might be better.
+                      )
             );
             for (let n = 0; n < Math.min(usableTracks.length, 5); n++) {
                 const t = usableTracks[n]!;
@@ -119,7 +119,7 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                     const res = await player.node.rest.resolve(`spsearch:${t.info.title} - ${t.info.author}`);
                     if (!res || res.loadType !== 'search' || !res.data.length) continue;
                     const tracks = res.data;
-                    let finalTrack;
+                    let finalTrack: Track | null = null;
                     for (let i = 0; i < tracks.length; i++) {
                         const playing = tracks[i]!;
                         if (
@@ -127,14 +127,13 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                             client.util.stringMatchPercentage(playing.info.author, t.info.author.replace(' - Topic', '').trim()) < 75 &&
                             client.util.stringMatchPercentage(
                                 `${playing.info.title} - ${playing.info.author}`,
-                                `${t.info.title} - ${t.info.author.replace(' - Topic', '').trim()}`,
+                                `${t.info.title} - ${t.info.author.replace(' - Topic', '').trim()}`
                             ) < 75
                         )
                             continue;
-                        else {
-                            finalTrack = playing;
-                            break;
-                        }
+
+                        finalTrack = playing;
+                        break;
                     }
                     if (!finalTrack) continue;
                     trackIdentifiers.push(finalTrack.info.identifier);
@@ -148,14 +147,15 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
                 return client.respond(
                     player.channel,
                     `${client.config.emojis.error} | **Failed to autoplay.**\nFailed to retrieve information for previously played tracks.`,
-                    'error',
+                    'error'
                 );
             }
             const similarTracks = await player.node.rest.resolve(
-                `sprec:seed_tracks=${trackIdentifiers.join(',')}` +
-                    (settings.autoplay.targetPopularity === -1 ? '' : `&target_popularity=${settings.autoplay.targetPopularity}`) +
-                    (settings.autoplay.minimumPopularity === -1 ? '' : `&min_popularity=${settings.autoplay.minimumPopularity}`) +
-                    (settings.autoplay.maximumPopularity === -1 ? '' : `&max_popularity=${settings.autoplay.maximumPopularity}`),
+                `sprec:seed_tracks=${trackIdentifiers.join(',')}${
+                    settings.autoplay.targetPopularity === -1 ? '' : `&target_popularity=${settings.autoplay.targetPopularity}`
+                }${settings.autoplay.minimumPopularity === -1 ? '' : `&min_popularity=${settings.autoplay.minimumPopularity}`}${
+                    settings.autoplay.maximumPopularity === -1 ? '' : `&max_popularity=${settings.autoplay.maximumPopularity}`
+                }`
             );
             if (!similarTracks || similarTracks.loadType !== 'playlist' || !similarTracks.data.tracks.length) {
                 if (settings.disconnectTimeout === 0) return player.destroy();
@@ -179,31 +179,32 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
             }
             client.util.timeout(player);
             player.stopped = true;
-            return (player.current = null);
+            player.current = null;
+            return;
         }
     } else if (!player.stopped) return player.play();
 };
 
-export const stuck = async (player: CelerityPlayer, client: Celerity, err: TrackStuckEvent) => {
+export const stuck = (player: CelerityPlayer, client: Celerity, err: TrackStuckEvent) => {
     client.logger.error(`Player in ${player.guild.name} (${player.guild.id}) encountered a playback error:`);
     client.logger.error(err);
     if (!player.current) return;
     client.respond(
         player.channel,
         `${client.config.emojis.error} | **Stuck while playing [${player.current.info.title} by ${player.current.info.author}](${player.current.info.uri}), skipping.**`,
-        'warn',
+        'warn'
     );
     if (!player.stopped) player.play();
 };
 
-export const exception = async (player: CelerityPlayer, client: Celerity, err: TrackExceptionEvent) => {
+export const exception = (player: CelerityPlayer, client: Celerity, err: TrackExceptionEvent) => {
     client.logger.error(`Player in ${player.guild.name} (${player.guild.id}) encountered a playback error:`);
     client.logger.error(err);
     if (!player.current) return;
     client.respond(
         player.channel,
         `${client.config.emojis.error} | **An error occurred while playing [${player.current.info.title} by ${player.current.info.author}](${player.current.info.uri}), disconnecting to prevent further issues.**`,
-        'error',
+        'error'
     );
     if (player.loop === 'track') player.setLoop('off');
     player.destroy();
