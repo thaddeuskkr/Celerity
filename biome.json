@@ -9,7 +9,7 @@
             "quoteStyle": "single",
             "jsxQuoteStyle": "single",
             "quoteProperties": "asNeeded",
-            "trailingComma": "none",
+            "trailingCommas": "none",
             "semicolons": "always",
             "arrowParentheses": "always",
             "indentStyle": "space",
