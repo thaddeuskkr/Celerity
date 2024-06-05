@@ -20,10 +20,6 @@
 - [Vote](https://top.gg/bot/1063698207793762406/vote)
 - [View on top.gg](https://top.gg/bot/1063698207793762406)
 
-## To-do
-
-- [ ] Rework lyrics feature, use LavaLyrics
-
 <p align="center">
     <i>Thank you for your support for Celerity.</i>
 </p>
