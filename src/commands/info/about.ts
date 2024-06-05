@@ -39,8 +39,6 @@ export const command: Command = {
                             process.uptime() * 1000,
                             { verbose: true, secondsDecimalDigits: 0, millisecondsDecimalDigits: 0 }
                         )}.
-                        
-                        Celerity receives constant updates and improvements, and its developer is always open to suggestions and feedback.
 
                         Celerity is in **${client.guilds.cache.size} servers** and serves **${userCount} users**.
 
