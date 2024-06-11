@@ -48,7 +48,7 @@
         "@biomejs/biome": "^1.8.1",
         "@types/common-tags": "^1.8.4",
         "@types/express": "^4.17.21",
-        "@types/lodash": "^4.17.4",
+        "@types/lodash": "^4.17.5",
         "@types/node": "^20.14.1",
         "node-gyp": "^10.1.0",
         "typescript": "^5.4.5"
