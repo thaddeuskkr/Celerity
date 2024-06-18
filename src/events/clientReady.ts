@@ -24,10 +24,12 @@ export const event: Event = {
 
         // Get server settings and statistics from database for first startup
         const guildSettingsInit = await client.db.get('server-settings');
-        client.statistics = (await client.db.get('statistics')) || client.config.baseStatistics;
-        client.maintenance = (await client.db.get('maintenance')) || client.config.baseMaintenance;
         client.guildSettings = new Collection(guildSettingsInit);
         client.logger.info(`Retrieved ${client.guildSettings.size} server settings from database`);
+        client.statistics = (await client.db.get('statistics')) || client.config.baseStatistics;
+        client.logger.info('Retrieved bot statistics from database');
+        client.maintenance = (await client.db.get('maintenance')) || client.config.baseMaintenance;
+        client.logger.info('Retrieved maintenance status from database');
 
         client.version = require('../../package.json').version;
 
