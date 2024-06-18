@@ -56,21 +56,8 @@ export class CelerityPlayer {
             if (this.current) {
                 this.current.skipped = true;
                 this.previous.unshift(this.current);
-                this.client.statistics.tracks.push({
-                    skipped: this.current.skipped,
-                    encoded: this.current.encoded,
-                    requester: this.current.info.requester.id,
-                    guild: this.guild.id
-                });
             }
             const cleared = this.queue.clear();
-            for (const t of cleared)
-                this.client.statistics.tracks.push({
-                    skipped: t.skipped,
-                    encoded: t.encoded,
-                    requester: t.info.requester.id,
-                    guild: this.guild.id
-                });
             this.previous.unshift(...cleared.reverse());
             this.queue.push(track);
             this.playskipUsed = true;
@@ -93,21 +80,8 @@ export class CelerityPlayer {
             if (this.current) {
                 this.current.skipped = true;
                 this.previous.unshift(this.current);
-                this.client.statistics.tracks.push({
-                    skipped: this.current.skipped,
-                    encoded: this.current.encoded,
-                    requester: this.current.info.requester.id,
-                    guild: this.guild.id
-                });
             }
             const cleared = this.queue.clear();
-            for (const t of cleared)
-                this.client.statistics.tracks.push({
-                    skipped: t.skipped,
-                    encoded: t.encoded,
-                    requester: t.info.requester.id,
-                    guild: this.guild.id
-                });
             this.previous.unshift(...cleared.reverse());
             this.queue.push(...finalTracks);
             this.playskipUsed = true;

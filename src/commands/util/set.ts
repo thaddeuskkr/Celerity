@@ -74,7 +74,6 @@ export const command: Command = {
             { name: 'prefixes', aliases: ['prefix'], default: client.config.defaultSettings.prefixes },
             { name: 'search provider', aliases: ['source', 'provider'], default: client.config.defaultSettings.searchProvider },
             { name: 'set stage topic', aliases: ['topic'], default: client.config.defaultSettings.setStageTopic }
-            // { name: 'statistics', default: client.config.defaultSettings.statistics },
             // { name: 'voteSkip', default: client.config.defaultSettings.voteSkip },
             // { name: 'voteSkipPercentage', default: client.config.defaultSettings.voteSkipPercentage }
         ];

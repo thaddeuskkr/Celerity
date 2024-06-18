@@ -79,7 +79,6 @@ export class Config {
         prefixes: ['c!'],
         searchProvider: 'ytmsearch',
         setStageTopic: true,
-        statistics: true,
         voteSkip: false,
         voteSkipPercentage: 50
     };
@@ -89,8 +88,7 @@ export class Config {
         commands: {
             executed: [],
             errored: []
-        },
-        tracks: []
+        }
     };
 
     // Maintenance status - base object

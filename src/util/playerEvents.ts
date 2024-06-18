@@ -74,15 +74,7 @@ export const start = async (player: CelerityPlayer, client: Celerity) => {
 export const end = async (player: CelerityPlayer, client: Celerity) => {
     if (!player.current) return;
     const settings = client.guildSettings.get(player.guild.id) || _.cloneDeep(client.config.defaultSettings);
-    if (!player.previousUsed && !player.playskipUsed) {
-        player.previous.unshift(player.current);
-        client.statistics.tracks.push({
-            skipped: player.current.skipped,
-            encoded: player.current.encoded,
-            requester: player.current.info.requester.id,
-            guild: player.guild.id
-        });
-    }
+    if (!player.previousUsed && !player.playskipUsed) player.previous.unshift(player.current);
     if (player.loop === 'track') player.queue.unshift(player.current);
     if (player.loop === 'queue' && !player.previousUsed && player.current.info.requester.id !== client.user!.id) player.queue.push(player.current);
     player.previousUsed = false;

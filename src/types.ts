@@ -33,7 +33,6 @@ export type GuildSettings = {
     prefixes: string[];
     searchProvider: 'ytmsearch' | 'ytsearch' | 'spsearch' | 'dzsearch' | 'scsearch' | 'amsearch' | 'ymsearch';
     setStageTopic: boolean;
-    statistics: boolean;
     voteSkip: boolean;
     voteSkipPercentage: number;
 };
@@ -53,12 +52,6 @@ export type Statistics = {
             error: Error | unknown;
         }>;
     };
-    tracks: Array<{
-        skipped: boolean;
-        encoded: string;
-        requester: string;
-        guild: string;
-    }>;
 };
 
 export type Maintenance = {
