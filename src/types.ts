@@ -128,6 +128,7 @@ declare module 'discord.js' {
         util: Util;
         commands: Collection<string, Command>;
         players: Collection<string, CelerityPlayer>;
+        webhook: WebhookClient;
         logger: Logger;
         db: Keyv;
         shoukaku: Shoukaku;

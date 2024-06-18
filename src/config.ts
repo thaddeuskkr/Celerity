@@ -33,6 +33,9 @@ export class Config {
     sp_dc: string = String(process.env.SP_DC);
     topggToken: string = String(process.env.TOPGG);
 
+    // Webhooks
+    webhookUrl: string = String(process.env.WEBHOOK_URL);
+
     // Client presence
     activities: ActivityOptions[] = [
         {

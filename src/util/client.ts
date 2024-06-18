@@ -2,7 +2,7 @@ import type EventEmitter from 'node:events';
 import fs from 'node:fs';
 import path from 'node:path';
 import { Collection } from '@discordjs/collection';
-import { ActivityType, Client, type ColorResolvable, EmbedBuilder, GatewayIntentBits } from 'discord.js';
+import { ActivityType, Client, type ColorResolvable, EmbedBuilder, GatewayIntentBits, WebhookClient } from 'discord.js';
 import Keyv from 'keyv';
 import pino from 'pino';
 import { Connectors, Shoukaku } from 'shoukaku';
@@ -38,6 +38,7 @@ export class Celerity extends Client {
         this.util = new Util(this);
         this.commands = new Collection();
         this.players = new Collection();
+        this.webhook = new WebhookClient({ url: this.config.webhookUrl });
         this.logger = pino({
             level: this.config.logLevel,
             transport:
