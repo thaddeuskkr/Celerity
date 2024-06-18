@@ -35,6 +35,12 @@ export const event: Event = {
 
         client.ready = true;
         client.logger.info('Ready to receive commands');
+        client.webhook
+            .send({
+                content: 'Celerity is **ready to receive commands**.',
+                username: 'Celerity'
+            })
+            .catch(() => null);
 
         // Write server settings, maintenance status and bot statistics to database every 10 seconds (if outdated)
         setInterval(async () => {
