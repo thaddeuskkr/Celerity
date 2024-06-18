@@ -18,6 +18,8 @@ services:
             - lavalink
         ports:
             - 6969:6969
+        environment:
+            TZ: Asia/Singapore
         volumes:
             - ./application.yml:/opt/Lavalink/application.yml:ro
 
