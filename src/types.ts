@@ -50,6 +50,7 @@ export type Statistics = {
             commandName: string;
             user: string;
             guild: string;
+            error: Error | unknown;
         }>;
     };
     tracks: Array<{
