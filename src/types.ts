@@ -56,15 +56,6 @@ export type Statistics = {
     tracks: Array<{
         skipped: boolean;
         encoded: string;
-        identifier: string;
-        author: string;
-        length: number;
-        isStream: boolean;
-        title: string;
-        uri?: string;
-        sourceName: string;
-        artworkUrl?: string;
-        isrc?: string;
         requester: string;
         guild: string;
     }>;

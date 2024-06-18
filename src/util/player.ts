@@ -59,15 +59,6 @@ export class CelerityPlayer {
                 this.client.statistics.tracks.push({
                     skipped: this.current.skipped,
                     encoded: this.current.encoded,
-                    identifier: this.current.info.identifier,
-                    author: this.current.info.author,
-                    length: this.current.info.length,
-                    isStream: this.current.info.isStream,
-                    title: this.current.info.title,
-                    uri: this.current.info.uri,
-                    sourceName: this.current.info.sourceName,
-                    artworkUrl: this.current.info.artworkUrl,
-                    isrc: this.current.info.isrc,
                     requester: this.current.info.requester.id,
                     guild: this.guild.id
                 });
@@ -77,15 +68,6 @@ export class CelerityPlayer {
                 this.client.statistics.tracks.push({
                     skipped: t.skipped,
                     encoded: t.encoded,
-                    identifier: t.info.identifier,
-                    author: t.info.author,
-                    length: t.info.length,
-                    isStream: t.info.isStream,
-                    title: t.info.title,
-                    uri: t.info.uri,
-                    sourceName: t.info.sourceName,
-                    artworkUrl: t.info.artworkUrl,
-                    isrc: t.info.isrc,
                     requester: t.info.requester.id,
                     guild: this.guild.id
                 });
@@ -114,15 +96,6 @@ export class CelerityPlayer {
                 this.client.statistics.tracks.push({
                     skipped: this.current.skipped,
                     encoded: this.current.encoded,
-                    identifier: this.current.info.identifier,
-                    author: this.current.info.author,
-                    length: this.current.info.length,
-                    isStream: this.current.info.isStream,
-                    title: this.current.info.title,
-                    uri: this.current.info.uri,
-                    sourceName: this.current.info.sourceName,
-                    artworkUrl: this.current.info.artworkUrl,
-                    isrc: this.current.info.isrc,
                     requester: this.current.info.requester.id,
                     guild: this.guild.id
                 });
@@ -132,15 +105,6 @@ export class CelerityPlayer {
                 this.client.statistics.tracks.push({
                     skipped: t.skipped,
                     encoded: t.encoded,
-                    identifier: t.info.identifier,
-                    author: t.info.author,
-                    length: t.info.length,
-                    isStream: t.info.isStream,
-                    title: t.info.title,
-                    uri: t.info.uri,
-                    sourceName: t.info.sourceName,
-                    artworkUrl: t.info.artworkUrl,
-                    isrc: t.info.isrc,
                     requester: t.info.requester.id,
                     guild: this.guild.id
                 });

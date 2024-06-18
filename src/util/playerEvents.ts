@@ -79,15 +79,6 @@ export const end = async (player: CelerityPlayer, client: Celerity) => {
         client.statistics.tracks.push({
             skipped: player.current.skipped,
             encoded: player.current.encoded,
-            identifier: player.current.info.identifier,
-            author: player.current.info.author,
-            length: player.current.info.length,
-            isStream: player.current.info.isStream,
-            title: player.current.info.title,
-            uri: player.current.info.uri,
-            sourceName: player.current.info.sourceName,
-            artworkUrl: player.current.info.artworkUrl,
-            isrc: player.current.info.isrc,
             requester: player.current.info.requester.id,
             guild: player.guild.id
         });
