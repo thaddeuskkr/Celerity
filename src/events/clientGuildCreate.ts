@@ -8,5 +8,11 @@ export const event: Event = {
 
     run(client, guild: Guild) {
         client.logger.info(`Added to server: ${guild.name} (${guild.id})`);
+        client.webhook
+            .send({
+                content: `**Added to server:** ${guild.name} \`${guild.id})\``,
+                username: 'Celerity'
+            })
+            .catch(() => null);
     }
 };
