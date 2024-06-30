@@ -9,7 +9,7 @@ FROM node:lts AS builder
 WORKDIR /celerity
 COPY . . 
 RUN npm install --omit=dev && cp -R node_modules prod_node_modules
-RUN npm install -g typescript && npm install && tsc
+RUN npm install && npm run build
 
 FROM base AS copier
 COPY --from=builder /celerity/prod_node_modules /celerity/node_modules
