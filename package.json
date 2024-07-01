@@ -52,7 +52,7 @@
         "@types/lodash": "^4.17.6",
         "@types/node": "^20.14.9",
         "node-gyp": "^10.1.0",
-        "typescript": "^5.4.5"
+        "typescript": "^5.5.3"
     },
     "engines": {
         "node": ">=18"
