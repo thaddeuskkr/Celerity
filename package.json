@@ -6,6 +6,7 @@
     "type": "module",
     "scripts": {
         "build": "tsc",
+        "test": "tsc",
         "start": "node dist/index.js",
         "biome": "biome format --write .",
         "cloc": "cloc --quiet --json --exclude-dir=node_modules,dist . > lines.json",
