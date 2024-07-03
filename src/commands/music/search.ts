@@ -69,7 +69,8 @@ export const command: Command = {
                 const newPlayer = await client.shoukaku.joinVoiceChannel({
                     guildId: context.guild!.id,
                     channelId: context.member!.voice.channel!.id,
-                    shardId: context.guild!.shardId
+                    shardId: context.guild!.shardId,
+                    deaf: true
                 });
                 if (settings.announceConnect)
                     client.respond(
