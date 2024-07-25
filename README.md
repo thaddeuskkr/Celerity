@@ -4,8 +4,6 @@
 <p align="center">
     <img src="https://top.gg/api/widget/servers/1063698207793762406.svg">
     <img src="https://img.shields.io/github/actions/workflow/status/thaddeuskkr/Celerity/build.yml">
-    <img src="https://img.shields.io/tokei/lines/github/thaddeuskkr/Celerity">
-    <img src="https://img.shields.io/github/package-json/v/thaddeuskkr/Celerity/main?label=version">
 </p>
 <p align="center">
     A Discord music bot focused on performance, without neglecting good audio quality and extensive features.
