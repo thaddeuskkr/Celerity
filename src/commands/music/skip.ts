@@ -5,7 +5,7 @@ export const command: Command = {
     description: 'Skips the currently playing track.',
     aliases: ['s'],
     examples: ['{p}skip'],
-    checks: ['vc', 'samevc', 'playing', 'dj'],
+    checks: ['vc', 'samevc', 'dj'],
     options: [],
 
     async execute({ client, context, player, args, settings, prefix }) {
@@ -14,6 +14,7 @@ export const command: Command = {
             searchCommand.execute({ client, context, args, settings, player, prefix });
             return;
         }
+        if (!player.current) return client.respond(context, `${client.config.emojis.error} | **There is nothing playing.**`, 'error');
         if (player.loop === 'track') player.setLoop('off');
         client.respond(
             context,
