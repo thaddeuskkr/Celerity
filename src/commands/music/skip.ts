@@ -8,7 +8,12 @@ export const command: Command = {
     checks: ['vc', 'samevc', 'playing', 'dj'],
     options: [],
 
-    async execute({ client, context, player }) {
+    async execute({ client, context, player, args, settings, prefix }) {
+        if (args.length) {
+            const searchCommand = client.commands.get('search')!;
+            searchCommand.execute({ client, context, args, settings, player, prefix });
+            return;
+        }
         if (player.loop === 'track') player.setLoop('off');
         client.respond(
             context,
