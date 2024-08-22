@@ -25,7 +25,7 @@
     "homepage": "https://github.com/thaddeuskkr/Celerity#readme",
     "dependencies": {
         "@discordjs/collection": "^2.1.0",
-        "@keyv/mongo": "^2.2.8",
+        "@keyv/mongo": "^3.0.1",
         "@sapphire/discord.js-utilities": "^7.3.0",
         "@top-gg/sdk": "^3.1.6",
         "axios": "^1.7.4",
